@@ -1,5 +1,8 @@
 // Styles for the Fun Tools page
 
+$toolcard-width: 300px;
+$toolcard-gutter: 32px;
+
 .fun-tools-container {
     
 }
@@ -26,7 +29,7 @@
 .my-masonry-grid {
   margin: 0 auto;
   width: 100vw;
-  max-width: 370px; /* 1 column by default */
+  max-width: calc(#{$toolcard-width} + 20px); /* 1 column by default, +20px for padding/margin fudge */
 }
 .my-masonry-grid_column {
   padding-left: 2rem;
@@ -36,22 +39,29 @@
   margin-bottom: 2rem;
   margin-left: auto;
   margin-right: auto;
-  width: 350px;
-  max-width: 350px;
+  width: $toolcard-width;
+  max-width: $toolcard-width;
+}
+
+.fun-tools-widget > * {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  max-width: 100%;
 }
 
 @media (min-width: 600px) {
   .my-masonry-grid {
-    max-width: 732px; /* 2 columns: (2*350)+(1*32) */
+    max-width: calc(2 * #{$toolcard-width} + 1 * #{$toolcard-gutter});
   }
 }
 @media (min-width: 900px) {
   .my-masonry-grid {
-    max-width: 1114px; /* 3 columns: (3*350)+(2*32) */
+    max-width: calc(3 * #{$toolcard-width} + 2 * #{$toolcard-gutter});
   }
 }
 @media (min-width: 1200px) {
   .my-masonry-grid {
-    max-width: 1496px; /* 4 columns: (4*350)+(3*32) */
+    max-width: calc(4 * #{$toolcard-width} + 3 * #{$toolcard-gutter});
   }
 } 

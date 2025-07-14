@@ -1,13 +1,10 @@
-import "./toolCard.scss"
+import './toolCard.scss';
+import React from 'react';
 
-interface ToolCardProps {
-    children: React.ReactNode
+export default function ToolCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="toolCard">
+      {children}
+    </div>
+  );
 }
-
-const toolCard: React.FC<ToolCardProps> = ({children}) => {
-    return (<div id="toolCard">
-        {children}
-    </div>)
-}
-
-export default toolCard;

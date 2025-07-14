@@ -11,11 +11,6 @@ export default function Page() {
   const widgets = [
     <Minesweeper key="minesweeper1" />,
     <ColorConverter key="color1" />,
-    <ColorConverter key="color2" />,
-    <Minesweeper key="minesweeper2" />,
-    <ColorConverter key="color3" />,
-    <ColorConverter key="color4" />,
-    <ColorConverter key="color5" />,
   ];
 
   const masonryOptions = {
