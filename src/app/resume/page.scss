@@ -1,0 +1,62 @@
+#abilities ul {
+    display: block;
+    list-style-type: none;
+    padding: 0;
+}
+
+@media(max-width: 749px) {
+    #abilities {
+        ul {
+            text-align: center;
+            li {
+                display: inline;
+            }
+        }
+    }
+}
+
+@media (min-width: 500px) {
+    #contactEducation {
+        display: flex;
+        justify-content: space-between;
+    }
+    #contacts, #education {
+        display: inline-block;
+        width: 225px;
+    }
+    #education {
+        text-align: right;
+    }
+}
+
+@media (min-width: 750px) {
+    #contactEducation {
+        display: block;
+    }
+    #contacts, #education {
+        display: block;
+    }
+    #education {
+        text-align: left;
+    }
+    #abilities {
+        display: block;
+        width: 230px;
+        #abilitiesList {
+            column-count: 2;
+            li:nth-of-type(n + 13) {
+                text-align: right;
+            }
+        }
+    }
+    #resume {
+        display: flex;
+        max-width: 960px;
+        margin: 0 auto;
+        #resumeBody {
+            border-left: solid $black 1px;
+            margin-left: 20px;
+            padding-left: 20px;
+        }
+    }
+}

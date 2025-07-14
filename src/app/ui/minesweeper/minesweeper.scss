@@ -1,0 +1,82 @@
+// Minesweeper number colors with better contrast and accessibility
+.blue { color: #0066cc; }      // Darker blue for better contrast
+.green { color: #008000; }     // Standard green
+.red { color: #cc0000; }       // Darker red for better contrast  
+.darkblue { color: #000080; }  // Navy blue (standard darkblue)
+.maroon { color: #800000; }    // Standard maroon
+.teal { color: #008080; }      // Standard teal
+.black { color: #000000; }     // Pure black
+.gray { color: #666666; }      // Darker gray for better contrast
+
+.smile {
+    background-image: url(../../../../public/minesweeperSmileys/smile.jpg);
+}
+
+.win {
+    background-image: url(../../../../public/minesweeperSmileys/win.jpg);
+}
+
+.dead {
+    background-image: url(../../../../public/minesweeperSmileys/dead.jpg);
+}
+
+.nervous {
+    background-image: url(../../../../public/minesweeperSmileys/nervous.jpg);
+}
+
+#mineHeader {
+    text-align: center;
+}
+
+button {
+    display: block;
+    width: 30px;
+    height: 30px;
+    box-sizing: content-box;
+    margin: 0 auto 20px;
+    padding: 2px;
+    background-position: center;
+    p {
+        margin: 0;
+        font-size: 20px;
+    }
+}
+
+.redBomb {
+    background-color: lightcoral;
+}
+
+.unclicked {
+    background: 
+        linear-gradient(135deg, rgb(245, 245, 245) 51%, transparent 25%), 
+        linear-gradient(315deg, rgb(95, 95, 95) 51%, transparent 25%);
+}
+
+table {
+    border-spacing: 0;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    tbody {
+        td {
+            box-sizing: border-box;
+            text-align: center;
+            padding: 3px;
+            width: 20px;
+            height: 20px;
+            p {
+                box-sizing: border-box;
+                background-color: lightgrey;
+                margin: 0;
+                font-size: 16px;
+                font-weight: bold;
+                line-height: 20px;
+                height: 20px;
+                width: 20px;
+            }
+            p:hover {
+                cursor: default
+            }
+        }
+    }
+}

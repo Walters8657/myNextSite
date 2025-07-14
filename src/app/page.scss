@@ -1,0 +1,37 @@
+@import "variables.scss";
+
+#projects {
+    display: flex;
+    width: 100%;
+    margin: auto;
+    padding: 10px 0 50px;
+
+    overflow: hidden;
+
+    transition: all 300ms ease;
+
+    position: relative;
+
+    // border: 8px solid;
+    // border-image: linear-gradient(to right, $black 0%, $white 25%, $white 75%, $black 100%) 8; 
+
+    #prevBtn, #nextBtn {
+        position: absolute;
+        bottom: 0;
+        border: none;
+        box-shadow: none;
+        border-radius: 50%;
+        background-color: $white;
+        padding: 0;
+        margin: 5px;
+        height: 50px;
+        width: 50px;
+    }
+    #prevBtn {
+        transform: rotate(180deg);
+        left: calc(50% - 60px);
+    }
+    #nextBtn {
+        right: calc(50% - 60px);
+    }
+}

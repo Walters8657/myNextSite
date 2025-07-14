@@ -1,0 +1,79 @@
+/*#region Font Sizes */
+body {
+    font-size: 18px;
+    line-height: 1.4em;
+    font-family: 'Ubuntu', 'Sans-serif';
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    body {
+        font-size: 16px;
+    }
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 2.25em;
+    line-height: 1.4em;
+}
+
+h3 {
+    font-size: 2em;
+}
+
+h4 {
+    font-size: 1.75em;
+}
+
+h5 {
+    font-size: 1.5em;
+}
+
+h6 {
+    font-size: 1.25em;
+}
+/*#endregion*/
+
+@import "variables.scss";
+
+body {
+    color: $black;
+    background-color: $white;
+}
+
+#rootContent {
+    box-sizing: border-box;
+    max-width: 100vw;
+    padding: 8px;
+}
+
+img {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+a, a:visited {
+    color: $white;
+}
+
+//--------------
+//--------------
+// CLASSES
+//--------------
+//--------------
+
+.cursorHover {
+    cursor: pointer;
+}
+
+.cursorHover:hover {
+    filter: invert(0.4);
+}

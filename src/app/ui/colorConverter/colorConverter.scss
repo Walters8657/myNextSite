@@ -1,0 +1,37 @@
+#rgbHex {
+    #fullRgbContainer {
+        display: flex;
+        justify-content: space-around;
+        
+        .rgbInputGroup {
+            width: 50px;
+            box-sizing: border-box;
+
+            .rgbLabel {
+                display: block;
+                text-align: center;
+                width: 100%;
+            }
+            
+            .rgbInput {
+                width: 100%;
+                display: block;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    #hexInputGroup {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        label {
+            padding-left: 5px;
+        }
+        input {
+            margin-right: 5px;
+            width: 70px;
+            box-sizing: border-box;
+        }
+    }
+}
