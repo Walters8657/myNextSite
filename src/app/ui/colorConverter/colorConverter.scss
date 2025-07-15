@@ -1,37 +1,56 @@
-#rgbHex {
-    #fullRgbContainer {
+#conversionsForm {
+    #colorSwatchContainer {
         display: flex;
-        justify-content: space-around;
-        
-        .rgbInputGroup {
-            width: 50px;
-            box-sizing: border-box;
-
-            .rgbLabel {
-                display: block;
-                text-align: center;
-                width: 100%;
-            }
-            
-            .rgbInput {
-                width: 100%;
-                display: block;
-                box-sizing: border-box;
-            }
-        }
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    #currentColorSwatch {
+        width: 100px;
+        height: 60px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tripleInputContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .tripleInputLabel {
+        min-width: 2.5em;
+        text-align: left;
+    }
+    .tripleInput {
+        width: 3.5em;
+        max-width: 3.5em;
+        min-width: 2.5em;
+        display: block;
+        box-sizing: border-box;
+    }
+    #hexInputGroup > span {
+        display: inline-flex;
+        align-items: center;
+    }
+    .hexInput {
+        width: 6.5em;
+        margin-left: 0.2em;
+        box-sizing: border-box;
+    }
+    
+    .colorName {
+        font-weight: 500;
+        min-width: 6em;
+    }
+    
+    .colorRGB {
+        color: #666;
+        font-size: 0.9em;
     }
 
-    #hexInputGroup {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        label {
-            padding-left: 5px;
-        }
-        input {
-            margin-right: 5px;
-            width: 70px;
-            box-sizing: border-box;
-        }
+    #closestNamedColor {
+        width: 100%;
+        text-align: center;
     }
 }

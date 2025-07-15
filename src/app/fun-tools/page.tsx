@@ -9,8 +9,8 @@ const Minesweeper = dynamic(() => import("../ui/minesweeper/minesweeper"), { ssr
 
 export default function Page() {
   const widgets = [
-    <Minesweeper key="minesweeper1" />,
-    <ColorConverter key="color1" />,
+    <Minesweeper key="minesweeper" />,
+    <ColorConverter key="colorConverter" />,
   ];
 
   const masonryOptions = {
