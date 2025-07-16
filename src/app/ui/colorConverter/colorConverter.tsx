@@ -494,7 +494,6 @@ export default function ColorConverter() {
                 </span>
 
                 <span id="closestNamedColorContainer">
-                    <p>Closest Named Color</p>
                     <div className="namedColorDisplay">
                         {closestNamedColor ? (
                             <p id='closestNamedColor'>
