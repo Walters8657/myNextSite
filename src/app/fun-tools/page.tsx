@@ -3,10 +3,8 @@
 import Masonry from "react-masonry-component";
 import "./funTools.scss";
 import ColorConverter from "../ui/colorConverter/colorConverter";
-import dynamic from 'next/dynamic';
 import HowMuchFaster from "../ui/howMuchFaster/howMuchFaster";
-
-const Minesweeper = dynamic(() => import("../ui/minesweeper/minesweeper"), { ssr: false });
+import Minesweeper from "../ui/minesweeper/minesweeper";
 
 export default function Page() {
   const widgets = [

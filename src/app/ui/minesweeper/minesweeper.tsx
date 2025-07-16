@@ -8,6 +8,7 @@ interface GameTile {
     isBomb: boolean;
     bombsTouching: number;
     isRevealed: boolean;
+    isFlagged: boolean;
 }
 
 // Color mapping for minesweeper numbers (standard minesweeper colors)
@@ -36,6 +37,7 @@ export default function Minesweeper() {
     const [isWon, setIsWon] = useState(false);
     const [isLost, setIsLost] = useState(false);
     const [resetButtonState, setResetButtonState] = useState("smile");
+    const [isClient, setIsClient] = useState(false);
 
     const resetButtonClass = useMemo((): string => {
         if (isWon) return "win";
@@ -58,6 +60,9 @@ export default function Minesweeper() {
     const handleCellClick = useCallback((rowIndex: number, cellIndex: number, cell: GameTile): void => {
         if (isLost || !fullGameData[rowIndex] || !fullGameData[rowIndex][cellIndex]) return;
         
+        // Don't reveal flagged cells
+        if (cell.isFlagged) return;
+        
         if (cell.isBomb) {
             setIsLost(true);
         } else {
@@ -65,9 +70,29 @@ export default function Minesweeper() {
         }
     }, [isLost, fullGameData]);
 
+    const handleRightClick = useCallback((e: React.MouseEvent, rowIndex: number, cellIndex: number, cell: GameTile): void => {
+        e.preventDefault(); // Prevent context menu
+        if (isLost || isWon || !fullGameData[rowIndex] || !fullGameData[rowIndex][cellIndex]) return;
+        
+        // Don't allow flagging revealed cells
+        if (cell.isRevealed) return;
+        
+        const newData = [...fullGameData];
+        newData[rowIndex][cellIndex].isFlagged = !newData[rowIndex][cellIndex].isFlagged;
+        setFullGameData(newData);
+    }, [isLost, isWon, fullGameData]);
+
+    // Set client flag on mount
     useEffect(() => {
-        createMineArray(10, 8, 10);
-    }, [])
+        setIsClient(true);
+    }, []);
+
+    // Initialize game only after client-side hydration
+    useEffect(() => {
+        if (isClient) {
+            createMineArray(10, 8, 10);
+        }
+    }, [isClient])
 
     function createMineArray(rows: number, cols: number, numBombs: number): void {
         const totalCells = rows * cols;
@@ -89,7 +114,7 @@ export default function Minesweeper() {
             Array.from({ length: cols }, (_, j) => {
                 const position = i * cols + j;
                 const isBomb = bombPositions.has(position);
-                return { isBomb, bombsTouching: 0, isRevealed: false };
+                return { isBomb, bombsTouching: 0, isRevealed: false, isFlagged: false };
             })
         );
         
@@ -130,8 +155,8 @@ export default function Minesweeper() {
             const [currentRow, currentCol] = queue.shift()!;
             const cell = newData[currentRow][currentCol];
             
-            // Skip if already revealed or is a bomb
-            if (cell.isRevealed || cell.isBomb) {
+            // Skip if already revealed, is a bomb, or is flagged
+            if (cell.isRevealed || cell.isBomb || cell.isFlagged) {
                 continue;
             }
             
@@ -155,7 +180,7 @@ export default function Minesweeper() {
                         
                         const adjacentCell = newData[newRow][newCol];
                         
-                        // Add to queue if not revealed and not a bomb
+                        // Add to queue if not revealed, not a bomb
                         if (!adjacentCell.isRevealed && !adjacentCell.isBomb) {
                             queue.push([newRow, newCol]);
                         }
@@ -178,6 +203,7 @@ export default function Minesweeper() {
 
     // Memoize cell content to avoid unnecessary re-renders
     const renderCellContent = useCallback((cell: GameTile): string | number | null => {
+        if (cell.isFlagged) return null; // Don't show content if flagged
         
         if (!cell.isRevealed && !isLost) return null;
 
@@ -186,6 +212,18 @@ export default function Minesweeper() {
         if (cell.bombsTouching > 0) return cell.bombsTouching;
         return '';
     }, [isLost]);
+
+    // Don't render until client-side hydration is complete
+    if (!isClient) {
+        return (
+            <ToolCard>
+                <p id="mineHeader">MiniSweeper</p>
+                <div id="minefield">
+                    <p>Loading...</p>
+                </div>
+            </ToolCard>
+        );
+    }
 
     return(
         <ToolCard>
@@ -210,8 +248,9 @@ export default function Minesweeper() {
                                         className={!cell.isRevealed ? "unclicked" : ""}
                                     >
                                         <p 
-                                            className={`${getColor(cell.bombsTouching)}`}
+                                            className={`${getColor(cell.bombsTouching)} ${cell.isFlagged ? 'flagged' : ''}`}
                                             onClick={() => handleCellClick(rowIndex, cellIndex, cell)}
+                                            onContextMenu={(e) => handleRightClick(e, rowIndex, cellIndex, cell)}
                                         >
                                             {renderCellContent(cell)}
                                         </p>                                                
@@ -225,5 +264,3 @@ export default function Minesweeper() {
         </ToolCard>
     ) 
 }
-
-export const dynamic = true;

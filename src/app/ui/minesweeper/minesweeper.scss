@@ -9,19 +9,26 @@
 .gray { color: #666666; }      // Darker gray for better contrast
 
 .smile {
-    background-image: url(../../../../public/minesweeperSmileys/smile.jpg);
+    background-image: url(../../../../public/minesweeperAssests/smile.jpg);
 }
 
 .win {
-    background-image: url(../../../../public/minesweeperSmileys/win.jpg);
+    background-image: url(../../../../public/minesweeperAssests/win.jpg);
 }
 
 .dead {
-    background-image: url(../../../../public/minesweeperSmileys/dead.jpg);
+    background-image: url(../../../../public/minesweeperAssests/dead.jpg);
 }
 
 .nervous {
-    background-image: url(../../../../public/minesweeperSmileys/nervous.jpg);
+    background-image: url(../../../../public/minesweeperAssests/nervous.jpg);
+}
+
+.flagged {
+    background-image: url(../../../../public/minesweeperAssests/flag.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #mineHeader {
