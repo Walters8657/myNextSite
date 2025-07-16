@@ -210,7 +210,7 @@ export default function Minesweeper() {
                                         className={!cell.isRevealed ? "unclicked" : ""}
                                     >
                                         <p 
-                                            className={`${getColor(cell.bombsTouching)} ${cell.isBomb ? 'redBomb' : ''}`}
+                                            className={`${getColor(cell.bombsTouching)}`}
                                             onClick={() => handleCellClick(rowIndex, cellIndex, cell)}
                                         >
                                             {renderCellContent(cell)}
