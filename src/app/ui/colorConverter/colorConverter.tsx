@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { cssNamedColors, type CSSNamedColor } from './cssNamedColors';
 
 export default function ColorConverter() {
-    const [currentRGB, setCurrentRGB] = useState([0, 0, 0]);
+    const [currentRGB, setCurrentRGB] = useState<[number, number, number]>([0, 0, 0]);
     const [currentHex, setCurrentHex] = useState("000000");
     const [currentHSL, setCurrentHSL] = useState<[number, number, number]>([0, 0, 0]);
     const [currentHSV, setCurrentHSV] = useState<[number, number, number]>([0, 0, 0]);
@@ -14,6 +14,21 @@ export default function ColorConverter() {
     const [currentHWB, setCurrentHWB] = useState<[number, number, number]>(rgbToHwb(0, 0, 0));
     const [lastChanged, setLastChanged] = useState<'rgb' | 'hsl' | 'hsv' | 'hex' | 'cmy' | 'hwb'>('rgb');
     const [closestNamedColor, setClosestNamedColor] = useState<CSSNamedColor | null>(null);
+
+
+// Function to generate a random RGB color
+    function generateRandomRGB(): [number, number, number] {
+        return [
+            Math.floor(Math.random() * 256),
+            Math.floor(Math.random() * 256),
+            Math.floor(Math.random() * 256)
+        ] as [number, number, number];
+    }
+
+    // Initialize with random color on client side only
+    useEffect(() => {
+        setCurrentRGB(generateRandomRGB());
+    }, []);
 
     
     // Sync HEX when RGB changes
@@ -275,7 +290,7 @@ export default function ColorConverter() {
         let parsedValue = parseInt(sanitized, 10);
         if (isNaN(parsedValue) || parsedValue < 0) parsedValue = 0;
         if (parsedValue > 255) parsedValue = 255;
-        const newRGB = currentRGB.map((existing, index) => index === rgbIndex ? parsedValue : existing);
+        const newRGB = currentRGB.map((existing, index) => index === rgbIndex ? parsedValue : existing) as [number, number, number];
         setCurrentRGB(newRGB);
     }
     
