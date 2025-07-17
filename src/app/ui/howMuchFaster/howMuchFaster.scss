@@ -1,16 +1,12 @@
-$hmf-faded-opacity: 0.5;
-$hmf-negative-color: #c00;
-
-#howMuchFasterHeader, .howMuchFasterContent {
-    text-align: center;
-}
+$faded-opacity: 0.5;
+$negative-color: #c00;
 
 .howMuchFasterContent {
   overflow-x: unset;
   padding: 0.25rem 0;
 }
 
-.hmf-table {
+.table {
   display: table !important;
   width: 100%;
   min-width: unset;
@@ -20,14 +16,16 @@ $hmf-negative-color: #c00;
   background: none;
   font-family: inherit;
 }
-.hmf-table th, .hmf-table td {
+
+.table th, .table td {
   padding: 0.05rem 0.05rem;
   border: none;
   text-align: center;
   background: none;
   font-family: inherit;
 }
-.hmf-input {
+
+.input {
   width: 48px;
   max-width: 100%;
   box-sizing: border-box;
@@ -39,14 +37,17 @@ $hmf-negative-color: #c00;
   background: #f8f8f8;
   font-family: inherit;
 }
+
 /* Make the last input in each row (ΔTime) wider */
-td:last-child .hmf-input {
+td:last-child .input {
   width: 66px;
 }
-.hmf-faded {
-  opacity: $hmf-faded-opacity;
+
+.faded {
+  opacity: $faded-opacity;
 }
-.hmf-hms-span {
+
+.hms-span {
   position: absolute;
   left: 0;
   right: 0;
@@ -61,16 +62,20 @@ td:last-child .hmf-input {
   background: transparent;
   display: block;
 }
-.hmf-hms-span-empty {
-  opacity: $hmf-faded-opacity;
+
+.hms-span-empty {
+  opacity: $faded-opacity;
 }
-.hmf-hms-span-negative {
-  color: $hmf-negative-color;
+
+.hms-span-negative {
+  color: $negative-color;
 }
+
 td {
   position: relative;
 }
-.hmf-table th {
+
+.table th {
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -79,7 +84,8 @@ td {
   line-height: 1.1;
   font-family: inherit;
 }
-.hmf-totals-label {
+
+.totals-label {
   font-size: 0.78rem;
   font-weight: 600;
   text-align: center;
@@ -88,7 +94,8 @@ td {
   line-height: 1.1;
   font-family: inherit;
 }
-.hmf-total-row td {
+
+.total-row td {
   background: none;
   border-bottom: none;
 }

@@ -5,9 +5,7 @@ import "./howMuchFaster.scss";
 import { useState } from "react";
 
 export default function HowMuchFaster() {
-  // Table rows (4 rows)
   const rows = Array.from({ length: 4 });
-  // Table columns: Speed 1, Speed 2, Distance, Time Saved
   const columns = ["Speed 1", "Speed 2", "Distance", "Time Saved"];
 
   // State for table data: 4 rows x 4 columns, all initialized to 0
@@ -22,7 +20,7 @@ export default function HowMuchFaster() {
     pattern: "^\\d*(\\.\\d{0,2})?$",
     maxLength: 8,
     autoComplete: "off",
-    className: "hmf-input",
+    className: "input",
   };
 
   // Handler to update table data
@@ -40,31 +38,21 @@ export default function HowMuchFaster() {
 
   // Calculate time saved for each row
   const calculatedTableData = tableData.map(row => {
-    const [initSpeed, fasterSpeed, distance] = row;
+    const [speed1, speed2, distance] = row;
     let timeSaved = 0;
-    if (initSpeed > 0 && fasterSpeed > 0 && distance > 0) {
-      timeSaved = distance * (1 / initSpeed - 1 / fasterSpeed);
+    if (speed1 > 0 && speed2 > 0 && distance > 0) {
+      timeSaved = distance * (1 / speed1 - 1 / speed2);
     }
-    return [initSpeed, fasterSpeed, distance, timeSaved];
+    return [speed1, speed2, distance, timeSaved];
   });
 
   // Calculate totals
   const totalDistance = calculatedTableData.reduce((sum, row) => sum + row[2], 0);
   const totalTimeSaved = calculatedTableData.reduce((sum, row) => sum + row[3], 0);
 
-  // Helper to format hours as HH:MM:SS
-  function formatHoursToHMS(hours: number): string {
-    if (!isFinite(hours) || hours <= 0) return "00:00:00";
-    const totalSeconds = Math.round(hours * 3600);
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    return [h, m, s].map(v => v.toString().padStart(2, '0')).join(":");
-  }
-
   // Helper to format hours as HH:MM:SS with faded leading zeros or fully faded if inputs are missing/zero
   function formatHoursToHMSFaded(hours: number, isEmpty: boolean): JSX.Element {
-    if (isEmpty || !isFinite(hours)) return <span className="hmf-hms-span-empty">00:00:00</span>;
+    if (isEmpty || !isFinite(hours)) return <span className="hms-span-empty">00:00:00</span>;
     const negative = hours < 0;
     const absHours = Math.abs(hours);
     const totalSeconds = Math.round(absHours * 3600);
@@ -76,13 +64,13 @@ export default function HowMuchFaster() {
     const sStr = s.toString().padStart(2, '0');
     const timeString =
       hStr === '00' && mStr === '00'
-        ? <><span className="hmf-faded">00:00:</span>{sStr}</>
+        ? <><span className="faded">00:00:</span>{sStr}</>
         : hStr === '00'
-        ? <><span className="hmf-faded">00:</span>{mStr}:{sStr}</>
+        ? <><span className="faded">00:</span>{mStr}:{sStr}</>
         : <>{hStr}:{mStr}:{sStr}</>;
     return (
       <span className={
-        isEmpty ? "hmf-hms-span-empty" : negative ? "hmf-hms-span-negative" : undefined
+        isEmpty ? "hms-span-empty" : negative ? "hms-span-negative" : undefined
       }>
         {negative ? "-" : null}{timeString}
       </span>
@@ -91,9 +79,8 @@ export default function HowMuchFaster() {
 
   return (
     <ToolCard>
-      <p id="howMuchFasterHeader">How Much Faster</p>
       <div className="howMuchFasterContent">
-        <table className="hmf-table">
+        <table className="table">
           <thead>
             <tr>
               <th>Speed 1</th>
@@ -104,7 +91,7 @@ export default function HowMuchFaster() {
           </thead>
           <tbody>
             {rows.map((_, rowIdx) => (
-              <tr key={rowIdx} className="hmf-data-row">
+              <tr key={rowIdx} className="data-row">
                 {columns.map((_, colIdx) => (
                   <td key={colIdx}>
                     {colIdx === 3 ? (
@@ -115,7 +102,7 @@ export default function HowMuchFaster() {
                           tabIndex={-1}
                           style={{ background: '#f8f8f8' }}
                         />
-                        <span className="hmf-hms-span">{
+                        <span className="hms-span">{
                           formatHoursToHMSFaded(
                             calculatedTableData[rowIdx][3],
                             tableData[rowIdx][0] === 0 || tableData[rowIdx][1] === 0 || tableData[rowIdx][2] === 0
@@ -134,8 +121,8 @@ export default function HowMuchFaster() {
               </tr>
             ))}
             {/* Total row */}
-            <tr className="hmf-total-row">
-              <td colSpan={2} className="hmf-totals-label">Totals</td>
+            <tr className="total-row">
+              <td colSpan={2} className="totals-label">Totals</td>
               <td>
                 <input
                   {...inputProps}
@@ -151,7 +138,7 @@ export default function HowMuchFaster() {
                   tabIndex={-1}
                   style={{ background: '#f8f8f8' }}
                 />
-                <span className="hmf-hms-span">{
+                <span className="hms-span">{
                   formatHoursToHMSFaded(
                     totalTimeSaved,
                     tableData.every(row => row[0] === 0 || row[1] === 0 || row[2] === 0)
