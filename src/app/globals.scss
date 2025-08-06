@@ -45,10 +45,17 @@ body {
     background-color: $white;
 }
 
+.layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 #rootContent {
-    box-sizing: border-box;
-    max-width: 100vw;
-    padding: 8px;
+  flex: 1 0 auto;
+  box-sizing: border-box;
+  max-width: 100vw;
+  padding: 8px;
 }
 
 img {
