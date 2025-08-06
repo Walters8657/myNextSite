@@ -1,5 +1,5 @@
 {
-  "name": "react-personal-site",
+  "name": "michael-walters-next",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,7 @@
     "sass": "^1.77.8"
   },
   "devDependencies": {
-    "@types/node": "^22.18.0",
+    "@types/node": "^22.0.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "typescript": "^5"
