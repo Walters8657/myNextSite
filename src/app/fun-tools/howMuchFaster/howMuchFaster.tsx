@@ -1,6 +1,6 @@
 "use client";
 
-import ToolCard from "../toolCard/toolCard";
+import ToolCard from "../../ui/toolCard/toolCard";
 import "./howMuchFaster.scss";
 import { useState } from "react";
 

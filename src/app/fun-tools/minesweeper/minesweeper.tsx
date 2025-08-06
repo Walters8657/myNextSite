@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
-import ToolCard from "../toolCard/toolCard";
+import ToolCard from "../../ui/toolCard/toolCard";
 import "./minesweeper.scss"
 
 interface GameTile {

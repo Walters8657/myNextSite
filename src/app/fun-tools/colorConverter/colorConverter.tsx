@@ -1,6 +1,6 @@
 'use client';
 
-import ToolCard from '../toolCard/toolCard';
+import ToolCard from '../../ui/toolCard/toolCard';
 import './colorConverter.scss'
 import { useEffect, useState } from "react";
 import { cssNamedColors, type CSSNamedColor } from './cssNamedColors';
