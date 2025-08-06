@@ -45,12 +45,20 @@
     }
     
     .colorRGB {
-        color: #666;
         font-size: 0.9em;
     }
 
     #closestNamedColor {
         width: 100%;
         text-align: center;
+        border-radius: 5px;
+        margin-top: 0;
     }
+    #closestNamedColorTitle {
+        text-align: center;
+        font-size: 0.8em;
+        margin-bottom: 0;
+    }
+
+
 }

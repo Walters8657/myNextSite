@@ -80,6 +80,7 @@ export default function HowMuchFaster() {
   return (
     <ToolCard>
       <div className="howMuchFasterContent">
+        <p id="title">How Much Faster?</p>
         <table className="table">
           <thead>
             <tr>

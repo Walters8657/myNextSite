@@ -509,9 +509,13 @@ export default function ColorConverter() {
                 </span>
 
                 <span id="closestNamedColorContainer">
+                    <p id="closestNamedColorTitle">Closest Named Color</p>
                     <div className="namedColorDisplay">
                         {closestNamedColor ? (
-                            <p id='closestNamedColor'>
+                            <p id='closestNamedColor' style={{ 
+                                backgroundColor: `rgb(${closestNamedColor.rgb[0]}, ${closestNamedColor.rgb[1]}, ${closestNamedColor.rgb[2]})`,
+                                color: closestNamedColor.textColor || 'black'
+                            }}>
                                 <span className="colorName">{closestNamedColor.name}</span>
                                 <br />
                                 <span className="colorRGB">
@@ -523,7 +527,6 @@ export default function ColorConverter() {
                         )}
                     </div>
                 </span>
-
             </form>
         </ToolCard>
     )

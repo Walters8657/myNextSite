@@ -4,6 +4,10 @@ $negative-color: #c00;
 .howMuchFasterContent {
   overflow-x: unset;
   padding: 0.25rem 0;
+  #title {
+    text-align: center;
+    font-weight: bold;
+  }
 }
 
 .table {
