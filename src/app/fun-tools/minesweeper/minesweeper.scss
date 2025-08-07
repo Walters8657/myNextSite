@@ -31,6 +31,10 @@
     background-position: center;
 }
 
+#mobileToggle {
+    text-align: center;
+}
+
 #mineHeader {
     text-align: center;
 }
@@ -76,6 +80,11 @@ table {
                 line-height: 20px;
                 height: 20px;
                 width: 20px;
+                //user-select: none;
+                //-webkit-user-select: none;
+                //-moz-user-select: none;
+                //-ms-user-select: none;
+                //touch-action: manipulation;
             }
             p:hover {
                 cursor: default

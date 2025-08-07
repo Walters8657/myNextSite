@@ -32,12 +32,29 @@ function getColor(numBombs: number): string {
     return bombColors[numBombs] || "";
 }
 
+// Function to detect if device is primarily touchscreen
+function detectTouchDevice(): boolean {
+    if (typeof window === 'undefined') return false;
+    
+    // Check for touch support
+    const hasTouchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // Check if the primary input mechanism is touch
+    const hasTouchPointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    
+    // Check for mobile/tablet user agent
+    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    return hasTouchSupport && (hasTouchPointer || isMobileUA);
+}
+
 export default function Minesweeper() {
     const [fullGameData, setFullGameData] = useState<GameTile[][]>([])
     const [isWon, setIsWon] = useState(false);
     const [isLost, setIsLost] = useState(false);
     const [resetButtonState, setResetButtonState] = useState("smile");
     const [isClient, setIsClient] = useState(false);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
 
     const resetButtonClass = useMemo((): string => {
         if (isWon) return "win";
@@ -82,9 +99,10 @@ export default function Minesweeper() {
         setFullGameData(newData);
     }, [isLost, isWon, fullGameData]);
 
-    // Set client flag on mount
+    // Set client flag and detect touch device on mount
     useEffect(() => {
         setIsClient(true);
+        setIsTouchDevice(detectTouchDevice());
     }, []);
 
     // Initialize game only after client-side hydration
@@ -261,6 +279,7 @@ export default function Minesweeper() {
                     </tbody>
                 </table>
             </div>
+            {isTouchDevice && <p id="mobileToggle">Reveal <span id="slider">Slide</span> Flag</p>}
         </ToolCard>
     ) 
 }
