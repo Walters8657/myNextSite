@@ -9,23 +9,23 @@
 .gray { color: #666666; }      // Darker gray for better contrast
 
 .smile {
-    background-image: url(../../../../public/minesweeperAssests/smile.jpg);
+    background-image: url(../../../../public/minesweeperAssets/smile.jpg);
 }
 
 .win {
-    background-image: url(../../../../public/minesweeperAssests/win.jpg);
+    background-image: url(../../../../public/minesweeperAssets/win.jpg);
 }
 
 .dead {
-    background-image: url(../../../../public/minesweeperAssests/dead.jpg);
+    background-image: url(../../../../public/minesweeperAssets/dead.jpg);
 }
 
 .nervous {
-    background-image: url(../../../../public/minesweeperAssests/nervous.jpg);
+    background-image: url(../../../../public/minesweeperAssets/nervous.jpg);
 }
 
 .flagged {
-    background-image: url(../../../../public/minesweeperAssests/flag.jpg);
+    background-image: url(../../../../public/minesweeperAssets/flag.jpg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -35,7 +35,7 @@
     text-align: center;
 }
 
-button {
+#resetButton {
     display: block;
     width: 30px;
     height: 30px;
