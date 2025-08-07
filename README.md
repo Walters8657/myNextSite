@@ -12,7 +12,6 @@
     - Regex generator?
 
 ### Bugs
-- Minesweeper 
-    - No ability to place flags on mobile
 - Resume
     - Mobile Abilities list
+- Home page projects can get un-centered after resize
