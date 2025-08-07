@@ -55,6 +55,7 @@ export default function Minesweeper() {
     const [resetButtonState, setResetButtonState] = useState("smile");
     const [isClient, setIsClient] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [useFlag, setUseFlag] = useState(false);
 
     const resetButtonClass = useMemo((): string => {
         if (isWon) return "win";
@@ -279,7 +280,7 @@ export default function Minesweeper() {
                     </tbody>
                 </table>
             </div>
-            {isTouchDevice && <p id="mobileToggle">Reveal <span id="slider">Slide</span> Flag</p>}
+            {isTouchDevice && <p id="mobileToggle">Show<span id="slider" className={useFlag ? "useFlag" : ""} onClick={() => setUseFlag(!useFlag)}><span></span></span> Flag</p>}
         </ToolCard>
     ) 
 }
