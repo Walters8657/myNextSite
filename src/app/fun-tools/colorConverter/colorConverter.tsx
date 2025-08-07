@@ -379,6 +379,10 @@ export default function ColorConverter() {
     return(
         <ToolCard>
             <form name="conversionsForm" id="conversionsForm">
+                <button id ="randomColorBtn" type="button" onClick={() => {
+                    setLastChanged('rgb'); 
+                    setCurrentRGB(generateRandomRGB());
+                }}></button>
                 <div id="colorSwatchContainer">
                     <div 
                         id="currentColorSwatch" 

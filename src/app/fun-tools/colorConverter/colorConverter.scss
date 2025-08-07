@@ -1,4 +1,18 @@
 #conversionsForm {
+    #randomColorBtn {
+        display: block;
+        position: absolute;
+        height: 30px;
+        width: 30px;
+        top: 23px;
+        right: 15px;
+        background-image: url(../../../../public/colorConvertorAssets/randomColor.png);
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+    }
+
     #colorSwatchContainer {
         display: flex;
         justify-content: center;
