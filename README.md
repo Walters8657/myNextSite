@@ -5,7 +5,6 @@
 - Better home page project arrows
 - Auto deployment from main
 - Fun Tools
-    - Add shuffle for color translator
     - Weather widget
     - Boids with parameters
     - Sorting visualizations
