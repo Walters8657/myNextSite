@@ -75,18 +75,29 @@ export default function Minesweeper() {
         createMineArray(10, 8, 10);
     }, []);
 
-    const handleCellClick = useCallback((rowIndex: number, cellIndex: number, cell: GameTile): void => {
+    const handleUseFlagSlider = useCallback((): void => {
+        setUseFlag(prev => !prev);
+    }, []);
+
+    const handleCellClick = useCallback((e: React.MouseEvent, rowIndex: number, cellIndex: number, cell: GameTile): void => {
         if (isLost || !fullGameData[rowIndex] || !fullGameData[rowIndex][cellIndex]) return;
+
+        // Handles flagging with use of the slider
+        if (useFlag) {
+            handleRightClick(e, rowIndex, cellIndex, cell);
+            return;
+        }
         
         // Don't reveal flagged cells
         if (cell.isFlagged) return;
-        
+
         if (cell.isBomb) {
             setIsLost(true);
         } else {
-            revealCell(rowIndex, cellIndex);
+            revealCell(rowIndex, cellIndex); 
         }
-    }, [isLost, fullGameData]);
+
+    }, [isLost, fullGameData, useFlag]);
 
     const handleRightClick = useCallback((e: React.MouseEvent, rowIndex: number, cellIndex: number, cell: GameTile): void => {
         e.preventDefault(); // Prevent context menu
@@ -268,7 +279,7 @@ export default function Minesweeper() {
                                     >
                                         <p 
                                             className={`${!cell.isBomb ? getColor(cell.bombsTouching) : ''} ${cell.isFlagged ? 'flagged' : ''}`}
-                                            onClick={() => handleCellClick(rowIndex, cellIndex, cell)}
+                                            onClick={(e) => handleCellClick(e, rowIndex, cellIndex, cell)}
                                             onContextMenu={(e) => handleRightClick(e, rowIndex, cellIndex, cell)}
                                         >
                                             {renderCellContent(cell)}
@@ -280,7 +291,7 @@ export default function Minesweeper() {
                     </tbody>
                 </table>
             </div>
-            {isTouchDevice && <p id="mobileToggle">Show<span id="slider" className={useFlag ? "useFlag" : ""} onClick={() => setUseFlag(!useFlag)}><span></span></span> Flag</p>}
+            {isTouchDevice && <p id="mobileToggle">Show<span id="slider" className={useFlag ? "useFlag" : ""} onClick={handleUseFlagSlider}><span></span></span> Flag</p>}
         </ToolCard>
     ) 
 }
