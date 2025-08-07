@@ -248,7 +248,7 @@ export default function Minesweeper() {
                                         className={!cell.isRevealed ? "unclicked" : ""}
                                     >
                                         <p 
-                                            className={`${getColor(cell.bombsTouching)} ${cell.isFlagged ? 'flagged' : ''}`}
+                                            className={`${!cell.isBomb ? getColor(cell.bombsTouching) : ''} ${cell.isFlagged ? 'flagged' : ''}`}
                                             onClick={() => handleCellClick(rowIndex, cellIndex, cell)}
                                             onContextMenu={(e) => handleRightClick(e, rowIndex, cellIndex, cell)}
                                         >

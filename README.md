@@ -13,7 +13,6 @@
 
 ### Bugs
 - Minesweeper 
-    - Mines have a text color on loss
     - No ability to place flags on mobile
 - Resume
     - Mobile Abilities list
