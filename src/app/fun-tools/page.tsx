@@ -5,12 +5,14 @@ import "./funTools.scss";
 import ColorConverter from "./colorConverter/colorConverter";
 import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import Minesweeper from "./minesweeper/minesweeper";
+import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
 
 export default function Page() {
   const widgets = [
     <Minesweeper key="minesweeper" />,
     <ColorConverter key="colorConverter" />,
     <HowMuchFaster key="howMuchFaster" />,
+    <SortingVisualizations key="sortingVisualizations" />,
   ];
 
   const masonryOptions = {
