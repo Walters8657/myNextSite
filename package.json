@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gcloud-deploy": "gcloud run deploy michael-walters-next --source ."
   },
   "dependencies": {
     "masonry-layout": "^4.2.2",

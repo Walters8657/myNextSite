@@ -12,6 +12,4 @@
     - Regex generator?
 
 ### Bugs
-- Resume
-    - Mobile Abilities list
 - Home page projects can get un-centered after resize
