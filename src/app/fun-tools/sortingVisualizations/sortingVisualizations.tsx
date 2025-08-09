@@ -19,9 +19,7 @@ export default function SortingVisualizations() {
         let newBars = [...bars];
         for (let i = newBars.length - 1; i >= 0; i--) {
             let rand = Math.floor(Math.random() * (i + 1));
-            newBars = swapBars(newBars, i, rand);
-            setBars([...newBars]);
-            await new Promise(resolve => setTimeout(resolve, 0));
+          newBars = await swapAndRender(newBars, i, rand, 0);
         }
     }
 
@@ -33,6 +31,14 @@ export default function SortingVisualizations() {
         return array;
     }
 
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const swapAndRender = async (array: Bar[], i: number, j: number, ms = 0): Promise<Bar[]> => {
+      array = swapBars(array, i, j);
+      setBars([...array]);
+      await delay(ms);
+      return array;
+  }
+
     const bubbleSort = async () => {
         let newBars = [...bars];
         let swapped = true;
@@ -42,10 +48,8 @@ export default function SortingVisualizations() {
             for (let i = 0; i < newBars.length - 1; i++) {
                 // If out of order, swap the bars and update state
                 if (newBars[i].order > newBars[i + 1].order) {
-                    newBars = swapBars(newBars, i, i + 1);
-                    swapped = true;
-                    setBars([...newBars]);
-                    await new Promise(resolve => setTimeout(resolve, 0));
+                  newBars = await swapAndRender(newBars, i, i + 1, 0);
+                  swapped = true;
                 }
             }
         }
@@ -56,9 +60,7 @@ export default function SortingVisualizations() {
         for (let i = 0; i < newBars.length - 1; i++) {
             for (let n = i + 1; n < newBars.length; n++) {
                 if (newBars[i].order > newBars[n].order) {
-                    newBars = swapBars(newBars, i, n);
-                    setBars([...newBars]);
-                    await new Promise(resolve => setTimeout(resolve, 0));
+                  newBars = await swapAndRender(newBars, i, n, 0);
                 }
             }
         }
@@ -70,9 +72,7 @@ export default function SortingVisualizations() {
             let j = i;
             // Bubble sort downwards to keep the bars in order
             while (j > 0 && newBars[j - 1].order > newBars[j].order) {
-                newBars = swapBars(newBars, j - 1, j);
-                setBars([...newBars]);
-                await new Promise(resolve => setTimeout(resolve, 0));
+              newBars = await swapAndRender(newBars, j - 1, j, 0);
                 j--;
             }
         }
@@ -98,12 +98,9 @@ export default function SortingVisualizations() {
                         i++;
                     } else {
                         // Bubble sort to keep the bars in order
-                        for (let k = j; k > i; k--) {
-                            newBars = swapBars(newBars, k, k - 1);
-                        }
-                        // Update the bars UI
-                        setBars([...newBars]);
-                        await new Promise(resolve => setTimeout(resolve, 30));
+                      for (let k = j; k > i; k--) {
+                          newBars = await swapAndRender(newBars, k, k - 1, 0);
+                      }
                         i++;
                         j++;
                         mid++;
@@ -114,7 +111,44 @@ export default function SortingVisualizations() {
         setBars([...newBars]);
     }
 
-    const quickSort = async () => { alert("Quick Sort"); }
+    const quickSort = async () => {
+        let working = [...bars];
+      
+        const partition = async (low: number, high: number): Promise<number> => {
+            const pivotValue = working[high].order;
+            // Store index is the index of the last bar that is less than the pivot
+            let storeIndex = low;
+            // Iterate through the bars in the chunk
+            for (let scanIndex = low; scanIndex < high; scanIndex++) {
+                // If the bar is less than the pivot, swap it with the store index
+                if (working[scanIndex].order <= pivotValue) {
+                    working = await swapAndRender(working, storeIndex, scanIndex, 0);
+                    storeIndex++;
+                }
+            }
+            working = await swapAndRender(working, storeIndex, high, 0);
+            return storeIndex;
+        };
+
+        // Stack to keep track of the low and high indices of the chunks
+        const stack: Array<{ low: number; high: number }> = [];
+        if (working.length > 1) stack.push({ low: 0, high: working.length - 1 });
+
+        while (stack.length) {
+            // Pop the last chunk from the stack
+            const { low, high } = stack.pop()!;
+            // If the chunk is empty, skip it
+            if (low >= high) continue;
+            // Partition the chunk and get the new pivot index
+            const p = await partition(low, high);
+            // If the left chunk is not empty, push it to the stack
+            if (p - 1 > low) stack.push({ low, high: p - 1 });
+            // If the right chunk is not empty, push it to the stack
+            if (p + 1 < high) stack.push({ low: p + 1, high });
+        }
+
+        setBars([...working]);
+     }
 
     useEffect(() => {
         populateBars();
