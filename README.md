@@ -7,7 +7,6 @@
 - Fun Tools
     - Weather widget
     - Boids with parameters
-    - Sorting visualizations
     - Metronome
     - Regex generator?
 
