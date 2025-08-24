@@ -22,8 +22,8 @@ export default function Boids() {
             y: number
         };
         velocity: {
-            x: number;
-            y: number;
+            deg: number;
+            speed: number;
         };
         
         attraction: number;
@@ -33,9 +33,9 @@ export default function Boids() {
         turnRadius: number;
         viewDistance: number;
     
-        constructor (position?: {x: number, y: number}, velocity?: {x: number, y: number}) {
+        constructor (position?: {x: number, y: number}, velocity?: {deg: number, speed: number}) {
             this.position = position || { x: 0, y: 0 };
-            this.velocity = velocity || { x: 0, y: 0 };
+            this.velocity = velocity || { deg: 0, speed: 0 };
     
             this.attraction = getVarianceValue(baseAttraction);
             this.repulsion = getVarianceValue(baseRepulsion);
@@ -69,7 +69,11 @@ export default function Boids() {
             const position = getRandomPosition();
             return new Boid(position);
         });
-        console.log("Refresh Boids");
+
+        newBoids.forEach(boid => {
+            boid.velocity = getRandomVelocity(boid.maxSpeed);
+        });
+
         setBoids(newBoids);
     }
 
@@ -95,6 +99,14 @@ export default function Boids() {
         }
     }
 
+    // Get a random velocity
+    function getRandomVelocity(maxSpeed: number) {
+        return {
+            deg: Math.random() * 360,
+            speed: Math.random() * maxSpeed
+        }
+    }
+
     // Get a value with a variance from the base value
     function getVarianceValue(baseValue: number) {
         const offset = Math.random() * variance * baseValue;
@@ -112,8 +124,9 @@ export default function Boids() {
                 <div id="boidsSimulation" ref={simulationRef}>
                     {boids.map((boid, index) => (
                         <div key={index} className="boid" style={{
-                            left: boid.position.x + 'px',
-                            top: boid.position.y + 'px'
+                            left: boid.position.x - 5 + 'px',
+                            top: boid.position.y - 5 +'px',
+                            transform: `rotate(${boid.velocity.deg}deg)`
                         }}></div>
                     ))}
                 </div>
