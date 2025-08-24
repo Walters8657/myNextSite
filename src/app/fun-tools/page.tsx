@@ -10,11 +10,11 @@ import Boids from "./boids/boids";
 
 export default function Page() {
   const widgets = [
+    <Boids key="boids" />,
     <Minesweeper key="minesweeper" />,
     <ColorConverter key="colorConverter" />,
     <HowMuchFaster key="howMuchFaster" />,
     <SortingVisualizations key="sortingVisualizations" />,
-    <Boids key="boids" />
   ];
 
   const masonryOptions = {

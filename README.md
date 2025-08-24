@@ -7,6 +7,7 @@
 - Fun Tools
     - Weather widget
     - Boids with parameters
+    - Conway's game of life
     - Metronome
     - Regex generator?
 
