@@ -6,6 +6,7 @@ import ColorConverter from "./colorConverter/colorConverter";
 import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import Minesweeper from "./minesweeper/minesweeper";
 import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
+import Boids from "./boids/boids";
 
 export default function Page() {
   const widgets = [
@@ -13,6 +14,7 @@ export default function Page() {
     <ColorConverter key="colorConverter" />,
     <HowMuchFaster key="howMuchFaster" />,
     <SortingVisualizations key="sortingVisualizations" />,
+    <Boids key="boids" />
   ];
 
   const masonryOptions = {

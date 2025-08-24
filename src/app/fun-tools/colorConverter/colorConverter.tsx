@@ -377,7 +377,7 @@ export default function ColorConverter() {
     }
 
     return(
-        <ToolCard>
+        <ToolCard title="Color Converter">
             <form name="conversionsForm" id="conversionsForm">
                 <button id ="randomColorBtn" type="button" onClick={() => {
                     setLastChanged('rgb'); 
