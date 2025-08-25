@@ -24,17 +24,18 @@ export default function Page() {
   };
 
   return (
-    <Masonry
-      className="my-masonry-grid"
-      options={masonryOptions}
-      disableImagesLoaded={false}
-      updateOnEachImageLoad={false}
-    >
-      {widgets.map((widget, i) => (
-        <div className="fun-tools-widget" key={i}>
-          {widget}
-        </div>
-      ))}
-    </Masonry>
+    <div className="masonry-container">
+      <Masonry
+        options={masonryOptions}
+        disableImagesLoaded={false}
+        updateOnEachImageLoad={false}
+      >
+        {widgets.map((widget, i) => (
+          <div className="fun-tools-widget" key={i}>
+            {widget}
+          </div>
+        ))}
+      </Masonry>
+    </div>
   );
 }
