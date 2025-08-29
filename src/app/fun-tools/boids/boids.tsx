@@ -7,126 +7,107 @@ class Boid {
         x: number;
         y: number
     };
-    velocity: {
-        deg: number;
-        speed: number;
-    };
-    
-    attraction: number;
-    repulsion: number;
-    influence: number;
-    maxSpeed: number;
-    turnRadius: number;
-    viewDistance: number;
+    heading: number;    
 
-    constructor (position?: {x: number, y: number}, velocity?: {deg: number, speed: number}, params?: {
-        baseAttraction: number;
-        baseRepulsion: number;
-        baseInfluence: number;
-        baseMaxSpeed: number;
-        baseTurnRadius: number;
-        baseViewDistance: number;
-        variance: number;
-    }) {
-        this.position = position || { x: 0, y: 0 };
-        this.velocity = velocity || { deg: 0, speed: 0 };
-
-        if (params) {
-            this.attraction = this.getVarianceValue(params.baseAttraction, params.variance);
-            this.repulsion = this.getVarianceValue(params.baseRepulsion, params.variance);
-            this.influence = this.getVarianceValue(params.baseInfluence, params.variance);
-            this.maxSpeed = this.getVarianceValue(params.baseMaxSpeed, params.variance);
-            this.turnRadius = this.getVarianceValue(params.baseTurnRadius, params.variance);
-            this.viewDistance = this.getVarianceValue(params.baseViewDistance, params.variance);
-        } else {
-            this.attraction = 1;
-            this.repulsion = 1;
-            this.influence = 1;
-            this.maxSpeed = 25;
-            this.turnRadius = 10;
-            this.viewDistance = 50;
-        }
+    constructor(position: {x: number, y: number}, heading: number) {
+        this.position = position;
+        this.heading = heading;
     }
 
-    // Get a value with a variance from the base value
-    getVarianceValue(baseValue: number, variance: number) {
-        const offset = Math.random() * variance * baseValue;
-
-        if (Math.random() < 0.5) {
-            return baseValue + offset;
-        }
-
-        return baseValue - offset;
-    }
-
+    // Returns boids that are within a 240* arc and 50px radius
     getNearbyBoids(boids: Boid[]) {
         return boids.filter(boid => {
-            return (
-                Math.sqrt(
-                    Math.pow(boid.position.x - this.position.x, 2) + 
-                    Math.pow(boid.position.y - this.position.y, 2)
-                ) < this.viewDistance
-            )
-        })
+            // Skip self
+            if (boid === this) return false;
+            
+            const distance = this.getDistance(this, boid);
+            if (distance > 50) return false; // Too far away
+            
+            // Calculate angle to the boid relative to current heading
+            const dx = boid.position.x - this.position.x;
+            const dy = boid.position.y - this.position.y;
+            const angleToBoid = Math.atan2(dy, dx) * (180 / Math.PI);
+            
+            // Calculate the angle difference from current heading
+            let angleDiff = angleToBoid - this.heading;
+            
+            // Normalize angle difference to [-180, 180] range
+            while (angleDiff > 180) angleDiff -= 360;
+            while (angleDiff < -180) angleDiff += 360;
+            
+            // Check if boid is within the 240-degree vision cone
+            return Math.abs(angleDiff) <= 120; // 240/2 = 120 degrees on each side
+        });
     }
 
     setNewRotation(boids: Boid[]) {
         const nearbyBoids = this.getNearbyBoids(boids);
-        let x = 0, y = 0, w = 0;
+        let separationX = 0, separationY = 0;
+        let alignmentX = 0, alignmentY = 0;
+        let cohesionX = 0, cohesionY = 0;
 
-        nearbyBoids.forEach(boid => {
-            const radians = boid.velocity.deg * (Math.PI / 180);
-            x += Math.cos(radians) * boid.influence;
-            y += Math.sin(radians) * boid.influence;
-            w += boid.influence;
-        });
+        if (nearbyBoids.length > 0) {
+            nearbyBoids.forEach(boid => {
+                // Separation: avoid collision with nearby boids
+                const distance = this.getDistance(this, boid);
+                if (distance < 25) {
+                    // Much stronger separation force, especially when very close
+                    const separationForce = Math.max(0, (25 - distance) / 25); 
+                    separationX += (this.position.x - boid.position.x) * separationForce;
+                    separationY += (this.position.y - boid.position.y) * separationForce;
+                }
 
-        let angle = Math.atan2(y, x);
-        
-        // Convert current velocity to radians for comparison
-        const currentRadians = this.velocity.deg * (Math.PI / 180);
-        
-        // Calculate the shortest angular difference
-        let angleDiff = angle - currentRadians;
-        
-        // Normalize to [-π, π] range
-        while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
-        while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
-        
-        // Apply turn radius limitation
-        const maxTurn = this.turnRadius * (Math.PI / 180);
-        if (Math.abs(angleDiff) > maxTurn) {
-            // Apply the maximum turn in the correct direction
-            angle = currentRadians + (angleDiff > 0 ? maxTurn : -maxTurn);
+                // Alignment: match velocity of nearby boids
+                const boidRadians = boid.heading * (Math.PI / 180);
+                alignmentX += Math.cos(boidRadians);
+                alignmentY += Math.sin(boidRadians);
+
+                // Cohesion: move toward center of nearby boids
+                cohesionX += boid.position.x;
+                cohesionY += boid.position.y;
+            });
+
+            // Normalize alignment and cohesion
+            alignmentX /= nearbyBoids.length;
+            alignmentY /= nearbyBoids.length;
+            cohesionX /= nearbyBoids.length;
+            cohesionY /= nearbyBoids.length;
+
+            // Calculate desired direction by combining all forces
+            const desiredX = separationX * 3.0 + alignmentX * 0.8 + (cohesionX - this.position.x) * 0.3;
+            const desiredY = separationY * 3.0 + alignmentY * 0.8 + (cohesionY - this.position.y) * 0.3;
+
+            // Calculate desired angle
+            let desiredAngle = Math.atan2(desiredY, desiredX);
+            
+            // Convert current heading to radians for comparison
+            const currentRadians = this.heading * (Math.PI / 180);
+            
+            // Calculate the shortest angular difference
+            let angleDiff = desiredAngle - currentRadians;
+            
+            // Normalize to [-π, π] range
+            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+            while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+            
+            // Apply turn radius limitation
+            const maxTurn = 2.5 * (Math.PI / 180);
+            if (Math.abs(angleDiff) > maxTurn) {
+                // Apply the maximum turn in the correct direction
+                desiredAngle = currentRadians + (angleDiff > 0 ? maxTurn : -maxTurn);
+            }
+
+            this.heading = desiredAngle * (180 / Math.PI);
         }
-
-        this.velocity.deg = angle * (180 / Math.PI);
-
-        return this;
-    }
-
-    setNewSpeed(boids: Boid[]) {
-        const nearbyBoids = this.getNearbyBoids(boids);
-        let s = 0, w = 0;
-
-        nearbyBoids.forEach(boid => {
-            s += boid.velocity.speed * boid.influence;
-            w += boid.influence;
-        });
-
-        let avgSpeed = s / w;
-
-        this.velocity.speed = Math.min(avgSpeed, this.maxSpeed);
 
         return this;
     }
 
     setNewPosition() {
-        let newX = this.position.x + Math.cos(this.velocity.deg * (Math.PI / 180)) * this.velocity.speed;
-        let newY = this.position.y + Math.sin(this.velocity.deg * (Math.PI / 180)) * this.velocity.speed;
+        let speed = 1;
+        let newX = this.position.x + Math.cos(this.heading * (Math.PI / 180)) * speed;
+        let newY = this.position.y + Math.sin(this.heading * (Math.PI / 180)) * speed;
 
-        // Clamp newX and newY to stay within the simulation area
-        // Use fallback dimensions if DOM element is not available
         const simWidth = 248; // fallback width
         const simHeight = 210; // fallback height
         
@@ -141,17 +122,18 @@ class Boid {
 
         return this;
     }
+
+    getDistance(boid1: Boid, boid2: Boid) {
+        return Math.sqrt(
+            Math.pow(boid1.position.x - boid2.position.x, 2) + 
+            Math.pow(boid1.position.y - boid2.position.y, 2)
+        )
+    }
 } 
 
 export default function Boids() {
     const [numBoids, setNumBoids] = useState<number>(25);
-    const [baseAttraction, setBaseAttraction] = useState<number>(1);
-    const [baseRepulsion, setBaseRepulsion] = useState<number>(1);
-    const [baseInfluence, setBaseInfluence] = useState<number>(1);
-    const [baseMaxSpeed, setBaseMaxSpeed] = useState<number>(25);
-    const [baseTurnRadius, setBaseTurnRadius] = useState<number>(10);
-    const [baseViewDistance, setBaseViewDistance] = useState<number>(50);
-    const [variance, setVariance] = useState<number>(0.2);
+    const [isPaused, setIsPaused] = useState<boolean>(true);
 
     const [boids, setBoids] = useState<Boid[]>([]);
 
@@ -169,42 +151,33 @@ export default function Boids() {
         createNewBoids();
     }, [numBoids]);
 
-    // On any of the base parameters change
+    // On pause or resume change
     useEffect(() => {
-        updateBoidsPreservePositionVelocity();
-    }, [baseAttraction, baseRepulsion, baseInfluence, baseMaxSpeed, baseTurnRadius, baseViewDistance, variance]);
+        if (!isPaused) {
+            const interval = setInterval(() => {
+                generateNewFrame();
+            }, 1000 / 60);
+            return () => clearInterval(interval);
+        }
+    }, [isPaused]);
 
     // Create new boids
     function createNewBoids() {
         const newBoids = Array.from({ length: numBoids }, () => {
             const position = getRandomPosition();
-            return new Boid(position, undefined, {
-                baseAttraction,
-                baseRepulsion,
-                baseInfluence,
-                baseMaxSpeed,
-                baseTurnRadius,
-                baseViewDistance,
-                variance
-            });
-        });
-
-        newBoids.forEach(boid => {
-            boid.velocity = getRandomVelocity(boid.maxSpeed);
+            const heading = getRandomVelocity();
+            return new Boid(position, heading);
         });
 
         setBoids(newBoids);
     }
 
+    // Generate a new frame of the simulation
     function generateNewFrame() {
         let newBoids = boids;
 
         newBoids = boids.map(boid => {
-            return boid.setNewRotation(boids);
-        });
-
-        newBoids = newBoids.map(boid => {
-            return boid.setNewSpeed(newBoids);
+            return boid.setNewRotation(newBoids);
         });
 
         newBoids = newBoids.map(boid => {
@@ -212,25 +185,6 @@ export default function Boids() {
         });
 
         setBoids(newBoids);
-    }
-
-    // Update boids with new parameters, preserving the existing position and velocity
-    function updateBoidsPreservePositionVelocity() {
-        setBoids(boids.map(boid => {
-            return new Boid(
-                boid.position,
-                boid.velocity,
-                {
-                    baseAttraction,
-                    baseRepulsion,
-                    baseInfluence,
-                    baseMaxSpeed,
-                    baseTurnRadius,
-                    baseViewDistance,
-                    variance
-                }
-            );
-        }));
     }
 
     // Get a random position within the simulation window
@@ -270,57 +224,31 @@ export default function Boids() {
     }
 
     // Get a random velocity
-    function getRandomVelocity(maxSpeed: number) {
-        return {
-            deg: Math.random() * 360,
-            speed: Math.random() * maxSpeed
-        }
+    function getRandomVelocity() {
+        return Math.random() * 360
+    }
+
+    // Pause or resume the simulation
+    function pauseResume() {
+        setIsPaused(!isPaused);
     }
 
     return (
         <ToolCard title="Boids">
             <div id="boidsContainer">
-                <button onClick={generateNewFrame}>+1 Frame</button>
+                <button id="pauseBtn" onClick={pauseResume}>{isPaused ? 'Play' : 'Pause'}</button>
                 <div id="boidsSimulation" ref={simulationRef}>
                     {boids.map((boid, index) => (
                         <div key={index} className="boid" style={{
                             left: boid.position.x - 5 + 'px',
                             top: boid.position.y - 5 +'px',
-                            transform: `rotate(${boid.velocity.deg}deg)`
+                            transform: `rotate(${boid.heading}deg)`
                         }}></div>
                     ))}
                 </div>
                 <span className="boidsInput">
                     <label htmlFor="numBoids">Number of Boids</label>
                     <input type="number" id="numBoids" value={numBoids} min={1} max={100} step={1} onChange={(e) => setNumBoids(parseInt(e.target.value))} />
-                </span>
-                <span className="boidsInput">
-                    <label htmlFor="baseAttraction">Base Attraction</label>
-                    <input type="number" id="baseAttraction" value={baseAttraction} min={0} max={10} step={0.1} onChange={(e) => setBaseAttraction(parseFloat(e.target.value))} />
-                </span>
-                <span className="boidsInput">
-                    <label htmlFor="baseRepulsion">Base Repulsion</label>
-                    <input type="number" id="baseRepulsion" value={baseRepulsion} min={0} max={10} step={0.1} onChange={(e) => setBaseRepulsion(parseFloat(e.target.value))} />
-                </span>
-                <span className="boidsInput">
-                    <label htmlFor="baseInfluence">Base Influence</label>
-                    <input type="number" id="baseInfluence" value={baseInfluence} min={0} max={10} step={0.1} onChange={(e) => setBaseInfluence(parseFloat(e.target.value))} />
-                </span>
-                <span className="boidsInput">
-                    <label htmlFor="baseMaxSpeed">Base Max Speed</label>
-                    <input type="number" id="baseMaxSpeed" value={baseMaxSpeed} min={0} max={100} step={1} onChange={(e) => setBaseMaxSpeed(parseInt(e.target.value))} />
-                </span>
-                <span className="boidsInput">
-                    <label htmlFor="baseTurnRadius">Base Turn Radius</label>
-                    <input type="number" id="baseTurnRadius" value={baseTurnRadius} min={0} max={100} step={1} onChange={(e) => setBaseTurnRadius(parseInt(e.target.value))} />
-                </span>
-                <span className="boidsInput">
-                    <label htmlFor="baseViewDistance">Base View Distance</label>
-                    <input type="number" id="baseViewDistance" value={baseViewDistance} min={0} max={100} step={1} onChange={(e) => setBaseViewDistance(parseInt(e.target.value))} />
-                </span>
-                <span className="boidsInput">
-                    <label htmlFor="variance">% Variance</label>
-                    <input type="number" id="variance" value={variance} min={0} max={1} step={0.01} onChange={(e) => setVariance(parseFloat(e.target.value))} />
                 </span>
             </div>
         </ToolCard>

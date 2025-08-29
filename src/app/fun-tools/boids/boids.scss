@@ -17,6 +17,13 @@
             border-left: 10px solid black;
         }
     }
+
+    #pauseBtn {
+        display: block;
+        width: 60px;
+        margin: 0 auto;
+    }
+
     .boidsInput {
         display: flex;
         justify-content: space-between;
