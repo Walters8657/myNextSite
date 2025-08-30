@@ -50,9 +50,9 @@ class Boid {
             nearbyBoids.forEach(boid => {
                 // Separation: avoid collision with nearby boids
                 const distance = this.getDistance(this, boid);
-                if (distance < 25) {
+                if (distance < 20) {
                     // Much stronger separation force, especially when very close
-                    const separationForce = Math.max(0, (25 - distance) / 25); 
+                    const separationForce = Math.max(0, (20 - distance) / 20); 
                     separationX += (this.position.x - boid.position.x) * separationForce;
                     separationY += (this.position.y - boid.position.y) * separationForce;
                 }
@@ -73,9 +73,13 @@ class Boid {
             cohesionX /= nearbyBoids.length;
             cohesionY /= nearbyBoids.length;
 
+            const separationMultiplier = 2.0;
+            const alignmentMultiplier = 3.0;
+            const cohesionMultiplier = 0.25;
+
             // Calculate desired direction by combining all forces
-            const desiredX = separationX * 3.0 + alignmentX * 0.8 + (cohesionX - this.position.x) * 0.3;
-            const desiredY = separationY * 3.0 + alignmentY * 0.8 + (cohesionY - this.position.y) * 0.3;
+            const desiredX = separationX * separationMultiplier + alignmentX * alignmentMultiplier + (cohesionX - this.position.x) * cohesionMultiplier;
+            const desiredY = separationY * separationMultiplier + alignmentY * alignmentMultiplier + (cohesionY - this.position.y) * cohesionMultiplier;
 
             // Calculate desired angle
             let desiredAngle = Math.atan2(desiredY, desiredX);
