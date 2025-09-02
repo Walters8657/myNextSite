@@ -26,17 +26,9 @@ class Boid {
             // Calculate angle to the boid relative to current heading
             const dx = boid.position.x - this.position.x;
             const dy = boid.position.y - this.position.y;
-            const angleToBoid = Math.atan2(dy, dx) * (180 / Math.PI);
-            
-            // Calculate the angle difference from current heading
-            let angleDiff = angleToBoid - this.heading;
-            
-            // Normalize angle difference to [-180, 180] range
-            while (angleDiff > 180) angleDiff -= 360;
-            while (angleDiff < -180) angleDiff += 360;
-            
-            // Check if boid is within the 240-degree vision cone
-            return Math.abs(angleDiff) <= 120; // 240/2 = 120 degrees on each side
+
+            // Check if the boid is within a 240* arc
+            return Math.abs(Math.atan2(dy, dx) * (180 / Math.PI) - this.heading) <= 120;
         });
     }
 
@@ -75,7 +67,7 @@ class Boid {
 
             const separationMultiplier = 2.0;
             const alignmentMultiplier = 3.0;
-            const cohesionMultiplier = 0.25;
+            const cohesionMultiplier = 1.0;
 
             // Calculate desired direction by combining all forces
             const desiredX = separationX * separationMultiplier + alignmentX * alignmentMultiplier + (cohesionX - this.position.x) * cohesionMultiplier;
@@ -128,10 +120,24 @@ class Boid {
     }
 
     getDistance(boid1: Boid, boid2: Boid) {
-        return Math.sqrt(
-            Math.pow(boid1.position.x - boid2.position.x, 2) + 
-            Math.pow(boid1.position.y - boid2.position.y, 2)
-        )
+        const simWidth = 248; // fallback width
+        const simHeight = 210; // fallback height
+        
+        // Calculate the shortest distance considering wrapping
+        let dx = Math.abs(boid1.position.x - boid2.position.x);
+        let dy = Math.abs(boid1.position.y - boid2.position.y);
+        
+        // If the distance is more than half the canvas width/height, 
+        // the shorter path is through wrapping
+        if (dx > simWidth / 2) {
+            dx = simWidth - dx;
+        }
+
+        if (dy > simHeight / 2) {
+            dy = simHeight - dy;
+        }
+        
+        return Math.sqrt(dx * dx + dy * dy);
     }
 } 
 
