@@ -10,7 +10,7 @@ export default function Boids() {
     const [separationMultiplier, setSeparationMultiplier] = useState<number>(2.0);
     const [alignmentMultiplier, setAlignmentMultiplier] = useState<number>(3.0);
     const [cohesionMultiplier, setCohesionMultiplier] = useState<number>(1.0);
-    const [turnRadiusMultiplier, setTurnRadiusMultiplier] = useState<number>(2.5);
+    const [maximumTurnAngle, setMaximumTurnAngle] = useState<number>(2);
 
     const [boids, setBoids] = useState<Boid[]>([]);
 
@@ -97,13 +97,16 @@ export default function Boids() {
                 while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
                 
                 // Apply turn radius limitation
-                const maxTurn = turnRadiusMultiplier * (Math.PI / 180);
-                if (Math.abs(angleDiff) > maxTurn) {
+                const maxTurnRadians = maximumTurnAngle * (Math.PI / 180);
+                if (Math.abs(angleDiff) > maxTurnRadians) {
                     // Apply the maximum turn in the correct direction
-                    desiredAngle = currentRadians + (angleDiff > 0 ? maxTurn : -maxTurn);
+                    angleDiff = angleDiff > 0 ? maxTurnRadians : -maxTurnRadians;
                 }
-    
-                this.heading = desiredAngle * (180 / Math.PI);
+
+                // Update heading with the limited angle change
+                let newHeadingRadians = currentRadians + angleDiff;
+                
+                this.heading = newHeadingRadians * (180 / Math.PI);
             }
     
             return this;
@@ -171,7 +174,7 @@ export default function Boids() {
             }, 1000 / 60);
             return () => clearInterval(interval);
         }
-    }, [isPaused]);
+    }, [isPaused, maximumTurnAngle, separationMultiplier, alignmentMultiplier, cohesionMultiplier]);
 
     // Create new boids
     function createNewBoids() {
@@ -275,8 +278,8 @@ export default function Boids() {
                     <input type="number" id="cohesionMultiplier" value={cohesionMultiplier} min={0} max={10} step={0.1} onChange={(e) => setCohesionMultiplier(parseFloat(e.target.value))} />
                 </span>
                 <span className="boidsInput">
-                    <label htmlFor="turnRadiusMultiplier">Turn Radius Multiplier</label>
-                    <input type="number" id="turnRadiusMultiplier" value={turnRadiusMultiplier} min={0} max={180} step={1} onChange={(e) => setTurnRadiusMultiplier(parseFloat(e.target.value))} />
+                    <label htmlFor="maximumTurnAngle">Maximum Turn Angle</label>
+                    <input type="number" id="maximumTurnAngle" value={maximumTurnAngle} min={0} max={360} step={1} onChange={(e) => setMaximumTurnAngle(parseFloat(e.target.value))} />
                 </span>
             </div>
         </ToolCard>
