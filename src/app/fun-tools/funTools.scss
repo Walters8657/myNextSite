@@ -3,40 +3,21 @@
 $toolcard-width: 300px;
 $toolcard-gutter: 32px;
 
-.fun-tools-gallery {
-  column-count: 1;
-  column-gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
+.masonry-container {
   margin: 0 auto;
-  padding: 2rem 0;
-
-  @media (min-width: 600px) {
-    column-count: 2;
-  }
-  @media (min-width: 900px) {
-    column-count: 3;
-  }
-  @media (min-width: 1200px) {
-    column-count: 4;
-  }
+  padding: 0 20px;
+  max-width: calc(#{$toolcard-width} * 4 + #{$toolcard-gutter} * 3);
+  display: flex;
+  justify-content: center;
 }
 
-.my-masonry-grid {
-  margin: 0 auto;
-  width: 100vw;
-  max-width: calc(#{$toolcard-width} + 20px); /* 1 column by default, +20px for padding/margin fudge */
-}
 .my-masonry-grid_column {
-  padding-left: 2rem;
   background-clip: padding-box;
+  margin: 0 20px;
 }
+
 .fun-tools-widget {
-  margin-bottom: 2rem;
-  margin-left: auto;
-  margin-right: auto;
   width: $toolcard-width;
-  max-width: $toolcard-width;
 }
 
 .fun-tools-widget > * {
@@ -45,19 +26,3 @@ $toolcard-gutter: 32px;
   display: block;
   max-width: 100%;
 }
-
-@media (min-width: 600px) {
-  .my-masonry-grid {
-    max-width: calc(2 * #{$toolcard-width} + 1 * #{$toolcard-gutter});
-  }
-}
-@media (min-width: 900px) {
-  .my-masonry-grid {
-    max-width: calc(3 * #{$toolcard-width} + 2 * #{$toolcard-gutter});
-  }
-}
-@media (min-width: 1200px) {
-  .my-masonry-grid {
-    max-width: calc(4 * #{$toolcard-width} + 3 * #{$toolcard-gutter});
-  }
-} 

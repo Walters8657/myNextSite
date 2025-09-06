@@ -163,8 +163,7 @@ export default function SortingVisualizations() {
     ]
 
     return (
-        <ToolCard>
-            <p id="title">Visualizations</p>
+        <ToolCard title="Sorting Visualizations">
             <button id="shuffleBtn" onClick={shuffleBars}>Shuffle</button>
             <div className="bars-container">
                 {bars.map((bar) => (

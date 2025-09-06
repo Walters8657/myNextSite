@@ -6,7 +6,6 @@
 - Auto deployment from main
 - Fun Tools
     - Weather widget
-    - Boids with parameters
     - Metronome
     - Regex generator?
 

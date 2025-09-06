@@ -246,8 +246,7 @@ export default function Minesweeper() {
     // Don't render until client-side hydration is complete
     if (!isClient) {
         return (
-            <ToolCard>
-                <p id="mineHeader">MiniSweeper</p>
+            <ToolCard title="MiniSweeper">
                 <div id="minefield">
                     <p>Loading...</p>
                 </div>
@@ -256,8 +255,7 @@ export default function Minesweeper() {
     }
 
     return(
-        <ToolCard>
-            <p id="mineHeader">MiniSweeper</p>
+        <ToolCard title="MiniSweeper">
             <button 
                 id="resetButton" 
                 className={resetButtonClass}

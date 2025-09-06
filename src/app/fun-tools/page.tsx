@@ -6,9 +6,13 @@ import ColorConverter from "./colorConverter/colorConverter";
 import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import Minesweeper from "./minesweeper/minesweeper";
 import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
+import Boids from "./boids/boids";
+import GameOfLife from "./gameOfLife/gameOfLife";
 
 export default function Page() {
   const widgets = [
+    <Boids key="boids" />,
+    <GameOfLife key="gameOfLife" />,
     <Minesweeper key="minesweeper" />,
     <ColorConverter key="colorConverter" />,
     <HowMuchFaster key="howMuchFaster" />,
@@ -22,17 +26,18 @@ export default function Page() {
   };
 
   return (
-    <Masonry
-      className="my-masonry-grid"
-      options={masonryOptions}
-      disableImagesLoaded={false}
-      updateOnEachImageLoad={false}
-    >
-      {widgets.map((widget, i) => (
-        <div className="fun-tools-widget" key={i}>
-          {widget}
-        </div>
-      ))}
-    </Masonry>
+    <div className="masonry-container">
+      <Masonry
+        options={masonryOptions}
+        disableImagesLoaded={false}
+        updateOnEachImageLoad={false}
+      >
+        {widgets.map((widget, i) => (
+          <div className="fun-tools-widget" key={i}>
+            {widget}
+          </div>
+        ))}
+      </Masonry>
+    </div>
   );
 }

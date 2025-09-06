@@ -1,0 +1,76 @@
+@mixin slider-gradient($filled-color: #727272, $unfilled-color: #bcbcbc) {
+    background: linear-gradient(to right, 
+        #{$filled-color} 0%, 
+        #{$filled-color} var(--slider-progress, 0%), 
+        #{$unfilled-color} var(--slider-progress, 0%), 
+        #{$unfilled-color} 100%
+    );
+}
+
+#pauseBtnGol, #simSpeedSlider, #clearGridBtn {
+    display: block;
+    margin: 20px auto;
+}
+
+#pauseBtnGol {
+    width: 60px;
+}
+
+#simSpeedSlider {
+    width: 50%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    @include slider-gradient();
+    outline: none;
+    border-radius: 3px;
+    
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background: #000;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+    
+    &::-moz-range-thumb {
+        width: 10px;
+        height: 10px;
+        background: #000;
+        cursor: pointer;
+        border-radius: 50%;
+        border: none;
+    }
+    
+    &::-webkit-slider-track, &::-moz-range-track {
+        @include slider-gradient();
+    }
+}
+
+p {
+    text-align: center;
+}
+
+#gameOfLifeSimulation {
+    table {
+        border-spacing: 0;
+        tr {
+            line-height: 0;
+        }
+        td {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin: 0;
+            line-height: 0;
+            &.aliveCell {
+                background-color: #000;
+            }
+            &.deadCell {
+                background-color: #fff;
+            }
+        }
+    }
+}
