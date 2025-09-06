@@ -2,8 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import ToolCard from "../../ui/toolCard/toolCard";
 import './boids.scss';
 
-
-
 export default function Boids() {
     const [isPaused, setIsPaused] = useState<boolean>(true);
     const [numBoids, setNumBoids] = useState<number>(25);

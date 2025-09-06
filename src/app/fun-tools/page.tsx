@@ -7,10 +7,12 @@ import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import Minesweeper from "./minesweeper/minesweeper";
 import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
 import Boids from "./boids/boids";
+import GameOfLife from "./gameOfLife/gameOfLife";
 
 export default function Page() {
   const widgets = [
     <Boids key="boids" />,
+    <GameOfLife key="gameOfLife" />,
     <Minesweeper key="minesweeper" />,
     <ColorConverter key="colorConverter" />,
     <HowMuchFaster key="howMuchFaster" />,
