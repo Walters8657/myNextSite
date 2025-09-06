@@ -6,7 +6,6 @@
 - Auto deployment from main
 - Fun Tools
     - Weather widget
-    - Conway's game of life
     - Metronome
     - Regex generator?
 

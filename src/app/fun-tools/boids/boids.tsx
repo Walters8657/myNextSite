@@ -161,6 +161,7 @@ export default function Boids() {
 
     // On number of boids change
     useEffect(() => {
+        setIsPaused(true);
         createNewBoids();
     }, [numBoids]);
 
@@ -261,23 +262,38 @@ export default function Boids() {
                 </div>
                 <span className="boidsInput">
                     <label htmlFor="numBoids">Number of Boids</label>
-                    <input type="number" id="numBoids" value={numBoids} min={1} max={100} step={1} onChange={(e) => setNumBoids(parseInt(e.target.value))} />
+                    <input type="number" id="numBoids" value={numBoids} min={1} max={100} step={1} onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        setNumBoids(isNaN(value) ? 0 : value);
+                    }} />
                 </span>
                 <span className="boidsInput">
                     <label htmlFor="separationMultiplier">Separation Multiplier</label>
-                    <input type="number" id="separationMultiplier" value={separationMultiplier} min={0} max={10} step={0.1} onChange={(e) => setSeparationMultiplier(parseFloat(e.target.value))} />
+                    <input type="number" id="separationMultiplier" value={separationMultiplier} min={0} max={10} step={0.1} onChange={(e) => {
+                        const value = parseFloat(e.target.value);
+                        setSeparationMultiplier(isNaN(value) ? 0 : value);
+                    }} />
                 </span>
                 <span className="boidsInput">
                     <label htmlFor="alignmentMultiplier">Alignment Multiplier</label>
-                    <input type="number" id="alignmentMultiplier" value={alignmentMultiplier} min={0} max={10} step={0.1} onChange={(e) => setAlignmentMultiplier(parseFloat(e.target.value))} />
+                    <input type="number" id="alignmentMultiplier" value={alignmentMultiplier} min={0} max={10} step={0.1} onChange={(e) => {
+                        const value = parseFloat(e.target.value);
+                        setAlignmentMultiplier(isNaN(value) ? 0 : value);
+                    }} />
                 </span>
                 <span className="boidsInput">
                     <label htmlFor="cohesionMultiplier">Cohesion Multiplier</label>
-                    <input type="number" id="cohesionMultiplier" value={cohesionMultiplier} min={0} max={10} step={0.1} onChange={(e) => setCohesionMultiplier(parseFloat(e.target.value))} />
+                    <input type="number" id="cohesionMultiplier" value={cohesionMultiplier} min={0} max={10} step={0.1} onChange={(e) => {
+                        const value = parseFloat(e.target.value);
+                        setCohesionMultiplier(isNaN(value) ? 0 : value);
+                    }} />
                 </span>
                 <span className="boidsInput">
-                    <label htmlFor="maximumTurnAngle">Maximum Turn Angle</label>
-                    <input type="number" id="maximumTurnAngle" value={maximumTurnAngle} min={0} max={360} step={1} onChange={(e) => setMaximumTurnAngle(parseFloat(e.target.value))} />
+                    <label htmlFor="maximumTurnAngle">Turn Allowance</label>
+                    <input type="number" id="maximumTurnAngle" value={maximumTurnAngle} min={0} max={360} step={1} onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        setMaximumTurnAngle(isNaN(value) ? 0 : value);
+                    }} />
                 </span>
             </div>
         </ToolCard>
