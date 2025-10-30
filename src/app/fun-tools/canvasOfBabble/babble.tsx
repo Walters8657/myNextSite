@@ -4,13 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 
 import './babble.scss';
 
-// 16,777,216 possible RGB colors
-// 62,500 pixels per canvas
-// 1,048,576,000,000 theoretical canvases 
-
-// 4,294,967,295 possible seeds with 32 bits
-// Use a second seed to be able to fully encapsulate all possible canvases
-
 export default function CanvasOfBabble() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [seed, setSeed] = useState<number | null>(null);
