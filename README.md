@@ -8,6 +8,7 @@
     - Weather widget
     - Metronome
     - Syntax validators
+    - Flash Cards
     - Regex generator?
     - Certificate generator??
 
