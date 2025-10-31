@@ -8,7 +8,6 @@
     - Weather widget
     - Metronome
     - Syntax validators
-    - Canvas of Babble 
     - Regex generator?
     - Certificate generator??
 
