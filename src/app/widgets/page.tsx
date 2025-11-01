@@ -1,7 +1,7 @@
 "use client";
 // @ts-ignore: react-masonry-component has no types
 import Masonry from "react-masonry-component";
-import "./funTools.scss";
+import "./widgets.scss";
 import ColorConverter from "./colorConverter/colorConverter";
 import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import Minesweeper from "./minesweeper/minesweeper";
@@ -35,7 +35,7 @@ export default function Page() {
         updateOnEachImageLoad={false}
       >
         {widgets.map((widget, i) => (
-          <div className="fun-tools-widget" key={i}>
+          <div className="widgets-widget" key={i}>
             {widget}
           </div>
         ))}

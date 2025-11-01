@@ -4,8 +4,8 @@
 - Favicon
 - Better home page project arrows
 - Auto deployment from main
-- Fun Tools
-    - Weather widget
+- Widgets
+    - Weather
     - Metronome
     - Syntax validators
     - Flash Cards

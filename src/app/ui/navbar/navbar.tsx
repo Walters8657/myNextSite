@@ -14,7 +14,7 @@ export default function Navbar() {
                     <li> | </li>           
                     <li id="resumeLink" className="cursorHover"><a href="/resume">Resume</a></li>
                     <li> | </li>
-                    <li id="funToolsLink" className="cursorHover"><a href="fun-tools">Fun Tools</a></li>
+                    <li id="widgetsLink" className="cursorHover"><a href="widgets">Widgets</a></li>
                 </ul>
             </nav>
         </header>
