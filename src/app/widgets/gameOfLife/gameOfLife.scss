@@ -1,9 +1,9 @@
-@mixin slider-gradient($filled-color: #727272, $unfilled-color: #bcbcbc) {
+@mixin slider-gradient($filledColor: #727272, $unfilledColor: #bcbcbc) {
     background: linear-gradient(to right, 
-        #{$filled-color} 0%, 
-        #{$filled-color} var(--slider-progress, 0%), 
-        #{$unfilled-color} var(--slider-progress, 0%), 
-        #{$unfilled-color} 100%
+        #{$filledColor} 0%, 
+        #{$filledColor} var(--sliderProgress, 0%), 
+        #{$unfilledColor} var(--sliderProgress, 0%), 
+        #{$unfilledColor} 100%
     );
 }
 

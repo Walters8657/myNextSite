@@ -1,5 +1,5 @@
-$faded-opacity: 0.5;
-$negative-color: #c00;
+$fadedOpacity: 0.5;
+$negativeColor: #c00;
 
 .howMuchFasterContent {
   overflow-x: unset;
@@ -44,7 +44,7 @@ td:last-child .input {
 }
 
 .faded {
-  opacity: $faded-opacity;
+  opacity: $fadedOpacity;
 }
 
 .hms-span {
@@ -64,11 +64,11 @@ td:last-child .input {
 }
 
 .hms-span-empty {
-  opacity: $faded-opacity;
+  opacity: $fadedOpacity;
 }
 
 .hms-span-negative {
-  color: $negative-color;
+  color: $negativeColor;
 }
 
 td {

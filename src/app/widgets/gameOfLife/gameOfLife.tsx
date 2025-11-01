@@ -51,7 +51,7 @@ export default function GameOfLife() {
         // Update CSS custom property for slider progress
         const slider = e.target as HTMLInputElement;
         const progress = ((newSpeed - 1) / (10 - 1)) * 100;
-        slider.style.setProperty('--slider-progress', `${progress}%`);
+        slider.style.setProperty('--sliderProgress', `${progress}%`);
     }
 
     // Returns number of alive cells touching another
@@ -115,7 +115,7 @@ export default function GameOfLife() {
                 max={10} 
                 value={simSpeed} 
                 onChange={handleSimSpeedChange}
-                style={{'--slider-progress': `${((simSpeed - 1) / (10 - 1)) * 100}%`} as React.CSSProperties}
+                style={{'--sliderProgress': `${((simSpeed - 1) / (10 - 1)) * 100}%`} as React.CSSProperties}
             />
             <div id="gameOfLifeSimulation">
                 <table>

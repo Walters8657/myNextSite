@@ -1,10 +1,10 @@
-$toolcard-width: 300px;
-$toolcard-gutter: 32px;
+$toolcardWidth: 300px;
+$toolcardGutter: 32px;
 
 .masonry-container {
   margin: 0 auto;
   padding: 0 20px;
-  max-width: calc(#{$toolcard-width} * 4 + #{$toolcard-gutter} * 3);
+  max-width: calc(#{$toolcardWidth} * 4 + #{$toolcardGutter} * 3);
   display: flex;
   justify-content: center;
 }
@@ -15,7 +15,7 @@ $toolcard-gutter: 32px;
 }
 
 .widgets-widget {
-  width: $toolcard-width;
+  width: $toolcardWidth;
 }
 
 .widgets-widget > * {
