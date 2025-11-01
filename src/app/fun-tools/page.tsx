@@ -8,6 +8,7 @@ import Minesweeper from "./minesweeper/minesweeper";
 import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
 import Boids from "./boids/boids";
 import GameOfLife from "./gameOfLife/gameOfLife";
+import CanvasOfBabble from "./canvasOfBabble/babble";
 
 export default function Page() {
   const widgets = [
@@ -17,6 +18,7 @@ export default function Page() {
     <ColorConverter key="colorConverter" />,
     <HowMuchFaster key="howMuchFaster" />,
     <SortingVisualizations key="sortingVisualizations" />,
+    <CanvasOfBabble key="canvasOfBabble" />,
   ];
 
   const masonryOptions = {
