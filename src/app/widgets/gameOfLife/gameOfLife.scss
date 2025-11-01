@@ -7,16 +7,13 @@
     );
 }
 
-#pauseBtnGol, #simSpeedSlider, #clearGridBtn {
-    display: block;
-    margin: 20px auto;
-}
-
 #pauseBtnGol {
     width: 60px;
 }
 
 #simSpeedSlider {
+    display: block;
+    margin: 20px auto;
     width: 50%;
     -webkit-appearance: none;
     appearance: none;

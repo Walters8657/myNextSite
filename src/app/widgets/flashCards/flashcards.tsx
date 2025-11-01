@@ -97,7 +97,7 @@ export default function Flashcards() {
 
     return (
         <ToolCard title="Flashcards">
-            <button id="shuffleBtn" onClick={() => shuffleCards()}>Shuffle</button>
+            <button id="shuffleBtn" className="center-button" onClick={() => shuffleCards()}>Shuffle</button>
             <div className="flashcards-container">
                 <div className="flashcards-card" onClick={() => setIsFront(!isFront)}>
                     <div className={`flashcards-card-front ${isFront ? "active" : ""}`}>

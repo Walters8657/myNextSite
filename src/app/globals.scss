@@ -84,3 +84,10 @@ a, a:visited {
 .cursorHover:hover {
     filter: invert(0.4);
 }
+
+.center-button {
+    display: block;
+    margin: 20px auto;
+    padding: 8px 16px;
+    cursor: pointer;
+}
