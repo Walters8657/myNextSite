@@ -1,0 +1,28 @@
+.flashcards-card {
+    cursor: pointer;
+    background-color: white;
+    padding: 25px 5px;
+    text-align: center;
+    border: solid black 2px;
+    border-radius: 10px;
+
+    margin: 10px auto;
+}
+
+.flashcards-card-front, .flashcards-card-back {
+    display: none;
+}
+
+.flashcards-card-front.active, .flashcards-card-back.active {
+    display: block;
+}
+
+.flashcards-card-front {
+    font-weight: bold;
+}
+
+.prev-next-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}

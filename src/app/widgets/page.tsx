@@ -9,16 +9,18 @@ import SortingVisualizations from "./sortingVisualizations/sortingVisualizations
 import Boids from "./boids/boids";
 import GameOfLife from "./gameOfLife/gameOfLife";
 import CanvasOfBabble from "./canvasOfBabble/babble";
+import Flashcards from "./flashCards/flashcards";
 
 export default function Page() {
   const widgets = [
     <Boids key="boids" />,
     <GameOfLife key="gameOfLife" />,
+    <Flashcards key="flashcards" />,
     <Minesweeper key="minesweeper" />,
-    <ColorConverter key="colorConverter" />,
     <HowMuchFaster key="howMuchFaster" />,
-    <SortingVisualizations key="sortingVisualizations" />,
+    <ColorConverter key="colorConverter" />,
     <CanvasOfBabble key="canvasOfBabble" />,
+    <SortingVisualizations key="sortingVisualizations" />,
   ];
 
   const masonryOptions = {
