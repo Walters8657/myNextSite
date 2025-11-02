@@ -1,4 +1,4 @@
-import { Flashcard } from "./types";
+import { Flashcard } from "../types";
 
 export const basicSpanish: Flashcard[] = [
     { front: "Yes", back: "Sí" },

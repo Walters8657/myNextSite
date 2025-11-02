@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import ToolCard from "../../ui/toolCard/toolCard";
 import "./flashcards.scss"
-import { stateCapitals } from "./stateCapitals";
-import { basicSpanish } from "./basicSpanish";
+import { stateCapitals } from "./flashcardData/stateCapitals";
+import { basicSpanish } from "./flashcardData/basicSpanish";
 import { Flashcard } from "./types";
 
 const cardSets = [
