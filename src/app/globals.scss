@@ -85,9 +85,13 @@ a, a:visited {
     filter: invert(0.4);
 }
 
-.center-button {
-    display: block;
-    margin: 20px auto;
-    padding: 8px 16px;
+
+button {
     cursor: pointer;
+    padding: 2px 8px;
+    display: block;
+}
+
+.center-button {
+    margin: 20px auto;
 }
