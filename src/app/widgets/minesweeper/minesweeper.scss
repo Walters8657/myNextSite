@@ -1,3 +1,5 @@
+@import "../../variables.scss";
+
 // Minesweeper number colors with better contrast and accessibility
 .blue { color: #0066cc; }      // Darker blue for better contrast
 .green { color: #008000; }     // Standard green
@@ -40,13 +42,13 @@
     #slider {
         display: flex;
         align-items: center;
-        background-color: black;
+        background-color: $black;
         border-radius: 20px;
         width: 50px;
         height: 30px;
         span {
             display: inline-block;
-            background-color: white;
+            background-color: $white;
             border-radius: 20px;
             width: 20px;
             height: 20px;
@@ -92,7 +94,7 @@ table {
             height: 20px;
             p {
                 box-sizing: border-box;
-                background-color: lightgrey;
+                background-color: $lightGray;
                 margin: 0;
                 font-size: 16px;
                 font-weight: bold;

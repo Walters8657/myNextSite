@@ -1,3 +1,5 @@
+@import "../../variables.scss";
+
 #cardSets {
     display: block;
     width: auto;
@@ -6,10 +8,10 @@
 
 .flashcards-card {
     cursor: pointer;
-    background-color: white;
+    background-color: $white;
     padding: 25px 5px;
     text-align: center;
-    border: solid black 2px;
+    border: solid $black 2px;
     border-radius: 10px;
 
     margin: 10px auto;
