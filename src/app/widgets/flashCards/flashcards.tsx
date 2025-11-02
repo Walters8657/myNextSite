@@ -60,14 +60,25 @@ const stateCapitals: Flashcard[] = [
     { front: "Wyoming", back: "Cheyenne" },
 ];
 
+const cardSets = [
+    { name: "State Capitals", flashcards: stateCapitals }
+];
+
 export default function Flashcards() {
     const [flashcards, setFlashcards] = useState<Flashcard[]>(stateCapitals);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
+    const [currentCardSet, setCurrentCardSet] = useState("State Capitals");
     const [isFront, setIsFront] = useState(true);
 
+    // Get new selection of flashcards, shuffle them, and update states
     useEffect(() => {
+        let newFlashcards = cardSets.find(set => set.name === currentCardSet)?.flashcards || [];
         
-    }, [flashcards]);
+        newFlashcards = [...newFlashcards].sort(() => Math.random() - 0.5);
+        setFlashcards(newFlashcards);
+        setCurrentCardIndex(0);
+        setIsFront(true);
+    }, [currentCardSet]);
 
     function shuffleCards() {
         let newFlashcards = [...flashcards];
@@ -95,8 +106,17 @@ export default function Flashcards() {
         setIsFront(true);
     }
 
+    function handleSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setCurrentCardSet(e.target.value);
+    }
+
     return (
         <ToolCard title="Flashcards">
+            <select name="cardSets" id="cardSets" value={currentCardSet} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleSelectChange(e)}>
+                {cardSets.map((set) => (
+                    <option key={set.name} value={set.name}>{set.name}</option>
+                ))}
+            </select>
             <button id="shuffleBtn" className="center-button" onClick={() => shuffleCards()}>Shuffle</button>
             <div className="flashcards-container">
                 <div className="flashcards-card" onClick={() => setIsFront(!isFront)}>
