@@ -41,7 +41,6 @@ export default function CanvasOfBabble() {
         const now = Date.now();
         const defaultSeed = ((now & 0xffffffff) ^ ((now / 1000) | 0)) >>> 0;
         setSeed(defaultSeed);
-        setSeedInput(numberToSeed(defaultSeed));
     }, []);
 
     // Render the canvas for the provided seed (or current state seed)
@@ -73,11 +72,12 @@ export default function CanvasOfBabble() {
         
         // Render the image data to canvas
         ctx.putImageData(imageData, 0, 0);
+    }, [seed]);
 
-        // Sync state if a new seed was used
-        if (nextSeed !== undefined) {
-            setSeed(nextSeed);
-            setSeedInput(numberToSeed(nextSeed));
+    // Sync seedInput whenever seed changes
+    useEffect(() => {
+        if (seed !== null) {
+            setSeedInput(numberToSeed(seed));
         }
     }, [seed]);
 
