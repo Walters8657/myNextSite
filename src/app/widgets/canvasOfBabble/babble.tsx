@@ -176,6 +176,7 @@ export default function CanvasOfBabble() {
                         const now = Date.now();
                         const mixedRandom = (((now & 0xffffffff) ^ ((Math.random() * 0xffffffff) >>> 0)) >>> 0);
                         generateNewCanvas(mixedRandom);
+                        setSeed(mixedRandom);
                     }}
                 >
                     Random
