@@ -7,7 +7,18 @@ import { Flashcard } from "./types";
 
 const cardSets = [
     { name: "State Capitals", flashcards: stateCapitals },
-    { name: "Basic Spanish", flashcards: basicSpanish }
+    { name: "Spanish Colors", flashcards: basicSpanish[0] },
+    { name: "Spanish Directions", flashcards: basicSpanish[1] },
+    { name: "Spanish Greetings", flashcards: basicSpanish[2] },
+    { name: "Spanish Answers", flashcards: basicSpanish[3] },
+    { name: "Spanish Pronouns", flashcards: basicSpanish[4] },
+    { name: "Spanish Days of the Week", flashcards: basicSpanish[5] },
+    { name: "Spanish Months of the Year", flashcards: basicSpanish[6] },
+    { name: "Spanish Animals", flashcards: basicSpanish[7] },
+    { name: "Spanish Family", flashcards: basicSpanish[8] },
+    { name: "Spanish Actions", flashcards: basicSpanish[9] },
+    { name: "Spanish Feelings", flashcards: basicSpanish[10] },
+    { name: "Spanish Numbers", flashcards: basicSpanish[11] },
 ];
 
 export default function Flashcards() {

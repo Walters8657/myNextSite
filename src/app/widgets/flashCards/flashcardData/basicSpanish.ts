@@ -1,8 +1,8 @@
 import { Flashcard } from "../types";
 
-export const basicSpanish: Flashcard[] = [
+export const basicSpanish: Flashcard[][] = [
     // Colors
-    {front: "Blue", back: "Azul"},
+    [{front: "Blue", back: "Azul"},
     {front: "Yellow", back: "Amarillo"},
     {front: "Red", back: "Rojo"},
     {front: "Pink", back: "Rosa"},
@@ -16,10 +16,10 @@ export const basicSpanish: Flashcard[] = [
     {front: "Gray", back: "Gris"},
     {front: "Silver", back: "Azul"},
     {front: "Gold", back: "Azul"},
-    {front: "Khaki", back: "Azul"},
+    {front: "Khaki", back: "Azul"}],
     
     // Directions
-    {front: "Right", back: "Derecha"},
+    [{front: "Right", back: "Derecha"},
     {front: "Left", back: "Izquierda"},
     {front: "Ahead", back: "Adelante"},
     {front: "Behind", back: "Altras"},
@@ -30,10 +30,10 @@ export const basicSpanish: Flashcard[] = [
     {front: "At", back: "En"},
     {front: "Inside", back: "Adentra"},
     {front: "Outside", back: "Afuera"},
-    {front: "From", back: "Desde"},
+    {front: "From", back: "Desde"}],
 
     // Greetings
-    {front: "Hello", back: "Hola"},
+    [{front: "Hello", back: "Hola"},
     {front: "Goodbye", back: "Adios"},
     {front: "Good Morning", back: "Buenos Dias"},
     {front: "Good Afternoon", back: "Buenas Tardes"},
@@ -41,34 +41,34 @@ export const basicSpanish: Flashcard[] = [
     {front: "Thank you", back: "Gracias"},
     {front: "Please", back: "Por favor"},
     {front: "Excuse me", back: "Perdon"},
-    {front: "I'm sorry", back: "Lo siento"},
+    {front: "I'm sorry", back: "Lo siento"}],
 
     // Answers
-    {front: "Yes", back: "Si"},
+    [{front: "Yes", back: "Si"},
     {front: "No", back: "No"},
     {front: "Maybe", back: "Tal Vez"},
-    {front: "I'm not sure", back: "No estoy seguro"},
+    {front: "I'm not sure", back: "No estoy seguro"}],
 
     // Pronouns
-    {front: "I", back: "Yo"},
+    [{front: "I", back: "Yo"},
     {front: "You", back: "Tu"},
     {front: "He", back: "El"},
     {front: "She", back: "Ella"},
     {front: "It", back: "El"},
     {front: "We", back: "Nosotros"},
-    {front: "They", back: "Ellos"},
+    {front: "They", back: "Ellos"}],
 
     // Days of the week
-    {front: "Monday", back: "Lunes"},
+    [{front: "Monday", back: "Lunes"},
     {front: "Tuesday", back: "Martes"},
     {front: "Wednesday", back: "Miercoles"},
     {front: "Thursday", back: "Jueves"},
     {front: "Friday", back: "Viernes"},
     {front: "Saturday", back: "Sabado"},
-    {front: "Sunday", back: "Domingo"},
+    {front: "Sunday", back: "Domingo"}],
 
     //Months of the year
-    {front: "January", back: "Enero"},
+    [{front: "January", back: "Enero"},
     {front: "February", back: "Febrero"},
     {front: "March", back: "Marzo"},
     {front: "April", back: "Abril"},
@@ -79,10 +79,10 @@ export const basicSpanish: Flashcard[] = [
     {front: "September", back: "Septiembre"},
     {front: "October", back: "Octubre"},
     {front: "November", back: "Noviembre"},
-    {front: "December", back: "Diciembre"},
+    {front: "December", back: "Diciembre"}],
 
     //Animals
-    {front: "Bird", back: "Pajaro"},
+    [{front: "Bird", back: "Pajaro"},
     {front: "Bull", back: "Toro"},
     {front: "Cat", back: "Gato"},
     {front: "Chicken", back: "Pollo"},
@@ -98,10 +98,10 @@ export const basicSpanish: Flashcard[] = [
     {front: "Rabbit", back: "Conejo"},
     {front: "Rooster", back: "Gallo"},
     {front: "Sheep", back: "Oveja"},
-    {front: "Turtle", back: "Tortuga"},
+    {front: "Turtle", back: "Tortuga"}],
 
     // Family
-    {front: "Father", back: "Padre"},
+    [{front: "Father", back: "Padre"},
     {front: "Mother", back: "Madre"},
     {front: "Brother", back: "Hermano"},
     {front: "Sister", back: "Hermana"},
@@ -117,10 +117,10 @@ export const basicSpanish: Flashcard[] = [
     {front: "Son", back: "Hijo"},
     {front: "Daughter", back: "Hija"},
     {front: "Wife", back: "Esposa"},
-    {front: "Husband", back: "Esposo"},
+    {front: "Husband", back: "Esposo"}],
 
     // Actions
-    {front: "Go", back: "Ir"},
+    [{front: "Go", back: "Ir"},
     {front: "Come", back: "Ven"},
     {front: "Leave", back: "Irse"},
     {front: "Stay", back: "Quedarse"},
@@ -136,19 +136,19 @@ export const basicSpanish: Flashcard[] = [
     {front: "Feel", back: "Sentir"},
     {front: "Smile", back: "Sonreir"},
     {front: "Cry", back: "Llorar"},
-    {front: "Laugh", back: "Reir"},
+    {front: "Laugh", back: "Reir"}],
 
     // Feelings
-    {front: "Happy", back: "Feliz"},
+    [{front: "Happy", back: "Feliz"},
     {front: "Sad", back: "Triste"},
     {front: "Angry", back: "Enojado"},
     {front: "Stressed", back: "Estresado"},
     {front: "Anxious", back: "Ansioso"},
     {front: "Tired", back: "Cansado"},
-    {front: "Excited", back: "Emocionado"},
+    {front: "Excited", back: "Emocionado"}],
 
     // Numbers
-    {front: "One", back: "Uno"},
+    [{front: "One", back: "Uno"},
     {front: "Two", back: "Dos"},
     {front: "Three", back: "Tres"},
     {front: "Four", back: "Cuatro"},
@@ -179,6 +179,6 @@ export const basicSpanish: Flashcard[] = [
     {front: "One Thousand", back: "Mil"},
     {front: "One Million", back: "Millón"},
     {front: "One Billion", back: "Billon"},
-    {front: "One Trillion", back: "Trillon"},
+    {front: "One Trillion", back: "Trillon"}],
 ];
 
