@@ -2,7 +2,6 @@
 
 ### Todo
 - Better home page project arrows
-- Auto deployment from main
 - Widgets
     - Weather
     - Metronome
