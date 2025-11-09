@@ -1,12 +1,16 @@
+import "./flashcards.scss"
+
 import { useEffect, useState } from "react";
 import ToolCard from "../../ui/toolCard/toolCard";
-import "./flashcards.scss"
+import { Flashcard } from "./types";
+
 import { stateCapitals } from "./flashcardData/stateCapitals";
 import { basicSpanish } from "./flashcardData/basicSpanish";
-import { Flashcard } from "./types";
+import { europeanCapitals } from "./flashcardData/europeanCapitals";
 
 const cardSets = [
     { name: "State Capitals", flashcards: stateCapitals },
+    { name: "European Capitals", flashcards: europeanCapitals },
     { name: "Spanish Colors", flashcards: basicSpanish[0] },
     { name: "Spanish Directions", flashcards: basicSpanish[1] },
     { name: "Spanish Greetings", flashcards: basicSpanish[2] },
