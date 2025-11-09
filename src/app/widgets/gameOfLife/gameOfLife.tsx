@@ -106,7 +106,7 @@ export default function GameOfLife() {
 
     return (
         <ToolCard title="Game of Life">
-            <button id="pauseBtnGol" className="center-button" onClick={pauseResume}>{isPaused ? 'Play' : 'Pause'}</button>
+            <button id="pauseBtnGol" className="centerButton" onClick={pauseResume}>{isPaused ? 'Play' : 'Pause'}</button>
             <p>Sim Speed</p>
             <input 
                 type="range" 
@@ -134,7 +134,7 @@ export default function GameOfLife() {
                     </tbody>
                 </table>
             </div>
-            <button id="clearGridBtn" className="center-button" onClick={clearGrid}>Clear Grid</button>
+            <button id="clearGridBtn" className="centerButton" onClick={clearGrid}>Clear Grid</button>
         </ToolCard>
     );
 }

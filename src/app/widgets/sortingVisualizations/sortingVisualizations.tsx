@@ -164,7 +164,7 @@ export default function SortingVisualizations() {
 
     return (
         <ToolCard title="Sorting Visualizations">
-            <button id="shuffleBtn" className="center-button" onClick={shuffleBars}>Shuffle</button>
+            <button id="shuffleBtn" className="centerButton" onClick={shuffleBars}>Shuffle</button>
             <div className="bars-container">
                 {bars.map((bar) => (
                     <div key={'bar-' + bar.order} className="bar" style={{ height: `${bar.order * 2}px` }}></div>

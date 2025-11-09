@@ -44,8 +44,9 @@ const cardSets = [
 export default function Flashcards() {
     const [flashcards, setFlashcards] = useState<Flashcard[]>(stateCapitals);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    const [currentCardSet, setCurrentCardSet] = useState("State Capitals");
+    const [currentCardSet, setCurrentCardSet] = useState("US State Capitals");
     const [isFront, setIsFront] = useState(true);
+    const [inverted, setInverted] = useState(false);
 
     // Get new selection of flashcards, shuffle them, and update states
     useEffect(() => {
@@ -94,19 +95,23 @@ export default function Flashcards() {
                     <option key={set.name} value={set.name}>{set.name}</option>
                 ))}
             </select>
-            <button id="shuffleBtn" className="center-button" onClick={() => shuffleCards()}>Shuffle</button>
-            <div className="flashcards-container">
-                <div className="flashcards-card" onClick={() => setIsFront(!isFront)}>
-                    <div className={`flashcards-card-front ${isFront ? "active" : ""}`}>
-                        {flashcards[currentCardIndex].front}
+            <span id="invertCheckboxContainer">
+                <input type="checkbox" id="invert" name="invert" checked={inverted} onChange={() => setInverted(!inverted)} />
+                <label htmlFor="invert">Invert Flashcards</label>
+            </span>
+            <button id="shuffleBtn" className="centerButton" onClick={() => shuffleCards()}>Shuffle</button>
+            <div className="flashcardsContainer">
+                <div className="flashcardsCard" onClick={() => setIsFront(!isFront)}>
+                    <div className={`flashcardsCardFront ${isFront ? "active" : ""}`}>
+                        {inverted ? flashcards[currentCardIndex].back : flashcards[currentCardIndex].front}
                     </div>
-                    <div className={`flashcards-card-back ${!isFront ? "active" : ""}`}>
-                        {flashcards[currentCardIndex].back}
+                    <div className={`flashcardsCardBack ${!isFront ? "active" : ""}`}>
+                        {inverted ? flashcards[currentCardIndex].front : flashcards[currentCardIndex].back}
                     </div>
                 </div>
             </div>
             <p>{currentCardIndex + 1} / {flashcards.length}</p>
-            <div className="prev-next-buttons">
+            <div className="prevNextButtons">
                 <button id="prevBtn" onClick={() => prevCard()}>{'<'}</button>
                 <button id="nextBtn" onClick={() => nextCard()}>{'>'}</button>
             </div>

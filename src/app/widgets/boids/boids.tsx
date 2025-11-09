@@ -250,7 +250,7 @@ export default function Boids() {
     return (
         <ToolCard title="Boids">
             <div id="boidsContainer">
-                <button id="pauseBtn" className="center-button" onClick={pauseResume}>{isPaused ? 'Play' : 'Pause'}</button>
+                <button id="pauseBtn" className="centerButton" onClick={pauseResume}>{isPaused ? 'Play' : 'Pause'}</button>
                 <div id="boidsSimulation" ref={simulationRef}>
                     {boids.map((boid, index) => (
                         <div key={index} className="boid" style={{
