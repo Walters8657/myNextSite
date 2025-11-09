@@ -7,11 +7,12 @@ import { Flashcard } from "./types";
 import { stateCapitals } from "./flashcardData/stateCapitals";
 import { basicSpanish } from "./flashcardData/basicSpanish";
 import { europeanCapitals } from "./flashcardData/europeanCapitals";
-
+import { northAmericanCapitals } from "./flashcardData/northAmericanCapitals";
 const cardSets = [
     // Capitals
     { name: "US State Capitals", flashcards: stateCapitals },
-    { name: "European Country Capitals", flashcards: europeanCapitals },
+    { name: "European Capitals", flashcards: europeanCapitals },
+    { name: "North American Capitals", flashcards: northAmericanCapitals },
 
     // Spanish
     { name: "Spanish Colors", flashcards: basicSpanish[0] },

@@ -1,0 +1,27 @@
+import { Flashcard } from "../types";
+
+export const northAmericanCapitals: Flashcard[] = [
+    { front: "Antigua and Barbuda", back: "Saint John's" },
+    { front: "Bahamas", back: "Nassau" },
+    { front: "Barbados", back: "Bridgetown" },
+    { front: "Belize", back: "Belmopan" },
+    { front: "Canada", back: "Ottawa" },
+    { front: "Costa Rica", back: "San Jose" },
+    { front: "Cuba", back: "Havana" },
+    { front: "Dominica", back: "Roseau" },
+    { front: "Dominican Republic", back: "Santo Domingo" },
+    { front: "El Salvador", back: "San Salvador" },
+    { front: "Grenada", back: "Saint George's" },
+    { front: "Guatemala", back: "Guatemala City" },
+    { front: "Haiti", back: "Port-au-Prince" },
+    { front: "Honduras", back: "Tegucigalpa" },
+    { front: "Jamaica", back: "Kingston" },
+    { front: "Mexico", back: "Mexico City" },
+    { front: "Nicaragua", back: "Managua" },
+    { front: "Panama", back: "Panama City" },
+    { front: "Saint Kitts and Nevis", back: "Basseterre" },
+    { front: "Saint Lucia", back: "Castries" },
+    { front: "Saint Vincent and the Grenadines", back: "Kingstown" },
+    { front: "Trinidad and Tobago", back: "Port of Spain" },
+    { front: "United States of America", back: "Washington, D.C." },
+];
