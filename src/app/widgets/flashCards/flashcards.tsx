@@ -4,11 +4,17 @@ import { useEffect, useState } from "react";
 import ToolCard from "../../ui/toolCard/toolCard";
 import { Flashcard } from "./types";
 
+//Capitals
 import { stateCapitals } from "./flashcardData/stateCapitals";
-import { basicSpanish } from "./flashcardData/basicSpanish";
 import { europeanCapitals } from "./flashcardData/europeanCapitals";
 import { northAmericanCapitals } from "./flashcardData/northAmericanCapitals";
 import { southAmericanCapitals } from "./flashcardData/southAmericanCapitals";
+import { asianCapitals } from "./flashcardData/asianCapitals";
+import { oceanicCapitals } from "./flashcardData/oceanicCapitals";
+import { africanCapitals } from "./flashcardData/africanCapitals";
+
+//Spanish
+import { basicSpanish } from "./flashcardData/basicSpanish";
 
 const cardSets = [
     // Capitals
@@ -16,6 +22,9 @@ const cardSets = [
     { name: "European Capitals", flashcards: europeanCapitals },
     { name: "North American Capitals", flashcards: northAmericanCapitals },
     { name: "South American Capitals", flashcards: southAmericanCapitals },
+    { name: "Asian Capitals", flashcards: asianCapitals },
+    { name: "Oceanic Capitals", flashcards: oceanicCapitals },
+    { name: "African Capitals", flashcards: africanCapitals },
 
     // Spanish
     { name: "Spanish Colors", flashcards: basicSpanish[0] },
