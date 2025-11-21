@@ -2,17 +2,20 @@
 // @ts-ignore: react-masonry-component has no types
 import Masonry from "react-masonry-component";
 import "./widgets.scss";
-import ColorConverter from "./colorConverter/colorConverter";
-import HowMuchFaster from "./howMuchFaster/howMuchFaster";
-import Minesweeper from "./minesweeper/minesweeper";
-import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
+
+import Snake from "./snake/snake";
 import Boids from "./boids/boids";
 import GameOfLife from "./gameOfLife/gameOfLife";
-import CanvasOfBabble from "./canvasOfBabble/babble";
 import Flashcards from "./flashCards/flashcards";
+import Minesweeper from "./minesweeper/minesweeper";
+import CanvasOfBabble from "./canvasOfBabble/babble";
+import HowMuchFaster from "./howMuchFaster/howMuchFaster";
+import ColorConverter from "./colorConverter/colorConverter";
+import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
 
 export default function Page() {
   const widgets = [
+    <Snake key="snake" />,
     <Boids key="boids" />,
     <GameOfLife key="gameOfLife" />,
     <Flashcards key="flashcards" />,
