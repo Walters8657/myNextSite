@@ -1,0 +1,21 @@
+#snakeGameArea{
+    width: calc(15px * 15);
+    margin: 0 auto;
+
+    border: solid red 1px;
+    .snakeRow {
+        display: flex;
+        .snakeGameCell {
+            width: 15px;
+            height: 15px;
+            line-height: 15px;
+
+            box-sizing: border-box;
+
+            border: solid black 1px;
+        }
+        .activeSnakeCell {
+            background-color: green;
+        }
+    }
+}
