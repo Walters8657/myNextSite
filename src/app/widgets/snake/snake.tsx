@@ -179,13 +179,13 @@ export default function Snake() {
         return collision;
     }
 
-    const isFood = useCallback((coords: {x: number, y: number}, log: boolean = false): boolean => {
+    function isFood(coords: {x: number, y: number}, log: boolean = false): boolean {
         // Use ref to always get the latest food location value
         const currentFood = foodLocRef.current;
         let foodFound = ((coords.x == currentFood.x) && (coords.y == currentFood.y));
         
         return foodFound;
-    }, [])
+    }
 
     /** Main game loop to step the snake forward one tick. */
     function progressSnake() {
