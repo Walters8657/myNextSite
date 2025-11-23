@@ -41,6 +41,7 @@ export default function Snake() {
     const snakeDirectionRef = useRef<dir>(dir.right);
     const randomXRef = useRef<number>(Math.floor(Math.random() * gameWidth));
     const randomYRef = useRef<number>(Math.floor(Math.random() * gameHeight));
+    const foodLocRef = useRef<cellLoc>(foodLoc);
 
     const gameField = new Array(gameHeight).fill(new Array(gameWidth).fill(null));
 
@@ -70,6 +71,7 @@ export default function Snake() {
         setFoodLoc((currentFood) => {
             if (snakeHead.x == currentFood.x && snakeHead.y == currentFood.y) {
                 let newFood = getNewFood(workingSnake);
+                foodLocRef.current = newFood; // Update ref immediately
                 return newFood;
             }
 
@@ -77,13 +79,22 @@ export default function Snake() {
         })
     }, [snakeCharacter])
 
+    // Keep ref in sync with state
+    useEffect(() => {
+        foodLocRef.current = foodLoc;
+    }, [foodLoc])
+
     function getNewFood(workingSnake: cellLoc[]): cellLoc {
-        while ([...snakeCharacter].includes(new cellLoc(randomXRef.current, randomYRef.current))) {
-            randomXRef.current = Math.floor(Math.random() * gameWidth);
-            randomYRef.current = Math.floor(Math.random() * gameHeight);
+        let randomX = Math.floor(Math.random() * gameWidth);
+        let randomY = Math.floor(Math.random() * gameHeight);
+        
+        // Check if food overlaps with snake by comparing coordinates
+        while (workingSnake.some(segment => segment.x === randomX && segment.y === randomY)) {
+            randomX = Math.floor(Math.random() * gameWidth);
+            randomY = Math.floor(Math.random() * gameHeight);
         }
 
-        return new cellLoc(randomXRef.current, randomYRef.current);
+        return new cellLoc(randomX, randomY);
     }
 
     function getPotentialNewHead(workingSnake: cellLoc[]) {
@@ -169,13 +180,12 @@ export default function Snake() {
     }
 
     const isFood = useCallback((coords: {x: number, y: number}, log: boolean = false): boolean => {
-        if (log)
-            console.log(coords, foodLoc);
-
-        let foodFound = ((coords.x == foodLoc.x) && (coords.y == foodLoc.y));
+        // Use ref to always get the latest food location value
+        const currentFood = foodLocRef.current;
+        let foodFound = ((coords.x == currentFood.x) && (coords.y == currentFood.y));
         
         return foodFound;
-    }, [foodLoc])
+    }, [])
 
     /** Main game loop to step the snake forward one tick. */
     function progressSnake() {
