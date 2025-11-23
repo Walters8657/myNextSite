@@ -16,7 +16,7 @@ enum dir {
  * 
  * The snakes head is the last item in the array.
  *  */
-class snakeBody {
+class cellLoc {
     x: number;
     y: number;
     constructor (newX: number, newY: number) {
@@ -28,15 +28,19 @@ class snakeBody {
 export default function Snake() {
     const [isPaused, setIsPaused] = useState<boolean>(true);
     const [isLost, setIsLost] = useState<boolean>(false);
-    const snakeDirectionRef = useRef<dir>(dir.right);
-    const [snakeCharacter, setSnakeCharacter] = useState<snakeBody[]>([
-            new snakeBody(0, 0)
-            , new snakeBody(1, 0)
-            , new snakeBody(2, 0)
+    const [foodLoc, setFoodLoc] = useState<cellLoc>(new cellLoc(3, 0));
+    const [snakeCharacter, setSnakeCharacter] = useState<cellLoc[]>([
+            new cellLoc(0, 0)
+            , new cellLoc(1, 0)
+            , new cellLoc(2, 0)
         ]);
 
     const gameWidth: number = 15;
     const gameHeight: number = 20;
+ 
+    const snakeDirectionRef = useRef<dir>(dir.right);
+    const randomXRef = useRef<number>(Math.floor(Math.random() * gameWidth));
+    const randomYRef = useRef<number>(Math.floor(Math.random() * gameHeight));
 
     const gameField = new Array(gameHeight).fill(new Array(gameWidth).fill(null));
 
@@ -59,7 +63,30 @@ export default function Snake() {
         };
     }, [])
 
-    function getPotentialNewHead(workingSnake: snakeBody[]) {
+    useEffect(() => {
+        let workingSnake = [...snakeCharacter];
+        let snakeHead = [...snakeCharacter][workingSnake.length -1];
+
+        setFoodLoc((currentFood) => {
+            if (snakeHead.x == currentFood.x && snakeHead.y == currentFood.y) {
+                let newFood = getNewFood(workingSnake);
+                return newFood;
+            }
+
+            return currentFood;
+        })
+    }, [snakeCharacter])
+
+    function getNewFood(workingSnake: cellLoc[]): cellLoc {
+        while ([...snakeCharacter].includes(new cellLoc(randomXRef.current, randomYRef.current))) {
+            randomXRef.current = Math.floor(Math.random() * gameWidth);
+            randomYRef.current = Math.floor(Math.random() * gameHeight);
+        }
+
+        return new cellLoc(randomXRef.current, randomYRef.current);
+    }
+
+    function getPotentialNewHead(workingSnake: cellLoc[]) {
         let potentialX = workingSnake[workingSnake.length - 1].x;
         let potentialY = workingSnake[workingSnake.length - 1].y;
 
@@ -122,7 +149,7 @@ export default function Snake() {
      * 
      * Using ignoreTail will return false if the tail would otherwise be hit
      */
-    function coordHittingSnake(workingSnake: snakeBody[], coordX: number, coordY: number, ignoreTail: boolean) {
+    function coordHittingSnake(workingSnake: cellLoc[], coordX: number, coordY: number, ignoreTail: boolean) {
         // If the snake will replace the tail in position, return false
         // Will only run tail check if ignore tail set to true
         if ((workingSnake.length > 1) && (workingSnake[1].x == coordX) && (workingSnake[1].y == coordY) && ignoreTail)
@@ -141,6 +168,15 @@ export default function Snake() {
         return collision;
     }
 
+    const isFood = useCallback((coords: {x: number, y: number}, log: boolean = false): boolean => {
+        if (log)
+            console.log(coords, foodLoc);
+
+        let foodFound = ((coords.x == foodLoc.x) && (coords.y == foodLoc.y));
+        
+        return foodFound;
+    }, [foodLoc])
+
     /** Main game loop to step the snake forward one tick. */
     function progressSnake() {
         // Use functional update to ensure we have the latest state
@@ -155,11 +191,8 @@ export default function Snake() {
                 return currentSnake;
             }
 
-            //Check if snake hits food
-            let foundFood = true;
-
             //Progress snake forwards one - shift all segments and add new head
-            const newSnake = [...currentSnake.slice(foundFood ? 0 : 1), new snakeBody(potentialNewHead.x, potentialNewHead.y)];
+            const newSnake = [...currentSnake.slice(isFood(potentialNewHead, true) ? 0 : 1), new cellLoc(potentialNewHead.x, potentialNewHead.y)];
 
             return newSnake;
         });
@@ -178,7 +211,11 @@ export default function Snake() {
                                         return(
                                             <div 
                                                 key={"row-" + rowIdx.toString() + "_col-" + colIdx.toString()} 
-                                                className={`snakeGameCell ${coordHittingSnake(snakeCharacter, colIdx, rowIdx, false) ? 'activeSnakeCell' : ''}`}
+                                                className={`
+                                                    snakeGameCell 
+                                                    ${coordHittingSnake(snakeCharacter, colIdx, rowIdx, false) ? 'activeSnakeCell' : ''}
+                                                    ${isFood({x: colIdx, y: rowIdx}) ? 'activeFood' : ''}
+                                                `}
                                             >
                                             </div>
                                         )
