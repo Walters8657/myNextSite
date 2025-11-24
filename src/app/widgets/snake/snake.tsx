@@ -28,18 +28,19 @@ class cellLoc {
 }
 
 export default function Snake() {
+    const gameWidth: number = 16;
+    const gameHeight: number = 16;
+
     const [isPaused, setIsPaused] = useState<boolean>(true);
     const [isLost, setIsLost] = useState<boolean>(false);
-    const [foodLoc, setFoodLoc] = useState<cellLoc>(new cellLoc(3, 0));
+    const [isWon, setIsWon] = useState<boolean>(false);
+    const [foodLoc, setFoodLoc] = useState<cellLoc>(new cellLoc(8, 8));
     const [snakeCharacter, setSnakeCharacter] = useState<cellLoc[]>([
             new cellLoc(0, 0)
             , new cellLoc(1, 0)
             , new cellLoc(2, 0)
         ]);
 
-    const gameWidth: number = 15;
-    const gameHeight: number = 20;
- 
     const snakeDirectionRef = useRef<dir>(dir.right);
     const foodLocRef = useRef<cellLoc>(foodLoc);
 
@@ -95,6 +96,11 @@ export default function Snake() {
         let randomX = Math.floor(Math.random() * gameWidth);
         let randomY = Math.floor(Math.random() * gameHeight);
         
+        if (workingSnake.length == gameWidth * gameHeight) {
+            setIsWon(true);
+            return new cellLoc(-1, -1);
+        }
+
         // Check if food overlaps with snake by comparing coordinates
         while (workingSnake.some(segment => segment.x === randomX && segment.y === randomY)) {
             randomX = Math.floor(Math.random() * gameWidth);
@@ -167,7 +173,12 @@ export default function Snake() {
      * @returns True if in bounds, False otherwise
      * */
     function coordOutOfBounds(coord: {x: number, y: number}): boolean {
-        return (coord.x < 0 || coord.x >= gameWidth || coord.y < 0 || coord.y >= gameHeight);
+        let OOB: boolean = (coord.x < 0 || coord.x >= gameWidth || coord.y < 0 || coord.y >= gameHeight);
+
+        if (OOB)
+            setIsLost(true);
+
+        return OOB;
     }
 
     /** 
@@ -176,23 +187,39 @@ export default function Snake() {
      * @param workingSnake - The current snake data
      * @param coordX - X coordinate to check
      * @param coordY - Y coordinate to check
-     * @param checkTail - Determines whether tail is included in the hit box.
-     * @returns True if the coordinate is on the snake
+     * @param forMovement - Determines whether to use movement logic and updates
+     * @returns
+     * 
+     * 0 - No collision
+     * 
+     * 1 - Head collision
+     * 
+     * 2 - Body collision
+     * 
+     * 3 - Tail collision
      */
-    function coordHittingSnake(workingSnake: cellLoc[], coordX: number, coordY: number, checkTail: boolean) {
-        // If the snake will replace the tail in position, return false
-        // Will only run tail check if ignore tail set to true
-        if ((workingSnake.length > 1) && (workingSnake[1].x == coordX) && (workingSnake[1].y == coordY) && !checkTail)
-            return false;
-
-        let collision = false;
-
+    function coordHittingSnake(workingSnake: cellLoc[], coordX: number, coordY: number, forMovement: boolean): number {
+        let collision: number = 0;
+        // If the snake will replace the tail in position
+        if ((workingSnake.length > 0) && (workingSnake[0].x == coordX) && (workingSnake[0].y == coordY))
+            if (forMovement) // If using movement logic, the tail will be gone next tick
+                return 0;
+            else  // If not using movement logic, return tail hit
+                return 3;
+            
         // If the snake will hit any other part, return true
-        workingSnake.forEach(snakeCell => {
+        workingSnake.forEach((snakeCell, idx) => {
             if ((snakeCell.x == coordX) && (snakeCell.y == coordY)) {
-                collision = true;
+                if (idx == workingSnake.length - 1) // If cell is the tail
+                    collision = 1;
+                else // If cell is the body
+                    collision = 2;
             }
         })
+
+        if (forMovement && collision > 0) {
+            setIsLost(true);
+        }
 
         // If the snake will land on an empty space, return false
         return collision;
@@ -221,9 +248,9 @@ export default function Snake() {
             const potentialNewHead = getPotentialNewHead(currentSnake);
 
             let outOfBounds: boolean = coordOutOfBounds(potentialNewHead);
-            let collision: boolean = coordHittingSnake(currentSnake, potentialNewHead.x, potentialNewHead.y, false);
+            let collision: number = coordHittingSnake(currentSnake, potentialNewHead.x, potentialNewHead.y, true);
 
-            if (outOfBounds || collision) {
+            if (outOfBounds || collision > 0) {
                 setIsLost(true);
                 return currentSnake;
             }
@@ -235,9 +262,51 @@ export default function Snake() {
         });
     }
 
+    /**
+     * Resets the game with the snake at the top left and a random food.
+     */
+    function resetGame() {
+        setIsWon(false);
+        setIsLost(false);
+
+        const newSnake: cellLoc[] = [
+            new cellLoc(0, 0),
+            new cellLoc(1, 0),
+            new cellLoc(2, 0)
+        ];
+
+        setSnakeCharacter(newSnake);
+
+        const newFood: cellLoc = getNewFood(newSnake);
+
+        setFoodLoc(newFood);
+        foodLocRef.current = newFood;
+    }
+
+    function getSnakeClass(xCoord: number, yCoord: number, forMovement: boolean) {
+        let collision = coordHittingSnake(snakeCharacter, xCoord, yCoord, forMovement);
+
+        switch(collision) {
+            case 0:
+                return '';
+            case 1: 
+                return 'activeSnakeHead';
+            case 2: 
+                return 'activeSnakeBody';
+            case 3: 
+                return 'activeSnakeTail';
+        }
+    }
+
     return (
         <ToolCard title="Snake">
-            <button className="centerButton" onClick={() => setIsPaused(!isPaused)}>{isPaused ? 'Start' : 'Pause'}</button>
+            <button className="centerButton" onClick={() => {
+                if (isLost || isWon)
+                    resetGame();
+                else
+                    setIsPaused(!isPaused)
+            }}>{(isWon || isLost) ? "Reset" : isPaused ? 'Start' : 'Pause'}</button>
+            
             <div id="snakeGameArea">
                 {
                     gameField.map((row, rowIdx) => {
@@ -250,7 +319,7 @@ export default function Snake() {
                                                 key={"row-" + rowIdx.toString() + "_col-" + colIdx.toString()} 
                                                 className={`
                                                     snakeGameCell 
-                                                    ${coordHittingSnake(snakeCharacter, colIdx, rowIdx, true) ? 'activeSnakeCell' : ''}
+                                                    ${getSnakeClass(colIdx, rowIdx, false)}
                                                     ${isFood({x: colIdx, y: rowIdx}) ? 'activeFood' : ''}
                                                 `}
                                             >

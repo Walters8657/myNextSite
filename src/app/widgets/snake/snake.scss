@@ -2,7 +2,7 @@
     width: calc(15px * 15);
     margin: 0 auto;
 
-    border: solid red 1px;
+    border: solid black 2px;
     .snakeRow {
         display: flex;
         .snakeGameCell {
@@ -12,10 +12,16 @@
 
             box-sizing: border-box;
 
-            border: solid black 1px;
+            // border: solid black 1px;
         }
-        .activeSnakeCell {
+        .activeSnakeHead {
+            background-color: darkGreen;
+        }
+        .activeSnakeBody {
             background-color: green;
+        }
+        .activeSnakeTail {
+            background-color: rgb(72, 180, 72);
         }
         .activeFood {
             background-color: blue;
