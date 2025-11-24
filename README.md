@@ -7,6 +7,8 @@
     - Metronome
     - Syntax validators
     - Maze solver
+    - Drum loop maker (kick snare tom hat crash ...)
+    - Drag and droppable widgets
     - Regex generator?
     - Certificate generator??
 

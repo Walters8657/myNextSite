@@ -17,8 +17,8 @@ export default function Page() {
   const widgets = [
     <Snake key="snake" />,
     <Boids key="boids" />,
-    <GameOfLife key="gameOfLife" />,
     <Flashcards key="flashcards" />,
+    <GameOfLife key="gameOfLife" />,
     <Minesweeper key="minesweeper" />,
     <HowMuchFaster key="howMuchFaster" />,
     <ColorConverter key="colorConverter" />,
