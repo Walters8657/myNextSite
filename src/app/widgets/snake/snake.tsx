@@ -52,9 +52,6 @@ export default function Snake() {
             if (validateDirection(event)) {
                 event.preventDefault();
                 setNewSnakeDirection(event);
-
-                //TODO: Put move on a timer
-                progressSnake();
             }
         };
         
@@ -64,6 +61,18 @@ export default function Snake() {
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, [])
+
+    // Main timer for gameplay
+    useEffect(() => {
+        const timer = setInterval(() => {
+            if (!isPaused && !isWon && !isLost)
+                progressSnake();
+        }, 400);
+
+        return () => {
+            clearTimeout(timer);
+        }
+    }, [isPaused, isWon, isLost])
 
     // If the snake moves, check if his head is on the current food and set a new food location if so
     useEffect(() => {
@@ -266,8 +275,10 @@ export default function Snake() {
      * Resets the game with the snake at the top left and a random food.
      */
     function resetGame() {
+        setIsPaused(true);
         setIsWon(false);
         setIsLost(false);
+        snakeDirectionRef.current = dir.right;
 
         const newSnake: cellLoc[] = [
             new cellLoc(0, 0),
@@ -285,6 +296,9 @@ export default function Snake() {
 
     function getSnakeClass(xCoord: number, yCoord: number, forMovement: boolean) {
         let collision = coordHittingSnake(snakeCharacter, xCoord, yCoord, forMovement);
+
+        if (isLost && collision > 0)
+            return 'activeSnakeLoss'
 
         switch(collision) {
             case 0:
