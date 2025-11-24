@@ -7,7 +7,6 @@
     - Metronome
     - Syntax validators
     - Maze solver
-    - Snake
     - Regex generator?
     - Certificate generator??
 
