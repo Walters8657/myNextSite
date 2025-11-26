@@ -1,24 +1,40 @@
 $toolcardWidth: 300px;
 $toolcardGutter: 32px;
 
-.widgets-container {
-  margin: 0 auto;
-  padding: 0 20px;
-  max-width: calc(#{$toolcardWidth} * 4 + #{$toolcardGutter} * 3);
+// .widgets-container {
+//   margin: 0 auto;
+//   padding: 0 20px;
+//   max-width: calc(#{$toolcardWidth} * 4 + #{$toolcardGutter} * 3);
+//   display: flex;
+//   gap: 32px;
+//   justify-content: center;
+// }
+
+// .widgets-widget {
+//   width: $toolcardWidth;
+//   display: block;
+// }
+
+// .widgets-widget > * {
+//   margin-left: auto;
+//   margin-right: auto;
+//   display: block;
+//   max-width: 100%;
+// }
+
+.widgetsContainer {
   display: flex;
-  gap: 32px;
+  flex-wrap: wrap;
+  gap: $toolcardGutter;
+
+  max-width: calc(#{$toolcardWidth} * 4 + #{$toolcardGutter} * 3);
+  margin: 0 auto;
   justify-content: center;
-}
 
-.widgets-widget {
-  width: $toolcardWidth;
-  display: block;
+  .widget {
+    display: block;
+    width: $toolcardWidth;
+    min-width: $toolcardWidth;
+    position: relative;
+  }
 }
-
-.widgets-widget > * {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  max-width: 100%;
-}
-

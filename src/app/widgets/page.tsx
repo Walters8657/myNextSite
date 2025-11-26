@@ -25,9 +25,9 @@ export default function Page() {
   ];
 
   return (
-    <div className="widgets-container">
+    <div className="widgetsContainer">
         {widgets.map((widget, i) => (
-          <div className="widgets-widget" key={i}>
+          <div className="widget" key={i}>
             {widget}
           </div>
         ))}
