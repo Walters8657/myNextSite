@@ -21,9 +21,12 @@ enum dir {
 class cellLoc {
     x: number;
     y: number;
-    constructor (newX: number, newY: number) {
+    direction: dir | null = null;
+
+    constructor (newX: number, newY: number, newDir: dir | null = null) {
         this.x = newX;
         this.y = newY;
+        this.direction = newDir;
     }
 }
 
@@ -36,12 +39,17 @@ export default function Snake() {
     const [isWon, setIsWon] = useState<boolean>(false);
     const [foodLoc, setFoodLoc] = useState<cellLoc>(new cellLoc(8, 8));
     const [snakeCharacter, setSnakeCharacter] = useState<cellLoc[]>([
-            new cellLoc(0, 0)
-            , new cellLoc(1, 0)
-            , new cellLoc(2, 0)
+            new cellLoc(0, 0, dir.right)
+            , new cellLoc(1, 0, dir.right)
+            , new cellLoc(2, 0, dir.right)
         ]);
 
     const snakeDirectionRef = useRef<dir>(dir.right);
+    const snakeCharacterRef = useRef<cellLoc[]>([
+            new cellLoc(0, 0, dir.right)
+            , new cellLoc(1, 0, dir.right)
+            , new cellLoc(2, 0, dir.right)
+        ]);
     const foodLocRef = useRef<cellLoc>(foodLoc);
 
     const gameField = new Array(gameHeight).fill(new Array(gameWidth).fill(null));
@@ -90,10 +98,14 @@ export default function Snake() {
         })
     }, [snakeCharacter])
 
-    // Keep ref in sync with state
+    // Keep refs in sync with state
     useEffect(() => {
         foodLocRef.current = foodLoc;
-    }, [foodLoc])
+    }, [foodLoc]);
+
+    useEffect(() => {
+        snakeCharacterRef.current = snakeCharacter;
+    }, [snakeCharacter]);
 
     /** 
      * Returns a cellLoc that is currently devoid of snake. 
@@ -123,7 +135,7 @@ export default function Snake() {
      * Gets the next location that the snake would like to move to
      * 
      * @param workingSnake - The current snake data
-     * @returns X, Y coordinates of an empty cell
+     * @returns X, Y, direction coordinates of an empty cell
      */
     function getPotentialNewHead(workingSnake: cellLoc[]) {
         let potentialX = workingSnake[workingSnake.length - 1].x;
@@ -143,8 +155,10 @@ export default function Snake() {
                 potentialX--;
                 break;
         }
+
+        console.log(snakeDirectionRef.current);
         
-        return {x: potentialX, y: potentialY}
+        return {x: potentialX, y: potentialY, direction: snakeDirectionRef.current}
     }
 
     /** 
@@ -158,18 +172,25 @@ export default function Snake() {
      * Updates direction ref to match keypress
      * */
     function setNewSnakeDirection(event: KeyboardEvent): void {
+        const workingSnake = snakeCharacterRef.current;
+        const workingHead = workingSnake[workingSnake.length - 1];
+
         switch (event.key.toString()){
             case "ArrowUp":
-                snakeDirectionRef.current = dir.up;
+                if (workingHead.direction != dir.down)
+                    snakeDirectionRef.current = dir.up;
                 break;
             case "ArrowRight":
-                snakeDirectionRef.current = dir.right;
+                if (workingHead.direction != dir.left)
+                    snakeDirectionRef.current = dir.right;
                 break;
             case "ArrowDown":
-                snakeDirectionRef.current = dir.down;
+                if (workingHead.direction != dir.up)
+                    snakeDirectionRef.current = dir.down;
                 break;
             case "ArrowLeft":
-                snakeDirectionRef.current = dir.left;
+                if (workingHead.direction != dir.right)
+                    snakeDirectionRef.current = dir.left;
                 break;
             default:
                 break;
@@ -265,8 +286,9 @@ export default function Snake() {
             }
 
             //Progress snake forwards one - shift all segments and add new head
-            const newSnake = [...currentSnake.slice(isFood(potentialNewHead) ? 0 : 1), new cellLoc(potentialNewHead.x, potentialNewHead.y)];
+            const newSnake = [...currentSnake.slice(isFood(potentialNewHead) ? 0 : 1), new cellLoc(potentialNewHead.x, potentialNewHead.y, potentialNewHead.direction)];
 
+            snakeCharacterRef.current = newSnake;
             return newSnake;
         });
     }
@@ -286,6 +308,7 @@ export default function Snake() {
             new cellLoc(2, 0)
         ];
 
+        snakeCharacterRef.current = newSnake;
         setSnakeCharacter(newSnake);
 
         const newFood: cellLoc = getNewFood(newSnake);
