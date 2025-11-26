@@ -1,6 +1,4 @@
 "use client";
-// @ts-ignore: react-masonry-component has no types
-import Masonry from "react-masonry-component";
 import "./widgets.scss";
 
 import Snake from "./snake/snake";
@@ -17,8 +15,8 @@ export default function Page() {
   const widgets = [
     <Snake key="snake" />,
     <Boids key="boids" />,
-    <GameOfLife key="gameOfLife" />,
     <Flashcards key="flashcards" />,
+    <GameOfLife key="gameOfLife" />,
     <Minesweeper key="minesweeper" />,
     <HowMuchFaster key="howMuchFaster" />,
     <ColorConverter key="colorConverter" />,
@@ -26,25 +24,13 @@ export default function Page() {
     <SortingVisualizations key="sortingVisualizations" />,
   ];
 
-  const masonryOptions = {
-    transitionDuration: 0,
-    gutter: 32, // 2rem
-    fitWidth: true,
-  };
-
   return (
-    <div className="masonry-container">
-      <Masonry
-        options={masonryOptions}
-        disableImagesLoaded={false}
-        updateOnEachImageLoad={false}
-      >
+    <div className="widgets-container">
         {widgets.map((widget, i) => (
           <div className="widgets-widget" key={i}>
             {widget}
           </div>
         ))}
-      </Masonry>
     </div>
   );
 }

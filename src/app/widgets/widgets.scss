@@ -1,21 +1,18 @@
 $toolcardWidth: 300px;
 $toolcardGutter: 32px;
 
-.masonry-container {
+.widgets-container {
   margin: 0 auto;
   padding: 0 20px;
   max-width: calc(#{$toolcardWidth} * 4 + #{$toolcardGutter} * 3);
   display: flex;
+  gap: 32px;
   justify-content: center;
-}
-
-.my-masonry-grid_column {
-  background-clip: padding-box;
-  margin: 0 20px;
 }
 
 .widgets-widget {
   width: $toolcardWidth;
+  display: block;
 }
 
 .widgets-widget > * {

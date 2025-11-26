@@ -10,14 +10,11 @@
     "gcloud-deploy": "gcloud run deploy michael-walters-next --source ."
   },
   "dependencies": {
-    "masonry-layout": "^4.2.2",
     "next": "^15.3.2",
     "node-sass": "^9.0.0",
     "p5": "^1.9.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-masonry-component": "^6.3.0",
-    "react-masonry-css": "^1.0.16",
     "react-p5-wrapper": "^4.1.2",
     "sass": "^1.77.8"
   },
