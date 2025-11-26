@@ -155,8 +155,6 @@ export default function Snake() {
                 potentialX--;
                 break;
         }
-
-        console.log(snakeDirectionRef.current);
         
         return {x: potentialX, y: potentialY, direction: snakeDirectionRef.current}
     }
