@@ -1,40 +1,44 @@
 $toolCardWidth: 300px;
 $toolCardGutter: 32px;
 
-// .widgets-container {
-//   margin: 0 auto;
-//   padding: 0 20px;
-//   max-width: calc(#{$toolCardWidth} * 4 + #{$toolCardGutter} * 3);
-//   display: flex;
-//   gap: 32px;
-//   justify-content: center;
-// }
-
-// .widgets-widget {
-//   width: $toolCardWidth;
-//   display: block;
-// }
-
-// .widgets-widget > * {
-//   margin-left: auto;
-//   margin-right: auto;
-//   display: block;
-//   max-width: 100%;
-// }
-
 .widgetsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $toolCardGutter;
+  // Default to one column wide
+  max-width: calc(#{$toolCardWidth} * 1 + #{$toolCardGutter} * 0);
 
-  max-width: calc(#{$toolCardWidth} * 4 + #{$toolCardGutter} * 3);
+  columns: $toolCardWidth;
+  column-gap: $toolCardGutter;
+  column-rule-width: 0;
+
   margin: 0 auto;
-  justify-content: center;
 
   .widget {
     display: block;
-    width: $toolCardWidth;
-    min-width: $toolCardWidth;
-    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: $toolCardWidth;
+    break-inside: avoid-column;
+  }
+}
+
+
+
+// Media query and rule for two columns
+@media (min-width: calc((#{$toolCardWidth} + #{$toolCardGutter}) * 2 + #{$toolCardGutter} * 2)) {
+  .widgetsContainer {
+    max-width: calc(#{$toolCardWidth} * 2 + #{$toolCardGutter} * 1);
+  }
+}
+
+// Media query and rule for three columns
+@media (min-width: calc((#{$toolCardWidth} + #{$toolCardGutter}) * 3 + #{$toolCardGutter} * 2)) {
+  .widgetsContainer {
+    max-width: calc(#{$toolCardWidth} * 3 + #{$toolCardGutter} * 2);
+  }
+}
+
+// Media query and rule for four (max) columns
+@media (min-width: calc((#{$toolCardWidth} + #{$toolCardGutter}) * 4 + #{$toolCardGutter} * 2)) {
+  .widgetsContainer {
+    max-width: calc(#{$toolCardWidth} * 4 + #{$toolCardGutter} * 3);
   }
 }
