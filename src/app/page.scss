@@ -15,23 +15,29 @@
     // border: 8px solid;
     // border-image: linear-gradient(to right, $black 0%, $white 25%, $white 75%, $black 100%) 8; 
 
+    #prevNextContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     #prevBtn, #nextBtn {
         position: absolute;
         bottom: 0;
         border: none;
         box-shadow: none;
         border-radius: 50%;
-        background-color: $white;
+        background-color: transparent;
         padding: 0;
         margin: 5px;
-        height: 50px;
-        width: 50px;
+        height: 30px;
+        width: 30px;
     }
     #prevBtn {
         transform: rotate(180deg);
-        left: calc(50% - 60px);
+        left: calc(50% - 40px);
     }
     #nextBtn {
-        right: calc(50% - 60px);
+        right: calc(50% - 40px);
     }
 }

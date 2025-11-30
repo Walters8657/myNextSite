@@ -17,10 +17,27 @@
 
     // Allows items to be positions with respect to the widget (Im looking at you color convertor shuffle)
     position: relative;
+
+    .orderControlBtns {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      #upBtn:hover, #downBtn:hover {
+        cursor: pointer;
+      }
+      #upBtn, #downBtn {
+        border-radius: 50%;
+        opacity: 33%;
+      }
+      #upBtn {
+        rotate: -90deg;
+      }
+      #downBtn {
+        rotate: 90deg;
+      }
+    }
   }
 }
-
-
 
 // Media query and rule for two columns
 @media (min-width: calc((#{$toolCardWidth} + #{$toolCardGutter}) * 2 + #{$toolCardGutter} * 2)) {

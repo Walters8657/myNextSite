@@ -95,12 +95,14 @@ export default function Home() {
             }
           />
         ))}
-        <button id="prevBtn" onClick={prevSlide} aria-label="Previous Project">
-          <img src="/arrow.png" alt="Left Arrow" />
-        </button>
-        <button id="nextBtn" onClick={nextSlide} aria-label="Next Project">
-          <img src="/arrow.png" alt="Right Arrow" />
-        </button>
+        <span id="prevNextContainer">
+          <button id="prevBtn" onClick={prevSlide} aria-label="Previous Project">
+            <img src="/arrow.svg" alt="Left Arrow" />
+          </button>
+          <button id="nextBtn" onClick={nextSlide} aria-label="Next Project">
+            <img src="/arrow.svg" alt="Right Arrow" />
+          </button>
+        </span>
       </div>
     </>
   );
