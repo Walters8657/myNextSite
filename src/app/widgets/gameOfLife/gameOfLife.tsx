@@ -107,7 +107,7 @@ export default function GameOfLife() {
     return (
         <ToolCard title="Game of Life">
             <button id="pauseBtnGol" className="centerButton" onClick={pauseResume}>{isPaused ? 'Play' : 'Pause'}</button>
-            <p>Sim Speed</p>
+            <p id="simSpeedLabel">Sim Speed</p>
             <input 
                 type="range" 
                 id="simSpeedSlider" 

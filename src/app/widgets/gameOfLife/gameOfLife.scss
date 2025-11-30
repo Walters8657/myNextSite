@@ -11,9 +11,15 @@
     width: 60px;
 }
 
+#simSpeedLabel {
+    font-size: $smallerText;
+    margin-bottom: 0;
+
+}
+
 #simSpeedSlider {
     display: block;
-    margin: 20px auto;
+    margin: 5px auto 20px;
     width: 50%;
     -webkit-appearance: none;
     appearance: none;

@@ -391,6 +391,24 @@ export default function ColorConverter() {
                         }}
                     />
                 </div>
+                
+                <span id="hexInputGroup" className="tripleInputContainer">
+                    <label htmlFor="hex" className="tripleInputLabel">HEX</label>
+                    <span>
+                        <span>#</span>
+                        <input
+                            type="text"
+                            name="hex"
+                            id="hex"
+                            value={currentHex}
+                            maxLength={6}
+                            onChange={handleHexChange}
+                            className="hexInput"
+                        />
+                    </span>
+                </span>
+
+                
                 <span id="fullRgbContainer" className="tripleInputContainer">
                     <label htmlFor="RGB1" className="tripleInputLabel">RGB</label>
                     {[
@@ -410,22 +428,6 @@ export default function ColorConverter() {
                             key={channel.id}
                         />
                     ))}
-                </span>
-
-                <span id="hexInputGroup" className="tripleInputContainer">
-                    <label htmlFor="hex" className="tripleInputLabel">HEX</label>
-                    <span>
-                        <span>#</span>
-                        <input
-                            type="text"
-                            name="hex"
-                            id="hex"
-                            value={currentHex}
-                            maxLength={6}
-                            onChange={handleHexChange}
-                            className="hexInput"
-                        />
-                    </span>
                 </span>
 
                 <span id="fullHslContainer" className="tripleInputContainer">
@@ -520,7 +522,7 @@ export default function ColorConverter() {
                                 backgroundColor: `rgb(${closestNamedColor.rgb[0]}, ${closestNamedColor.rgb[1]}, ${closestNamedColor.rgb[2]})`,
                                 color: closestNamedColor.textColor || 'black'
                             }}>
-                                <span className="colorName">{closestNamedColor.name}</span>
+                                <span>{closestNamedColor.name}</span>
                                 <br />
                                 <span className="colorRGB">
                                     RGB({closestNamedColor.rgb[0]}, {closestNamedColor.rgb[1]}, {closestNamedColor.rgb[2]})

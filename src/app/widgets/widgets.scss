@@ -1,6 +1,3 @@
-$toolCardWidth: 300px;
-$toolCardGutter: 32px;
-
 .widgetsContainer {
   // Default to one column wide
   max-width: calc(#{$toolCardWidth} * 1 + #{$toolCardGutter} * 0);

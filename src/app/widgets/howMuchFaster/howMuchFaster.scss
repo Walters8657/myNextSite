@@ -76,7 +76,7 @@ td {
 }
 
 .table th {
-  font-size: 0.78rem;
+  font-size: $smallerText;
   font-weight: 600;
   letter-spacing: 0.01em;
   padding-bottom: 0.18rem;
@@ -86,7 +86,7 @@ td {
 }
 
 .totals-label {
-  font-size: 0.78rem;
+  font-size: $smallerText;
   font-weight: 600;
   text-align: center;
   letter-spacing: 0.01em;
