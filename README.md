@@ -2,6 +2,7 @@
 
 ### Todo
 - Better home page project arrows
+- Move global functions ()
 - Widgets
     - Weather
     - Metronome

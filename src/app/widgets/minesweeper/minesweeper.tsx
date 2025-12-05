@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, Activity } from "react";
 import ToolCard from "../../ui/toolCard/toolCard";
 import "./minesweeper.scss"
 
@@ -268,28 +268,32 @@ export default function Minesweeper() {
             >
                 <table>
                     <tbody>
-                        {fullGameData.length > 0 && fullGameData.map((row: GameTile[], rowIndex: number) => (
-                            <tr key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
-                                    <td 
-                                        key={cellIndex}
-                                        className={!cell.isRevealed ? "unclicked" : ""}
-                                    >
-                                        <p 
-                                            className={`${!cell.isBomb ? getColor(cell.bombsTouching) : ''} ${cell.isFlagged ? 'flagged' : ''}`}
-                                            onClick={(e) => handleCellClick(e, rowIndex, cellIndex, cell)}
-                                            onContextMenu={(e) => handleRightClick(e, rowIndex, cellIndex, cell)}
+                        <Activity mode={fullGameData.length > 0 ? "visible" : "hidden"} >
+                            {fullGameData.map((row: GameTile[], rowIndex: number) => (
+                                <tr key={rowIndex}>
+                                    {row.map((cell, cellIndex) => (
+                                        <td 
+                                            key={cellIndex}
+                                            className={!cell.isRevealed ? "unclicked" : ""}
                                         >
-                                            {renderCellContent(cell)}
-                                        </p>                                                
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
+                                            <p 
+                                                className={`${!cell.isBomb ? getColor(cell.bombsTouching) : ''} ${cell.isFlagged ? 'flagged' : ''}`}
+                                                onClick={(e) => handleCellClick(e, rowIndex, cellIndex, cell)}
+                                                onContextMenu={(e) => handleRightClick(e, rowIndex, cellIndex, cell)}
+                                            >
+                                                {renderCellContent(cell)}
+                                            </p>                                                
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </Activity>
                     </tbody>
                 </table>
             </div>
-            {isTouchDevice && <p id="mobileToggle">Show<span id="slider" className={useFlag ? "useFlag" : ""} onClick={handleUseFlagSlider}><span></span></span> Flag</p>}
+            <Activity mode={isTouchDevice ? "visible" : "hidden"}>
+                <p id="mobileToggle">Show<span id="slider" className={useFlag ? "useFlag" : ""} onClick={handleUseFlagSlider}><span></span></span> Flag</p>
+            </Activity>
         </ToolCard>
     ) 
 }

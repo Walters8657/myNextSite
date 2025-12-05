@@ -2,7 +2,7 @@
 
 import ToolCard from "../../ui/toolCard/toolCard";
 import "./howMuchFaster.scss";
-import { useState } from "react";
+import { JSX, useState } from "react";
 
 export default function HowMuchFaster() {
   const rows = Array.from({ length: 4 });
