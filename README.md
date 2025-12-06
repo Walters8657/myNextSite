@@ -8,7 +8,8 @@
     - Metronome
     - Syntax validators
     - Maze solver
-    - Drag and drop re ordering
+    - Drag and drop widget re ordering
+    - Fluid simulation
     - Regex generator?
     - Certificate generator??
 
