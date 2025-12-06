@@ -101,6 +101,7 @@ export default function HowMuchFaster() {
                           readOnly
                           tabIndex={-1}
                           style={{ background: '#f8f8f8' }}
+                          name={"deltaTime" + colIdx.toString()}
                         />
                         <span className="hms-span">{
                           formatHoursToHMSFaded(
@@ -114,6 +115,7 @@ export default function HowMuchFaster() {
                         {...inputProps}
                         value={tableData[rowIdx][colIdx] === 0 ? "" : tableData[rowIdx][colIdx]}
                         onChange={handleInputChange(rowIdx, colIdx)}
+                        name={colIdx.toString() + "_" + rowIdx.toString()}
                       />
                     )}
                   </td>
@@ -129,6 +131,7 @@ export default function HowMuchFaster() {
                   readOnly
                   tabIndex={-1}
                   value={totalDistance === 0 ? "" : Number(totalDistance.toFixed(2))}
+                  name="totalDistance"
                 />
               </td>
               <td>
@@ -137,6 +140,7 @@ export default function HowMuchFaster() {
                   readOnly
                   tabIndex={-1}
                   style={{ background: '#f8f8f8' }}
+                  name="totalDeltaTime"
                 />
                 <span className="hms-span">{
                   formatHoursToHMSFaded(
