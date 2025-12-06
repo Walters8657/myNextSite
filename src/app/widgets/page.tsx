@@ -2,7 +2,7 @@
 
 import "./widgets.scss";
 
-import React, { useState, useEffect } from "react";
+import { JSX, useState } from "react";
 
 import Snake from "./snake/snake";
 import Boids from "./boids/boids";
