@@ -157,6 +157,7 @@ export default function CanvasOfBabble() {
                             setSeed(n);
                         }
                     }}
+                    name="canvasSeed"
                     className="babble-seed-input"
                 />
                 <button
