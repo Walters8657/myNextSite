@@ -3,6 +3,6 @@ const path = require('path')
 module.exports = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
-    prependData: `@import "src/app/variables.scss";`
+    prependData: `@use "@/app/variables.scss" as *;`
   },
 }
