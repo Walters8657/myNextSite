@@ -15,8 +15,7 @@ export default function ColorConverter() {
     const [lastChanged, setLastChanged] = useState<'rgb' | 'hsl' | 'hsv' | 'hex' | 'cmy' | 'hwb'>('rgb');
     const [closestNamedColor, setClosestNamedColor] = useState<CSSNamedColor | null>(null);
 
-
-// Function to generate a random RGB color
+    // Function to generate a random RGB color
     function generateRandomRGB(): [number, number, number] {
         return [
             Math.floor(Math.random() * 256),
@@ -31,45 +30,42 @@ export default function ColorConverter() {
     }, []);
 
     
-    // Sync HEX when RGB changes
+    // Color Value Sync on RGB change
     useEffect(() => {
-        if (lastChanged != 'hex') {
-        setCurrentHex(rgbToHex(currentRGB[0], currentRGB[1], currentRGB[2]));
-        }
-    }, [currentRGB]);
-
-    // Sync HSL when RGB changes
-    useEffect(() => {
-        if (lastChanged !== 'hsl') {
-            setCurrentHSL(rgbToHsl(currentRGB[0], currentRGB[1], currentRGB[2]));
-        }
-    }, [currentRGB]);
-
-    // Sync HSV when RGB changes
-    useEffect(() => {
-        if (lastChanged !== 'hsv') {
-            setCurrentHSV(rgbToHsv(currentRGB[0], currentRGB[1], currentRGB[2]));
-        }
-    }, [currentRGB]);
-
-    // Sync CMY when RGB changes
-    useEffect(() => {
-        if (lastChanged !== 'cmy') {
-            setCurrentCMY(rgbToCmy(currentRGB[0], currentRGB[1], currentRGB[2]));
-        }
-    }, [currentRGB]);
-
-    // Sync HWB when RGB changes
-    useEffect(() => {
-        if (lastChanged !== 'hwb') {
-            setCurrentHWB(rgbToHwb(currentRGB[0], currentRGB[1], currentRGB[2]));
-        }
+        syncWithRgb();
     }, [currentRGB]);
 
     // Find closest named color when RGB changes
     useEffect(() => {
         setClosestNamedColor(findClosestNamedColor(currentRGB[0], currentRGB[1], currentRGB[2]));
     }, [currentRGB]);
+
+    function syncWithRgb() {
+        // Hex sync
+        if (lastChanged != 'hex') {
+        setCurrentHex(rgbToHex(currentRGB[0], currentRGB[1], currentRGB[2]));
+        }
+
+        // HSL sync
+        if (lastChanged !== 'hsl') {
+            setCurrentHSL(rgbToHsl(currentRGB[0], currentRGB[1], currentRGB[2]));
+        }
+
+        // HSV sync
+        if (lastChanged !== 'hsv') {
+            setCurrentHSV(rgbToHsv(currentRGB[0], currentRGB[1], currentRGB[2]));
+        }
+
+        // CMY sync
+        if (lastChanged !== 'cmy') {
+            setCurrentCMY(rgbToCmy(currentRGB[0], currentRGB[1], currentRGB[2]));
+        }
+        
+        // HWB sync
+        if (lastChanged !== 'hwb') {
+            setCurrentHWB(rgbToHwb(currentRGB[0], currentRGB[1], currentRGB[2]));
+        }
+    }
     
     // --- rgbToX conversion functions ---
     function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
