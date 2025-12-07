@@ -33,7 +33,9 @@ export default function ColorConverter() {
     
     // Sync HEX when RGB changes
     useEffect(() => {
+        if (lastChanged != 'hex') {
         setCurrentHex(rgbToHex(currentRGB[0], currentRGB[1], currentRGB[2]));
+        }
     }, [currentRGB]);
 
     // Sync HSL when RGB changes
@@ -300,8 +302,8 @@ export default function ColorConverter() {
         setCurrentHex(value);
         if (/^([0-9A-F]{3}){1,2}$/.test(value)) {
             let hexValue = value;
-            if (hexValue.length === 3) {
-                hexValue = hexValue.split('').map(x => x + x).join('');
+            if (hexValue.length === 3 && (hexValue[0] == hexValue[1] && hexValue[0] == hexValue[2])) {
+                hexValue = hexValue + hexValue;
             }
             if (hexValue.length === 6) {
                 const r = parseInt(hexValue.substring(0, 2), 16);
