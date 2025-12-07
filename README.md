@@ -1,8 +1,7 @@
-## Personal website for and by Michael Walters using Next.js
+## [Personal website](https://michaelwalters.dev) for and by Michael Walters using Next.js
 
 ### Todo
-- Better home page project arrows
-- Move global functions ()
+- Move global functions
 - Widgets
     - Weather
     - Metronome
