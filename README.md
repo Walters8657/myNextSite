@@ -9,8 +9,10 @@
     - Maze solver
     - Drag and drop widget re ordering
     - Fluid simulation
+    - Link shortener
     - Regex generator?
     - Certificate generator??
 
 ### Bugs
 - Home page projects can get un-centered after resize
+- Minesweeper is won lets clicks happen still
