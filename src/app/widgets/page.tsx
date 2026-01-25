@@ -13,19 +13,21 @@ import CanvasOfBabble from "./canvasOfBabble/babble";
 import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import ColorConverter from "./colorConverter/colorConverter";
 import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
+import ShortLinks from "./shortLinks/shortLinks";
 
 
 export default function Page() {
   const widgets: JSX.Element[] = [
-    <Snake key="snake" />,
-    <Boids key="boids" />,
-    <Flashcards key="flashcards" />,
-    <GameOfLife key="gameOfLife" />,
-    <Minesweeper key="minesweeper" />,
-    <HowMuchFaster key="howMuchFaster" />,
-    <ColorConverter key="colorConverter" />,
-    <CanvasOfBabble key="canvasOfBabble" />,
-    <SortingVisualizations key="sortingVisualizations" />,
+    <Snake key="snake" />
+    ,<Boids key="boids" />
+    ,<ShortLinks key="shortLinks" />
+    ,<Flashcards key="flashcards" />
+    ,<GameOfLife key="gameOfLife" />
+    ,<Minesweeper key="minesweeper" />
+    ,<HowMuchFaster key="howMuchFaster" />
+    ,<ColorConverter key="colorConverter" />
+    ,<CanvasOfBabble key="canvasOfBabble" />
+    ,<SortingVisualizations key="sortingVisualizations" />
   ];
 
   const [widgetOrder, setWidgetOrder] = useState(
