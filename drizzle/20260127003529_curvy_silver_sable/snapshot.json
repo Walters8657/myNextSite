@@ -1,0 +1,46 @@
+{
+  "version": "2",
+  "dialect": "mssql",
+  "id": "1e896c30-74a1-417d-b21e-cc9e19a1dbb0",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "name": "shortLink",
+      "entityType": "tables",
+      "schema": "dbo"
+    },
+    {
+      "type": "varchar(6)",
+      "notNull": true,
+      "generated": null,
+      "identity": null,
+      "name": "shortLink",
+      "schema": "dbo",
+      "entityType": "columns",
+      "table": "shortLink"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "generated": null,
+      "identity": null,
+      "name": "longLink",
+      "schema": "dbo",
+      "entityType": "columns",
+      "table": "shortLink"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "shortLink"
+      ],
+      "name": "shortLink_shortLink_key",
+      "schema": "dbo",
+      "table": "shortLink",
+      "entityType": "uniques"
+    }
+  ],
+  "renames": []
+}

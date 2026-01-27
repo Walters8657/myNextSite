@@ -1,11 +1,15 @@
 // proxy.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { drizzle } from 'drizzle-orm/node-mssql';
+import { shortLinkTable } from "./db/schema"
+import '../envConfig';
 
-export function proxy(request: NextRequest) {
-  console.log(request.nextUrl);
-  // if (request.nextUrl.pathname.startsWith('/ls')) {
-  //   return NextResponse.redirect(new URL('https:www.google.com'));
-  // }
+const db = drizzle(process.env.DATABASE_STRING!);
+
+export async function proxy(request: NextRequest) {
+  const shortLinks = await db.select().from(shortLinkTable);
+
+  console.log(shortLinks);
 
   return NextResponse.next();
 }
