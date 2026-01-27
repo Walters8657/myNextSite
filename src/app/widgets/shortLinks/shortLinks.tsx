@@ -1,5 +1,6 @@
+"use client"
+
 import { useCallback, useState } from "react";
-import { NextRequest, NextResponse } from "next/server";
 
 import ToolCard from "@/app/ui/toolCard/toolCard";
 
@@ -14,13 +15,13 @@ export default function shortLinks() {
     }, [])
 
     const handleGenerateLink = useCallback(async (): Promise<void> => {
-        let newLink = generateLink();
-        setNewShortLink(newLink);
+        let newLinkSlug = generateLinkSlug();
+        let host = window.location.host;
         
         const result = await fetch("/api/shortLink", {
             method: "POST",
             body: JSON.stringify({
-                shortLink: newLink,
+                slug: newLinkSlug,
                 longLink: longLink
             }),
             headers: {
@@ -28,9 +29,11 @@ export default function shortLinks() {
             }
         });
 
+        setNewShortLink(host.concat("/ls/", newLinkSlug));
+
     }, [longLink, newShortLink]);
 
-    function generateLink(): string {
+    function generateLinkSlug(): string {
         let randomString = "";
 
         for(let i = 0; i < 6; i++) {
@@ -38,7 +41,7 @@ export default function shortLinks() {
             randomString = randomString.concat(rand36);
         }
 
-        return "/ls/" + randomString;
+        return randomString;
     } 
 
     function randBase36(): string {
@@ -60,7 +63,7 @@ export default function shortLinks() {
                 value={longLink ?? ''}
             />
             <button 
-                id="generateLink" 
+                id="generateLinkSlug" 
                 className="centerButton" 
                 onClick={handleGenerateLink}
             >

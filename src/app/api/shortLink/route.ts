@@ -15,13 +15,11 @@ export async function GET(request: any) {
 export async function POST(request: Request) {
   const data = await request.json();
 
-  if (data.shortLink && data.longLink) {
+  if (data.slug && data.longLink) {
     const result = await db.insert(shortLinkTable).values({
-      shortLink: data.shortLink,
+      slug: data.slug,
       longLink: data.longLink
     });
-
-    console.log(result);
 
     return NextResponse.json({ message: "Values Inserted" }, { status: 200 });
   } else {

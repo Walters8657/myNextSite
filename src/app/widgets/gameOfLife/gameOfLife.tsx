@@ -19,7 +19,6 @@ export default function GameOfLife() {
 
     useEffect(() => {
         if (!isPaused) {
-            console.log("Generating new frame");
             const interval = setInterval(() => {
                 generateNewFrame();
             }, 1000 / (1 * simSpeed));
@@ -75,7 +74,6 @@ export default function GameOfLife() {
                     nearbyCellCount++;
             }
         }
-        if (nearbyCellCount > 0)console.log(nearbyCellCount);
         return nearbyCellCount;
     }
 
