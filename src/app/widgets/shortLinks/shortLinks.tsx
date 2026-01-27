@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { NextRequest, NextResponse } from "next/server";
 
 import ToolCard from "@/app/ui/toolCard/toolCard";
 
@@ -12,10 +13,22 @@ export default function shortLinks() {
         setLongLink(newLongLink);
     }, [])
 
-    const handleGenerateLink = useCallback((): void => {
+    const handleGenerateLink = useCallback(async (): Promise<void> => {
         let newLink = generateLink();
         setNewShortLink(newLink);
-    }, []);
+        
+        const result = await fetch("/api/shortLink", {
+            method: "POST",
+            body: JSON.stringify({
+                shortLink: newLink,
+                longLink: longLink
+            }),
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8"
+            }
+        });
+
+    }, [longLink, newShortLink]);
 
     function generateLink(): string {
         let randomString = "";
@@ -25,9 +38,7 @@ export default function shortLinks() {
             randomString = randomString.concat(rand36);
         }
 
-        let shortLinkDomain = (process.env.NODE_ENV == "development") ? "localhost:3000/ls/" : "mwdev.work/ls/";
-
-        return shortLinkDomain.concat(randomString);
+        return "/ls/" + randomString;
     } 
 
     function randBase36(): string {
