@@ -20,14 +20,6 @@ export async function insertShortLinkPair(slPair: {
     return result;
 }
 
-export async function getAllShortLinks() {
-    const shortLinks = await db
-        .select()
-        .from(shortLinkTable);
-
-    return shortLinks ?? null;
-}
-
 export async function getShortLinkPair(slug: string) {
     const shortLinks = await db
         .select()

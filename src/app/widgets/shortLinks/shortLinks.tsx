@@ -15,21 +15,25 @@ export default function shortLinks() {
     }, [])
 
     const handleGenerateLink = useCallback(async (): Promise<void> => {
-        let newLinkSlug = generateLinkSlug();
         let host = window.location.host;
+        let newLinkSlug = await getUniqueSlug(5);
         
-        const result = await fetch("/api/shortLink", {
-            method: "POST",
-            body: JSON.stringify({
-                slug: newLinkSlug,
-                longLink: longLink
-            }),
-            headers: {
-                "Content-Type": "application/json; charset=UTF-8"
-            }
-        });
+        if (newLinkSlug) {
+            const result = await fetch("/api/shortLink", {
+                method: "POST",
+                body: JSON.stringify({
+                    slug: newLinkSlug,
+                    longLink: longLink
+                }),
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8"
+                }
+            });
 
-        setNewShortLink(host.concat("/ls/", newLinkSlug));
+            setNewShortLink(host.concat("/ls/", newLinkSlug));
+        }
+
+        setNewShortLink("Error generating short link.")
 
     }, [longLink, newShortLink]);
 
@@ -44,13 +48,33 @@ export default function shortLinks() {
         return randomString;
     } 
 
+    async function getUniqueSlug(maxAttempts: number): Promise<string | null> {
+        let newLinkSlug = generateLinkSlug();
+        let attempts = 0;
+
+        while (attempts < maxAttempts && await isDuplicateSlug(newLinkSlug)) {
+            newLinkSlug = generateLinkSlug();
+            attempts++;
+        }
+
+        if (attempts == maxAttempts && await isDuplicateSlug(newLinkSlug)) {
+            return null;
+        }
+
+        return newLinkSlug;
+    }
+
     function randBase36(): string {
         let randomNum = Math.floor(Math.random() * 36);
         return randomNum.toString(36);
     }
 
-    function checkDuplicate(testString: string) {
-        return '';
+    async function isDuplicateSlug(slug: string) {
+        const response = await fetch("api/shortLink/" + slug);
+
+        let shortLinkPair = (await response.json()).shortLinks;
+
+        return shortLinkPair.longLink ? true : false;
     }
 
     return (

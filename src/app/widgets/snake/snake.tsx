@@ -163,7 +163,7 @@ export default function Snake() {
      * Validates that the key pressed is an arrow key
      */
     function validateDirection(event: KeyboardEvent ): boolean {
-        return Object.values<string>(dir).includes(event.key.toString());
+        return Object.values<string>(dir).includes(event.key?.toString());
     }
 
     /** 
