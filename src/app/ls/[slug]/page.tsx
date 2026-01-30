@@ -6,8 +6,8 @@ export default function Page(){
   const [url, setUrl] = useState<String | null>(null);
 
   useEffect (() => {
-    setUrl(window.location.href ?? '');
-  }, [window.location.href]);
+    setUrl(window?.location.href ?? '');
+  }, []);
 
-  return <div>The short link '{url}' is not a valid short link.</div>
+  return url ? <div>The short link '{url}' is not a valid short link.</div> : <></>
 }
