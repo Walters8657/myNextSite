@@ -10,10 +10,12 @@ export default function shortLinks() {
     const [longLink, setLongLink] = useState<string | null>();
     const [newShortLink, setNewShortLink] = useState<string | null>();
 
+    /** Updates long link text input */
     const handleLongLinkInput = useCallback((newLongLink: string): void => {
         setLongLink(newLongLink);
     }, [])
 
+    /** Tries to get a unique slug and insert it. If no unique slug is generated, then it will return an error message in place of a short link. */
     const handleGenerateLink = useCallback(async (): Promise<void> => {
         let host = window.location.host;
         let newLinkSlug = await getUniqueSlug(5);
@@ -37,6 +39,9 @@ export default function shortLinks() {
 
     }, [longLink, newShortLink]);
 
+    /**
+     * @returns Random 6 character alpha-numeric string
+     */
     function generateLinkSlug(): string {
         let randomString = "";
 
@@ -48,6 +53,10 @@ export default function shortLinks() {
         return randomString;
     } 
 
+    /**
+     * @param maxAttempts Maximum number of times to try and get a slug
+     * @returns 6 character alpha-numeric string if unique string found, otherwise null
+     */
     async function getUniqueSlug(maxAttempts: number): Promise<string | null> {
         let newLinkSlug = generateLinkSlug();
         let attempts = 0;
@@ -64,11 +73,18 @@ export default function shortLinks() {
         return newLinkSlug;
     }
 
+    /**
+     * @returns random base 36 number as a string
+     */
     function randBase36(): string {
         let randomNum = Math.floor(Math.random() * 36);
         return randomNum.toString(36);
     }
 
+    /**
+     * @param slug - Slug to pull data for
+     * @returns - True if short link has corresponding long link, otherwise returns false
+     */
     async function isDuplicateSlug(slug: string) {
         const response = await fetch("api/shortLink/" + slug);
 
