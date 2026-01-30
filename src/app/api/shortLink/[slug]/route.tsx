@@ -1,6 +1,7 @@
 import { getShortLinkPair } from "@/data/shortLink-dto";
 import { NextRequest, NextResponse } from "next/server";
 
+/** Gets specific slug pair */
 export async function GET(
     request: NextRequest
     ,{ params }: { params: Promise<{ slug: string }>}

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import '../../../../envConfig';
 import { insertShortLinkPair } from "@/data/shortLink-dto";
 
-// To handle a POST request to /api
+/** Passes data to be inserted to dto */
 export async function POST(request: Request) {
   const data = await request.json();
 
