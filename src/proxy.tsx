@@ -1,22 +1,15 @@
 // proxy.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { drizzle } from 'drizzle-orm/node-mssql';
-import { eq } from 'drizzle-orm'
-import { shortLinkTable } from "./db/schema"
-import '../envConfig';
-
-const db = drizzle(process.env.DATABASE_STRING!);
+import { getShortLinkPair } from './data/shortLink-dto';
 
 export async function proxy(request: NextRequest) {
   const pathName = request.nextUrl.pathname! ?? '';
   const slug = pathName.split('/').pop() ?? '';
-  const shortLinks = await db
-    .select()
-    .from(shortLinkTable)
-    .where(eq(shortLinkTable.slug, slug));
 
-  if (shortLinks.length > 0) {
-    return NextResponse.redirect(shortLinks[0].longLink);
+  const shortLinkPair = await getShortLinkPair(slug);
+
+  if (shortLinkPair.longLink) {
+    return NextResponse.redirect(shortLinkPair.longLink);
   }
 
   return NextResponse.next();

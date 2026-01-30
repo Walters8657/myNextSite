@@ -9,5 +9,5 @@ export default function Page(){
     setUrl(window?.location.href ?? '');
   }, []);
 
-  return url ? <div>The short link '{url}' is not a valid short link.</div> : <></>
+  return url ? <div>The short link slug '{url.split('/').pop()}' is not a valid short link.</div> : <></>
 }

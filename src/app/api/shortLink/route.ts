@@ -2,14 +2,14 @@ import { NextResponse, NextRequest } from "next/server";
 import { drizzle } from 'drizzle-orm/node-mssql';
 import { shortLinkTable } from "../../../db/schema";
 import '../../../../envConfig';
+import { getAllShortLinks } from "@/data/shortLink-dto";
 
 const db = drizzle(process.env.DATABASE_STRING!);
 
 // To handle a GET request to /api
 export async function GET(request: any) {
-  let shortLinks = await db
-    .select()
-    .from(shortLinkTable);
+  let shortLinks = getAllShortLinks();
+  
   return NextResponse.json({ shortLinks: shortLinks }, { status: 200 });
 }
 
