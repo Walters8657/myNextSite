@@ -1,15 +1,11 @@
-import { NextResponse, NextRequest } from "next/server";
-import { drizzle } from 'drizzle-orm/node-mssql';
-import { shortLinkTable } from "../../../db/schema";
+import { NextResponse } from "next/server";
 import '../../../../envConfig';
-import { getAllShortLinks } from "@/data/shortLink-dto";
-
-const db = drizzle(process.env.DATABASE_STRING!);
+import { getAllShortLinks, insertShortLinkPair } from "@/data/shortLink-dto";
 
 // To handle a GET request to /api
 export async function GET(request: any) {
   let shortLinks = getAllShortLinks();
-  
+
   return NextResponse.json({ shortLinks: shortLinks }, { status: 200 });
 }
 
@@ -19,10 +15,12 @@ export async function POST(request: Request) {
 
   if (data.slug && data.longLink) {
     try {
-      const result = await db.insert(shortLinkTable).values({
-        slug: data.slug,
-        longLink: data.longLink
+      const result = insertShortLinkPair({
+        slug: data.slug
+        ,longLink: data.longLink
       });
+
+      console.log(result);
     } catch (sqlError: any) {
       return NextResponse.json({message: sqlError.message}, {status: 500});
     }
