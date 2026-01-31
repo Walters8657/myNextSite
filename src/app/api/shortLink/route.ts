@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import '../../../../envConfig';
-import { insertShortLinkPair } from "@/data/shortLink-dto";
+import { insertShortLinkPair } from "@/data/shortLinkDal";
 
 /** Passes data to be inserted to dto */
 export async function POST(request: Request) {

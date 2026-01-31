@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import ToolCard from "@/app/ui/toolCard/toolCard";
 
 import "./shortLinks.scss"
+import { shortLinkDto } from "@/interfaces";
 
 export default function shortLinks() {
     const [longLink, setLongLink] = useState<string | null>();
@@ -24,12 +25,14 @@ export default function shortLinks() {
         if (!validUrl) {
             setNewShortLink("Invalid URL: https://www.example.com");
         } else if (newLinkSlug) {
+            const data: shortLinkDto = {
+                    slug: newLinkSlug,
+                    longLink: longLink!
+                };
+
             const result = await fetch("/api/shortLink", {
                 method: "POST",
-                body: JSON.stringify({
-                    slug: newLinkSlug,
-                    longLink: longLink
-                }),
+                body: JSON.stringify(data),
                 headers: {
                     "Content-Type": "application/json; charset=UTF-8"
                 }
@@ -105,7 +108,7 @@ export default function shortLinks() {
     async function isDuplicateSlug(slug: string) {
         const response = await fetch("api/shortLink/" + slug);
 
-        let shortLinkPair = (await response.json()).shortLinks;
+        let shortLinkPair : shortLinkDto = (await response.json()).shortLinks;
 
         return shortLinkPair.longLink ? true : false;
     }

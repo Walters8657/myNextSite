@@ -1,6 +1,6 @@
 // proxy.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getShortLinkPair } from './data/shortLink-dto';
+import { getShortLinkPair } from './data/shortLinkDal';
 
 export async function proxy(request: NextRequest) {
   const pathName = request.nextUrl.pathname! ?? '';
