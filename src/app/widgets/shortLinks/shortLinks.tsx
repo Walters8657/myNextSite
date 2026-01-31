@@ -19,8 +19,11 @@ export default function shortLinks() {
     const handleGenerateLink = useCallback(async (): Promise<void> => {
         let host = window.location.host;
         let newLinkSlug = await getUniqueSlug(5);
+        let validUrl = await isUrlFetchable(longLink ?? '');
         
-        if (newLinkSlug) {
+        if (!validUrl) {
+            setNewShortLink("Invalid URL: https://www.example.com");
+        } else if (newLinkSlug) {
             const result = await fetch("/api/shortLink", {
                 method: "POST",
                 body: JSON.stringify({
@@ -33,11 +36,25 @@ export default function shortLinks() {
             });
 
             setNewShortLink(host.concat("/ls/", newLinkSlug));
+        } else {
+            setNewShortLink("Error generating short link.");
+        }
+    }, [longLink, newShortLink]);
+
+    /**
+     * @param url - URL string to test
+     * @returns true if url is fetchable, false if there are any errors
+     */
+    async function isUrlFetchable(url: string): Promise<boolean> {
+        try {
+            const response = await fetch(url, { method: 'HEAD', mode: 'no-cors'});
+
+            return (response.ok || response.redirected);
+        } catch (e: any) {
+            return false;
         }
 
-        setNewShortLink("Error generating short link.")
-
-    }, [longLink, newShortLink]);
+    }
 
     /**
      * @returns Random 6 character alpha-numeric string
@@ -98,7 +115,7 @@ export default function shortLinks() {
             <input 
                 type="text" 
                 id="longLink" 
-                placeholder="Long Link" 
+                placeholder="https://www.example.com" 
                 onChange={e => handleLongLinkInput(e.target.value)} 
                 value={longLink ?? ''}
             />
