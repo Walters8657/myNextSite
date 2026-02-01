@@ -38,6 +38,9 @@ export default function shortLinks() {
                 }
             });
 
+            if (process.env.NODE_ENV == "development")
+                host = "mwdev.work";
+
             setNewShortLink(host.concat("/ls/", newLinkSlug));
         } else {
             setNewShortLink("Error generating short link.");
@@ -51,8 +54,6 @@ export default function shortLinks() {
     async function isUrlFetchable(url: string): Promise<boolean> {
         try {
             const response = await fetch(url, { method: 'HEAD', mode: 'no-cors'});
-
-            console.log(response);
 
             return (response.ok || response.redirected || response.type == "opaque");
         } catch (e: any) {
