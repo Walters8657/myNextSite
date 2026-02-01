@@ -52,7 +52,9 @@ export default function shortLinks() {
         try {
             const response = await fetch(url, { method: 'HEAD', mode: 'no-cors'});
 
-            return (response.ok || response.redirected);
+            console.log(response);
+
+            return (response.ok || response.redirected || response.type == "opaque");
         } catch (e: any) {
             return false;
         }

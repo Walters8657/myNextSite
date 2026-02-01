@@ -1,3 +1,5 @@
+"use server";
+
 import { getShortLinkPair } from "@/data/shortLinkDal";
 import { shortLinkDto } from "@/interfaces";
 import { NextRequest, NextResponse } from "next/server";
