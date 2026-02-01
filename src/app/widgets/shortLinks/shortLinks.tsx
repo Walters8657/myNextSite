@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState } from "react";
+import { Activity, useCallback, useState } from "react";
 
 import ToolCard from "@/app/ui/toolCard/toolCard";
 
@@ -10,11 +10,23 @@ import { shortLinkDto } from "@/interfaces";
 export default function shortLinks() {
     const [longLink, setLongLink] = useState<string | null>();
     const [newShortLink, setNewShortLink] = useState<string | null>();
+    const [showError, setShowError] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+
+    const errorMessages = {
+        badUrl: "Invalid URL. Please make sure to include the entire URL such as follows: https://www.example.com"
+        ,noShortLink: "Short link was unable to be generated. Please try again."
+    }
 
     /** Updates long link text input */
     const handleLongLinkInput = useCallback((newLongLink: string): void => {
         setLongLink(newLongLink);
     }, [])
+
+    function setNewErrorMessage(newErrorMessage: string) {
+        setErrorMessage(newErrorMessage);
+        setShowError(true);
+    }
 
     /** Tries to get a unique slug and insert it. If no unique slug is generated, then it will return an error message in place of a short link. */
     const handleGenerateLink = useCallback(async (): Promise<void> => {
@@ -23,7 +35,7 @@ export default function shortLinks() {
         let validUrl = await isUrlFetchable(longLink ?? '');
         
         if (!validUrl) {
-            setNewShortLink("Invalid URL: https://www.example.com");
+            setNewErrorMessage(errorMessages.badUrl);
         } else if (newLinkSlug) {
             const data: shortLinkDto = {
                     slug: newLinkSlug,
@@ -43,7 +55,7 @@ export default function shortLinks() {
 
             setNewShortLink(host.concat("/ls/", newLinkSlug));
         } else {
-            setNewShortLink("Error generating short link.");
+            setNewErrorMessage(errorMessages.noShortLink);
         }
     }, [longLink, newShortLink]);
 
@@ -52,10 +64,13 @@ export default function shortLinks() {
      * @returns true if url is fetchable, false if there are any errors
      */
     async function isUrlFetchable(url: string): Promise<boolean> {
-        try {
-            const response = await fetch(url, { method: 'HEAD', mode: 'no-cors'});
+        if (url.trim() == '')
+            return false;
 
-            return (response.ok || response.redirected || response.type == "opaque");
+        try {
+            const response = await fetch(url, { method: 'HEAD', mode: 'cors'});
+
+            return (response.ok || response.redirected);
         } catch (e: any) {
             return false;
         }
@@ -118,6 +133,12 @@ export default function shortLinks() {
 
     return (
         <ToolCard title="Short Links">
+            <div id="hideOverflow">
+                <div id ="shortLinkErrorCover" className={showError ? 'showError ' : ''}>
+                    <p id="errorMessage">{errorMessage}</p>
+                    <p id="dismissError" onClick={() => {setShowError(false)}}>Dismiss</p>
+                </div>
+            </div>
             <input 
                 type="text" 
                 id="longLink" 

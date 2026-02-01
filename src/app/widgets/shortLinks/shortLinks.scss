@@ -1,3 +1,51 @@
+#shortLinkErrorCover {
+    box-sizing: border-box;
+
+    width: calc(100% + 4px);
+
+    position: absolute;
+    bottom: -100%;
+    left: -2px;
+
+    background-color: $darkGray;
+    border: solid black 2px;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -7px 7px 0 rgba(0, 0, 0, 0.25);
+
+    text-align: left;
+
+    p {
+        padding: 0 10px;
+        font-size: 0.9rem;
+        line-height: 1rem;
+    }
+    transition: bottom 0.5s ease-in-out;
+}
+
+#hideOverflow {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#errorMessage {
+    height: 50px;
+    overflow-y: auto;
+}
+
+#dismissError {
+    text-align: center;
+    font-weight: 600;
+}
+
+#dismissError:hover {
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+.showError {
+    bottom: -2px !important;
+}
+
 #shortLink, #longLink {
     display: block;
     width: 100%;

@@ -110,7 +110,7 @@ export default function Flashcards() {
                     </div>
                 </div>
             </div>
-            <p>{currentCardIndex + 1} / {flashcards.length}</p>
+            <p id="cardCounter">{currentCardIndex + 1} / {flashcards.length}</p>
             <div className="prevNextButtons">
                 <button id="prevBtn" onClick={() => prevCard()}>{'<'}</button>
                 <button id="nextBtn" onClick={() => nextCard()}>{'>'}</button>
