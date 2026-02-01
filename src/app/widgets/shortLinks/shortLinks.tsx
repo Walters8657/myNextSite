@@ -38,7 +38,7 @@ export default function shortLinks() {
                 }
             });
 
-            if (process.env.NODE_ENV == "development")
+            if (process.env.NODE_ENV == "production")
                 host = "mwdev.work";
 
             setNewShortLink(host.concat("/ls/", newLinkSlug));
