@@ -1,6 +1,6 @@
 "use client"
 
-import { Activity, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import ToolCard from "@/app/ui/toolCard/toolCard";
 
@@ -15,7 +15,8 @@ export default function shortLinks() {
 
     const errorMessages = {
         badUrl: "Invalid URL. Please make sure to include the entire URL such as follows: https://www.example.com"
-        ,noShortLink: "Short link was unable to be generated. Please try again."
+        ,noShortLink: "Short link was unable to be generated. Please try again shortly."
+        ,errorPosting: "There was an error posting your short link to the database. Please try again later."
     }
 
     /** Updates long link text input */
@@ -30,33 +31,47 @@ export default function shortLinks() {
 
     /** Tries to get a unique slug and insert it. If no unique slug is generated, then it will return an error message in place of a short link. */
     const handleGenerateLink = useCallback(async (): Promise<void> => {
-        let host = window.location.host;
-        let newLinkSlug = await getUniqueSlug(5);
         let validUrl = await isUrlFetchable(longLink ?? '');
         
         if (!validUrl) {
             setNewErrorMessage(errorMessages.badUrl);
-        } else if (newLinkSlug) {
-            const data: shortLinkDto = {
-                    slug: newLinkSlug,
-                    longLink: longLink!
-                };
+            return;
+        } 
 
-            const result = await fetch("/api/shortLink", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json; charset=UTF-8"
-                }
-            });
+        let newLinkSlug = await getUniqueSlug(5);
 
-            if (process.env.NODE_ENV == "production")
-                host = "mwdev.work";
-
-            setNewShortLink(host.concat("/ls/", newLinkSlug));
-        } else {
+        if (!newLinkSlug) {
             setNewErrorMessage(errorMessages.noShortLink);
+            return;
         }
+
+        const data: shortLinkDto = {
+                slug: newLinkSlug,
+                longLink: longLink!
+            };
+
+        const result = await fetch("/api/shortLink", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8"
+            }
+        });
+
+        if (result.status != 200 && result.status != 0) {
+            let message = await result.json();
+
+            setNewErrorMessage(message.message ?? errorMessages.errorPosting);
+
+            return;
+        }
+        
+        let host = window.location.host;
+
+        if (process.env.NODE_ENV == "production")
+            host = "mwdev.work";
+
+        setNewShortLink(host.concat("/ls/", newLinkSlug));
     }, [longLink, newShortLink]);
 
     /**
@@ -67,14 +82,19 @@ export default function shortLinks() {
         if (url.trim() == '')
             return false;
 
-        try {
-            const response = await fetch(url, { method: 'HEAD', mode: 'cors'});
-
-            return (response.ok || response.redirected);
+        try { // Try to instantiate as URL to prevent fetch invocations
+            new URL(url);
         } catch (e: any) {
             return false;
         }
 
+        try {
+            const response = await fetch(url, { method: 'HEAD', mode: 'no-cors'});
+
+            return (response.ok || response.redirected || response.status == 0);
+        } catch (e: any) {
+            return false;
+        }
     }
 
     /**

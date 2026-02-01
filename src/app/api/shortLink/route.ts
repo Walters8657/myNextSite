@@ -13,11 +13,11 @@ export async function POST(request: Request) {
         ,longLink: data.longLink
       });
     } catch (sqlError: any) {
-      return NextResponse.json({message: sqlError.message}, {status: 500});
+      return NextResponse.json({message: "Error inserting values. Please try again later."}, {status: 500});
     }
 
-    return NextResponse.json({ message: "Value Inserted" }, { status: 200 });
+    return NextResponse.json({ message: "Values Inserted." }, { status: 200 });
   } else {
-    return NextResponse.json({ message: "Expected JSON keys not found." }, { status: 400 });
+    return NextResponse.json({ message: "Expected JSON keys not found. Please try again later." }, { status: 400 });
   }
 }
