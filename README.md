@@ -9,7 +9,6 @@
     - Maze solver
     - Drag and drop widget re ordering
     - Fluid simulation
-    - Link shortener
     - Regex generator?
     - Certificate generator??
 
