@@ -80,7 +80,7 @@ export default function Minesweeper() {
     }, []);
 
     const handleCellClick = useCallback((e: React.MouseEvent, rowIndex: number, cellIndex: number, cell: GameTile): void => {
-        if (isLost || !fullGameData[rowIndex] || !fullGameData[rowIndex][cellIndex]) return;
+        if (isLost || isWon || !fullGameData[rowIndex] || !fullGameData[rowIndex][cellIndex]) return;
 
         // Handles flagging with use of the slider
         if (useFlag) {
