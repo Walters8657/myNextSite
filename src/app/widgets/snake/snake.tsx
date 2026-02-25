@@ -56,7 +56,7 @@ export default function Snake({lastClicked}: {lastClicked: string}) {
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if(lastClicked.toLowerCase() == "snake" && !isPaused) { // If snake is current game
+            if(!isPaused) { // If snake is current game
                 if (validateDirection(event)) {
                     event.preventDefault();
                     setNewSnakeDirection(event);
