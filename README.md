@@ -14,4 +14,3 @@
 
 ### Bugs
 - Home page projects can get un-centered after resize
-- Minesweeper is won lets clicks happen still
