@@ -9,6 +9,7 @@ interface Bar {
 export default function SortingVisualizations() {
     const [bars, setBars] = useState<Bar[]>([]);
     const [selectedSortIndex, setSelectedSortIndex] = useState<number>(0);
+    const [isSorting, setIsSorting] = useState<boolean>(false);
     const numBars = 105;
 
     const populateBars = () => {
@@ -16,11 +17,15 @@ export default function SortingVisualizations() {
     }
 
     const shuffleBars = async () => {
+        setIsSorting(true);
+
         let newBars = [...bars];
         for (let i = newBars.length - 1; i >= 0; i--) {
             let rand = Math.floor(Math.random() * (i + 1));
           newBars = await swapAndRender(newBars, i, rand, 0);
         }
+
+        setIsSorting(false);
     }
 
     const swapBars = ( array: Bar[], i: number, j: number) => {
@@ -40,6 +45,7 @@ export default function SortingVisualizations() {
   }
 
     const bubbleSort = async () => {
+        setIsSorting(true);
         let newBars = [...bars];
         let swapped = true;
 
@@ -53,9 +59,13 @@ export default function SortingVisualizations() {
                 }
             }
         }
+
+        setIsSorting(false);
     }
 
     const selectionSort = async () => { 
+        setIsSorting(true);
+
         let newBars = [...bars];
         for (let i = 0; i < newBars.length - 1; i++) {
             for (let n = i + 1; n < newBars.length; n++) {
@@ -64,9 +74,13 @@ export default function SortingVisualizations() {
                 }
             }
         }
+
+        setIsSorting(false);
      }
 
     const insertionSort = async () => {
+        setIsSorting(true);
+
         let newBars = [...bars];
         for (let i = 1; i < newBars.length; i++) {
             let j = i;
@@ -76,9 +90,12 @@ export default function SortingVisualizations() {
                 j--;
             }
         }
+
+        setIsSorting(false);
     }
 
     const mergeSort = async () => {
+        setIsSorting(true);
         let newBars = [...bars];
         const n = newBars.length;
         for (let bucketSize = 1; bucketSize < n; bucketSize *= 2) {
@@ -109,9 +126,13 @@ export default function SortingVisualizations() {
             }
         }
         setBars([...newBars]);
+
+        setIsSorting(false);
     }
 
     const quickSort = async () => {
+        setIsSorting(true);
+
         let working = [...bars];
       
         const partition = async (low: number, high: number): Promise<number> => {
@@ -148,6 +169,8 @@ export default function SortingVisualizations() {
         }
 
         setBars([...working]);
+
+        setIsSorting(false);
      }
 
     useEffect(() => {
@@ -164,7 +187,7 @@ export default function SortingVisualizations() {
 
     return (
         <ToolCard title="Sorting Visualizations">
-            <button id="shuffleBtn" className="centerButton" onClick={shuffleBars}>Shuffle</button>
+            <button id="shuffleBtn" className="centerButton" disabled={isSorting} onClick={shuffleBars}>Shuffle</button>
             <div className="bars-container">
                 {bars.map((bar) => (
                     <div key={'bar-' + bar.order} className="bar" style={{ height: `${bar.order * 2}px` }}></div>
@@ -181,7 +204,7 @@ export default function SortingVisualizations() {
                         <option key={index} value={index}>{type.name}</option>
                     ))}
                 </select>
-                <button id="sortBtn" onClick={() => sortTypes[selectedSortIndex].func()}>Sort</button>
+                <button id="sortBtn" disabled={isSorting} onClick={() => sortTypes[selectedSortIndex].func() }>Sort</button>
             </div>
         </ToolCard>
     );
