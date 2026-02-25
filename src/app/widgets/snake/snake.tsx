@@ -30,7 +30,7 @@ class cellLoc {
     }
 }
 
-export default function Snake() {
+export default function Snake({lastClicked}: {lastClicked: string}) {
     const gameWidth: number = 16;
     const gameHeight: number = 16;
 
@@ -55,11 +55,12 @@ export default function Snake() {
     const gameField = new Array(gameHeight).fill(new Array(gameWidth).fill(null));
 
     useEffect(() => {
-        // TODO: Implement last clicked on widget logic so this isn't running on every single keypress
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (validateDirection(event)) {
-                event.preventDefault();
-                setNewSnakeDirection(event);
+            if(lastClicked.toLowerCase() == "snake" && !isPaused) { // If snake is current game
+                if (validateDirection(event)) {
+                    event.preventDefault();
+                    setNewSnakeDirection(event);
+                }
             }
         };
         
@@ -68,7 +69,7 @@ export default function Snake() {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [])
+    }, [lastClicked, isPaused])
 
     // Main timer for gameplay
     useEffect(() => {
@@ -106,6 +107,12 @@ export default function Snake() {
     useEffect(() => {
         snakeCharacterRef.current = snakeCharacter;
     }, [snakeCharacter]);
+
+    // Pause game on click away to another widget
+    useEffect(() => {
+        if (lastClicked.toLowerCase() != "snake")
+            setIsPaused(true);
+    }, [lastClicked]);
 
     /** 
      * Returns a cellLoc that is currently devoid of snake. 
@@ -315,6 +322,14 @@ export default function Snake() {
         foodLocRef.current = newFood;
     }
 
+    /**
+     * 
+     * @param xCoord - X coord to check
+     * @param yCoord - Y coord to check
+     * @param forMovement - Determines whether movement logic is used or not. If false, checks current position, if true checks next frame position.
+     * 
+     * @returns String representing the snake head, body, or tail
+     */
     function getSnakeClass(xCoord: number, yCoord: number, forMovement: boolean) {
         let collision = coordHittingSnake(snakeCharacter, xCoord, yCoord, forMovement);
 

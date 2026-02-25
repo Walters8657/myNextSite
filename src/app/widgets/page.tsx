@@ -17,8 +17,9 @@ import ShortLinks from "./shortLinks/shortLinks";
 
 
 export default function Page() {
+  const [lastClickedWidget, setLastClickedWidget] = useState("");
   const widgets: JSX.Element[] = [
-    <Snake key="snake" />
+    <Snake key="snake" lastClicked={lastClickedWidget}/>
     ,<Boids key="boids" />
     ,<ShortLinks key="shortLinks" />
     ,<Flashcards key="flashcards" />
@@ -62,26 +63,26 @@ export default function Page() {
   * 
   * @param idx Widget index to move down
   */
-function widgetDown(idx: number): void {
-  setWidgetOrder(currentOrder => {
-    if (idx == currentOrder.length - 1)
-      return currentOrder
+  function widgetDown(idx: number): void {
+    setWidgetOrder(currentOrder => {
+      if (idx == currentOrder.length - 1)
+        return currentOrder
 
-    let workingOrder = [...currentOrder];
+      let workingOrder = [...currentOrder];
 
-    let movingValue = currentOrder[idx];
-    
-    workingOrder[idx] = workingOrder[idx + 1];
-    workingOrder[idx + 1] = movingValue;
+      let movingValue = currentOrder[idx];
+      
+      workingOrder[idx] = workingOrder[idx + 1];
+      workingOrder[idx + 1] = movingValue;
 
-    return workingOrder;
-  })
-}
+      return workingOrder;
+    })
+  }
 
   return (
     <div className="widgetsContainer">
         {widgetOrder.map((widgetX, i) => (
-          <div className="widget" key={widgetX}>
+          <div className="widget" key={widgetX} onClick={() => setLastClickedWidget(widgetX ?? "")}>
             <span className="orderControlBtns">
               <img id="upBtn" src="../arrow.svg" onClick={() => widgetUp(i)} />
               <img id="downBtn" src="../arrow.svg" onClick={() => widgetDown(i)} />
