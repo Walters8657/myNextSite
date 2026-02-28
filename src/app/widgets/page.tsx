@@ -14,12 +14,14 @@ import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import ColorConverter from "./colorConverter/colorConverter";
 import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
 import ShortLinks from "./shortLinks/shortLinks";
+import Chess from "./chess/chess";
 
 
 export default function Page() {
   const [lastClickedWidget, setLastClickedWidget] = useState("");
   const widgets: JSX.Element[] = [
-    <Snake key="snake" lastClicked={lastClickedWidget}/>
+    <Chess key="chess" />
+    ,<Snake key="snake" lastClicked={lastClickedWidget}/>
     ,<Boids key="boids" />
     ,<ShortLinks key="shortLinks" />
     ,<Flashcards key="flashcards" />

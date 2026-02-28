@@ -1,0 +1,54 @@
+#chessBoard {
+    display: block;
+
+    tbody{
+        display: block;
+
+        tr {
+            display: block;
+            width: 100%;
+
+            td {
+                position: relative;
+                box-sizing: border-box;
+                aspect-ratio: 1;
+                width: calc((100%) / 8);
+                height: auto;
+                display: inline-block;
+
+                p {
+                    box-sizing: border-box;
+                    font-weight: 300;
+                    background-color: transparent;
+                    opacity: 0.66;
+
+                    position: absolute;
+
+                    width: auto;
+                    height: auto;
+
+                    line-height: 10px;
+                    font-size: 10px;
+                }
+
+                .rowLabel {
+                    top: 2px;
+                    left: 2px;
+                }
+
+                .colLabel {
+                    bottom: 2px;
+                    right: 2px;
+                }
+            }
+
+            .darkSquare {
+                background-color: darkgray;
+            }
+
+            .lightSquare {
+                background-color: lightgray;
+            }
+        }
+    }
+}
