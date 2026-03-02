@@ -10,7 +10,6 @@
 
             td {
                 position: relative;
-                box-sizing: border-box;
                 aspect-ratio: 1;
                 width: calc((100%) / 8);
                 height: auto;
@@ -42,12 +41,60 @@
                 }
             }
 
+            @mixin pieceOutline {
+                display: block;
+                box-sizing: border-box;
+
+                height: 100%;
+                width: 100%;
+
+                background-size: cover;
+            }
+
+            .piece1 {
+                // pawn
+                background-image: url(../../../../public/chessAssets/Pawn.svg);
+            }
+
+            .piece2 {
+                // king
+                background-image: url(../../../../public/chessAssets/King.svg);
+            }
+
+            .piece3 {
+                // queen
+                background-image: url(../../../../public/chessAssets/Queen.svg);
+            }
+
+            .piece4 {
+                //bishop
+                background-image: url(../../../../public/chessAssets/Bishop.svg);
+            }
+
+            .piece5 {
+                //knight
+                background-image: url(../../../../public/chessAssets/Knight.svg);
+            }
+
+            .piece6 {
+                //rook
+                background-image: url(../../../../public/chessAssets/Rook.svg);
+            }
+
+            .whitePiece, .blackPiece {
+                @include pieceOutline();
+            }
+
+            .blackPiece {
+                filter: invert(1)
+            }
+
             .darkSquare {
-                background-color: darkgray;
+                background-color: rgb(150, 150, 150);
             }
 
             .lightSquare {
-                background-color: lightgray;
+                background-color: rgb(190, 190, 190);
             }
         }
     }
