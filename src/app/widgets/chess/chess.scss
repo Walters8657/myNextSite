@@ -89,6 +89,10 @@
                 filter: invert(1)
             }
 
+            .selectedPiece {
+                background-color: red;
+            }
+
             .darkSquare {
                 background-color: rgb(150, 150, 150);
             }

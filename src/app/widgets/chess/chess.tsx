@@ -2,7 +2,7 @@
 import ToolCard from "@/app/ui/toolCard/toolCard";
 
 import './chess.scss'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const pieceType: Record<string, number> = {
     "pawn": 1
@@ -13,43 +13,78 @@ const pieceType: Record<string, number> = {
     ,"rook": 6
 } as const
 
+const pieceColor: Record<string, number> = {
+    "white": 1
+    ,"black": 2
+}
+
 interface chessPiece {
     location: string;
     pieceType: number;
+    color: number;
 }
 
 export default function Chess() {
     let columns: string[]= ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     let rows: string[] = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-    const [whitePieces, setWhitePieces] = useState<chessPiece[]>();
-    const [blackPieces, setBlackPieces] = useState<chessPiece[]>();
+    const [whitePieces, setWhitePieces] = useState<chessPiece[]>([]);
+    const [blackPieces, setBlackPieces] = useState<chessPiece[]>([]);
+
+    const [selectedPiece, setSelectedPiece] = useState<string>("");
+
+    const allPiecesRef = useRef<chessPiece[]>([]);
+
+    useEffect(() => {
+        resetGame();
+    }, []);
+
+    useEffect(() => {
+        if (whitePieces.length > 0 && blackPieces.length > 0) {
+            let newPieceSet = whitePieces.concat(blackPieces!);
+
+            allPiecesRef.current = newPieceSet;
+        }
+    }, [whitePieces, blackPieces])
 
     function resetGame() {
         resetWhitePieces();
         resetBlackPieces();
+        console.log(allPiecesRef);
     }
 
     function resetWhitePieces() {
         let newWhitePieces: chessPiece[] = [];
 
         columns.forEach(col => {
-            let newPiece: chessPiece = {location: col + "2", pieceType: pieceType.pawn};
-            newWhitePieces.push(newPiece);
+            //#region Pawn Setup
+            let newPawn: chessPiece = {
+                location: col + "2"
+                ,pieceType: pieceType.pawn
+                ,color: pieceColor.white
+            };
+            newWhitePieces.push(newPawn);
+            //#endregion Pawn Setup
 
-            let row1Loc = col + "1";
+            //#region Major Piece Setup
+            let newPiece: chessPiece = {
+                location: col + "1"
+                ,pieceType: pieceType.pawn
+                ,color: pieceColor.white
+            };
 
             if (["a", "h"].includes(col)) {
-                newPiece = {location: row1Loc, pieceType: pieceType.rook}
+                newPiece.pieceType = pieceType.rook
             } else if (["b", "g"].includes(col)) {
-                newPiece = {location: row1Loc, pieceType: pieceType.knight}
+                newPiece.pieceType = pieceType.knight;
             } else if (["c", "f"].includes(col)) {
-                newPiece = {location: row1Loc, pieceType: pieceType.bishop}
+                newPiece.pieceType = pieceType.bishop;
             } else if (col == "d") {
-                newPiece = {location: row1Loc, pieceType: pieceType.queen}
+                newPiece.pieceType= pieceType.queen;
             } else if (col == "e") {
-                newPiece = {location: row1Loc, pieceType: pieceType.king}
+                newPiece.pieceType = pieceType.king;
             }
+            //#region Major Piece Setup
 
             newWhitePieces.push(newPiece);
         });
@@ -61,32 +96,40 @@ export default function Chess() {
         let newBlackPieces: chessPiece[] = [];
 
         columns.forEach(col => {
-            let newPiece: chessPiece = {location: col + "7", pieceType: pieceType.pawn};
-            newBlackPieces.push(newPiece);
+            //#region Pawn Setup
+            let newPawn: chessPiece = {
+                location: col + "7"
+                ,pieceType: pieceType.pawn
+                ,color: pieceColor.white
+            };
+            newBlackPieces.push(newPawn);
+            //#endregion Pawn Setup
 
-            let row1Loc = col + "8";
+            //#region Major Piece Setup
+            let newPiece: chessPiece = {
+                location: col + "8"
+                ,pieceType: pieceType.pawn
+                ,color: pieceColor.white
+            };
 
             if (["a", "h"].includes(col)) {
-                newPiece = {location: row1Loc, pieceType: pieceType.rook}
+                newPiece.pieceType = pieceType.rook
             } else if (["b", "g"].includes(col)) {
-                newPiece = {location: row1Loc, pieceType: pieceType.knight}
+                newPiece.pieceType = pieceType.knight;
             } else if (["c", "f"].includes(col)) {
-                newPiece = {location: row1Loc, pieceType: pieceType.bishop}
+                newPiece.pieceType = pieceType.bishop;
             } else if (col == "d") {
-                newPiece = {location: row1Loc, pieceType: pieceType.queen}
+                newPiece.pieceType= pieceType.queen;
             } else if (col == "e") {
-                newPiece = {location: row1Loc, pieceType: pieceType.king}
+                newPiece.pieceType = pieceType.king;
             }
+            //#endregion Major Piece Setup
 
             newBlackPieces.push(newPiece);
         });
 
         setBlackPieces(newBlackPieces);
     }
-
-    useEffect(() => {
-        resetGame();
-    }, []);
 
     function boardSquareColor(cIdx: number, rIdx: number): string {
         let className: string = "";
@@ -114,7 +157,15 @@ export default function Chess() {
             }
         })
 
+        if (selectedPiece == col + row) {
+            className += " selectedPiece";
+        }
+
         return className;
+    }
+
+    function handleOnPieceSelect(col: string, row: string) {
+        setSelectedPiece(col + row);
     }
 
     return (
@@ -127,7 +178,7 @@ export default function Chess() {
                                 return (<td key={col + row} className={boardSquareColor(cIdx, rIdx)}>
                                     <p className="colLabel">{(row == '1' ? col : '')}</p>
                                     <p className="rowLabel">{(col == 'a' ? row : '')}</p>
-                                    <span className={getPieceClass(col, row)}></span>
+                                    <span className={getPieceClass(col, row)} onClick={() => handleOnPieceSelect(col, row)}></span>
                                 </td>)
                             })}
                         </tr>
