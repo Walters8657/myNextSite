@@ -18,7 +18,7 @@
     "p5": "^1.9.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "react-p5-wrapper": "^4.1.2",
+    "@p5-wrapper/react": "^4.1.2",
     "sass": "^1.94.2"
   },
   "devDependencies": {
