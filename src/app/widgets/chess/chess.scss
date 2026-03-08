@@ -10,10 +10,13 @@
 
             td {
                 position: relative;
+
                 aspect-ratio: 1;
                 width: calc((100%) / 8);
                 height: auto;
                 display: inline-block;
+                box-sizing: border-box;
+                padding: 2px;
 
                 p {
                     box-sizing: border-box;
