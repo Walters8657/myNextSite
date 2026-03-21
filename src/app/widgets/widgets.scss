@@ -15,13 +15,15 @@
     max-width: $toolCardWidth;
     break-inside: avoid-column;
 
-    // Allows items to be positions with respect to the widget (Im looking at you color convertor shuffle)
+    // Allows items to be positions with respect to the widget
     position: relative;
 
     .orderControlBtns {
       position: absolute;
       top: 10px;
       left: 10px;
+      
+      z-index: 1;
       #upBtn:hover, #downBtn:hover {
         cursor: pointer;
       }

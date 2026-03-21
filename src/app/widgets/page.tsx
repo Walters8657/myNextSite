@@ -86,8 +86,8 @@ export default function Page() {
         {widgetOrder.map((widgetX, i) => (
           <div className="widget" key={widgetX} onClick={() => setLastClickedWidget(widgetX ?? "")}>
             <span className="orderControlBtns">
-              <img id="upBtn" src="../arrow.svg" onClick={() => widgetUp(i)} />
-              <img id="downBtn" src="../arrow.svg" onClick={() => widgetDown(i)} />
+              <img id="upBtn" src="/arrow.svg" onClick={() => widgetUp(i)} />
+              <img id="downBtn" src="/arrow.svg" onClick={() => widgetDown(i)} />
             </span>
 
             {widgets.find(widget => {
