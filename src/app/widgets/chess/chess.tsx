@@ -31,9 +31,12 @@ export default function Chess() {
     const [whitePieces, setWhitePieces] = useState<chessPiece[]>([]);
     const [blackPieces, setBlackPieces] = useState<chessPiece[]>([]);
 
-    const [selectedPiece, setSelectedPiece] = useState<string>("");
+    const [selectedPiece, setSelectedPiece] = useState<chessPiece | null>(null);
+
+    const [ potentialMoveList, setPotentialMoveList] = useState<String[] | null>([]);
 
     const allPiecesRef = useRef<chessPiece[]>([]);
+    const selectedPieceRef = useRef<chessPiece | null>(null);
 
     useEffect(() => {
         resetGame();
@@ -47,10 +50,14 @@ export default function Chess() {
         }
     }, [whitePieces, blackPieces])
 
+    useEffect (() => {
+        selectedPieceRef.current = selectedPiece;
+        setPotentialMoves();
+    }, [selectedPiece])
+
     function resetGame() {
         resetWhitePieces();
         resetBlackPieces();
-        console.log(allPiecesRef);
     }
 
     function resetWhitePieces() {
@@ -100,7 +107,7 @@ export default function Chess() {
             let newPawn: chessPiece = {
                 location: col + "7"
                 ,pieceType: pieceType.pawn
-                ,color: pieceColor.white
+                ,color: pieceColor.black
             };
             newBlackPieces.push(newPawn);
             //#endregion Pawn Setup
@@ -109,7 +116,7 @@ export default function Chess() {
             let newPiece: chessPiece = {
                 location: col + "8"
                 ,pieceType: pieceType.pawn
-                ,color: pieceColor.white
+                ,color: pieceColor.black
             };
 
             if (["a", "h"].includes(col)) {
@@ -157,8 +164,12 @@ export default function Chess() {
             }
         })
 
-        if (selectedPiece == col + row) {
+        if (selectedPiece?.location == col + row) {
             className += " selectedPiece";
+        }
+
+        if (potentialMoveList?.includes(col + row)) {
+            className += " potentialMove"
         }
 
         className = className + " piece";
@@ -168,21 +179,105 @@ export default function Chess() {
 
     function handleOnPieceSelect(col: string, row: string) {
         let allPieces: chessPiece[] = allPiecesRef.current;
-        let newLoc = "";
+        let clickedPiece: chessPiece | null = null;
 
+        // Finds if a piece was clicked on or not
         allPieces.forEach(piece => {
             if (piece.location == col + row) {
-                newLoc = piece.location;
-                return;
+                clickedPiece = piece;
             }
         });
 
-        if (newLoc == "" || newLoc == selectedPiece) {
-            setSelectedPiece("");
+        if (clickedPiece == selectedPiece) { 
+            // If the piece clicked on was the already selected piece, de-select 
+            setSelectedPiece(null);
         } else {
-            setSelectedPiece(col + row);
+            // Otherwise set the new active piece. Empty squares are null.
+            setSelectedPiece(clickedPiece);
+            selectedPieceRef.current = clickedPiece;
         }
 
+    }
+
+    function setPotentialMoves() {
+        switch (selectedPieceRef.current?.pieceType) {
+            case pieceType.pawn: 
+                setPawnMoves();
+                break;
+            case pieceType.knight:
+                setKnightMoves();
+                break;
+            case pieceType.king:
+                setKingMoves();
+                break;
+            case pieceType.rook:
+                setRookMoves();
+                break;
+            case pieceType.bishop:
+                setBishopMoves();
+                break;
+            case pieceType.queen:
+                setQueenMoves();
+                break;
+            default: // Handles no piece selected
+                setPotentialMoveList(null);
+                break;
+        }
+    }
+
+    function setPawnMoves() {
+        let piece = selectedPieceRef.current!;
+        let potentialLocs = [];
+        let collision: number = 0;
+
+        for (let i = 1; i <= 2; i++) {
+            let newLoc = piece.location.charAt(0) + (parseInt(piece.location.charAt(1)) + (piece.color == pieceColor.white ? i : -i));
+
+            collision = checkPieceCollision(newLoc);
+
+            // Since pawns can only take diagonally, head on collisions are not allowed with _either_ piece color
+            if (collision == 0) {
+                potentialLocs.push(newLoc);
+            };
+
+            // TODO: Look diagonally for attacks
+
+            // If the piece has already moved, or is blocked, break the for loop before the second step
+            if (![2, 7].includes(parseInt(piece.location.charAt(1))) || collision > 0) {
+                break;
+            }
+        }
+
+        setPotentialMoveList(potentialLocs);
+    }
+
+    function setKnightMoves() {}
+
+    function setKingMoves() {}
+    
+    function setRookMoves() {}
+
+    function setBishopMoves() {}
+
+    function setQueenMoves() {}
+
+    /**
+     * 
+     * @param newLoc Location to check for collision
+     * @returns 0 if no collision, 1 if white collision, 2 if black collision
+     */
+    function checkPieceCollision(newLoc: String): number {
+        let collision: boolean = false;
+
+        allPiecesRef.current.forEach(existingPiece => {
+            if (existingPiece.location == newLoc) {
+                collision = true;
+
+                return existingPiece.color;
+            }
+        });
+
+        return 0;
     }
 
     return (
