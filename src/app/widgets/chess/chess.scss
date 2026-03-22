@@ -84,7 +84,7 @@
                 background-image: url(../../../../public/chessAssets/Rook.svg);
             }
 
-            .whitePiece, .blackPiece {
+            .piece {
                 @include pieceOutline();
             }
 

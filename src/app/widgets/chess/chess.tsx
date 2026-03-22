@@ -84,7 +84,7 @@ export default function Chess() {
             } else if (col == "e") {
                 newPiece.pieceType = pieceType.king;
             }
-            //#region Major Piece Setup
+            //#endregion Major Piece Setup
 
             newWhitePieces.push(newPiece);
         });
@@ -161,11 +161,28 @@ export default function Chess() {
             className += " selectedPiece";
         }
 
+        className = className + " piece";
+
         return className;
     }
 
     function handleOnPieceSelect(col: string, row: string) {
-        setSelectedPiece(col + row);
+        let allPieces: chessPiece[] = allPiecesRef.current;
+        let newLoc = "";
+
+        allPieces.forEach(piece => {
+            if (piece.location == col + row) {
+                newLoc = piece.location;
+                return;
+            }
+        });
+
+        if (newLoc == "" || newLoc == selectedPiece) {
+            setSelectedPiece("");
+        } else {
+            setSelectedPiece(col + row);
+        }
+
     }
 
     return (
