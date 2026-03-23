@@ -228,22 +228,36 @@ export default function Chess() {
     function setPawnMoves() {
         let piece = selectedPieceRef.current!;
         let potentialLocs = [];
-        let collision: number = 0;
+        let frontCollision: number = 0;
 
         for (let i = 1; i <= 2; i++) {
             let newLoc = piece.location.charAt(0) + (parseInt(piece.location.charAt(1)) + (piece.color == pieceColor.white ? i : -i));
 
-            collision = checkPieceCollision(newLoc);
+            frontCollision = checkPieceCollision(newLoc);
 
             // Since pawns can only take diagonally, head on collisions are not allowed with _either_ piece color
-            if (collision == 0) {
+            if (frontCollision == 0) {
                 potentialLocs.push(newLoc);
             };
 
-            // TODO: Look diagonally for attacks
+            //#region Search for Attacks
+            let colIdx = columns.findIndex((col) => {
+                return col == piece.location.charAt(0);
+            });
+
+            let row = parseInt(piece.location.charAt(1)) + (piece.color == pieceColor.white ? 1 : -1);
+
+            newLoc = columns[colIdx + 1] + row;
+            if (checkPieceCollision(newLoc) > 0 && piece.color != checkPieceCollision(newLoc))
+                potentialLocs.push(newLoc);
+
+            newLoc = columns[colIdx - 1] + row;
+            if (checkPieceCollision(newLoc) > 0 && piece.color != checkPieceCollision(newLoc))
+                potentialLocs.push(newLoc);
+            //#endregion Search for Attacks
 
             // If the piece has already moved, or is blocked, break the for loop before the second step
-            if (![2, 7].includes(parseInt(piece.location.charAt(1))) || collision > 0) {
+            if (![2, 7].includes(parseInt(piece.location.charAt(1))) || frontCollision > 0) {
                 break;
             }
         }
@@ -267,17 +281,15 @@ export default function Chess() {
      * @returns 0 if no collision, 1 if white collision, 2 if black collision
      */
     function checkPieceCollision(newLoc: String): number {
-        let collision: boolean = false;
+        let collision: number = 0;
 
         allPiecesRef.current.forEach(existingPiece => {
             if (existingPiece.location == newLoc) {
-                collision = true;
-
-                return existingPiece.color;
+                collision = existingPiece.color;
             }
         });
 
-        return 0;
+        return collision;
     }
 
     return (
