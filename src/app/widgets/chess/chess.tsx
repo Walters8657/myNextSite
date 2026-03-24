@@ -177,20 +177,59 @@ export default function Chess() {
         return className;
     }
 
-    function handleOnPieceSelect(col: string, row: string) {
+    function handleOnBoardClick(col: string, row: string) {
         let allPieces: chessPiece[] = allPiecesRef.current;
         let clickedPiece: chessPiece | null = null;
 
         // Finds if a piece was clicked on or not
-        allPieces.forEach(piece => {
-            if (piece.location == col + row) {
-                clickedPiece = piece;
-            }
-        });
+        clickedPiece = allPieces.find(piece => {
+            return piece.location == col + row
+        }) ?? null;
 
-        if (clickedPiece == selectedPiece) { 
-            // If the piece clicked on was the already selected piece, de-select 
+        if (clickedPiece == selectedPiece) { // If the piece clicked on was the already selected piece, de-select
             setSelectedPiece(null);
+            selectedPieceRef.current = null;
+        } else if (potentialMoveList?.includes(col + row)) { // If the clicked square is in the potential move list
+            let movedPiece = selectedPiece;
+
+            if (!movedPiece) return;
+
+            movedPiece.location = col + row;
+
+            let collision = checkPieceCollision(movedPiece.location);
+
+            if (collision > 0 && collision != movedPiece.color) { //If taking piece
+                if (collision == 1) {
+                    let newWhite = whitePieces.filter(piece => {
+                        return piece.location != movedPiece.location
+                    });
+
+                    let newBlack = blackPieces.filter(piece => {
+                        return piece.location != selectedPiece?.location;
+                    });
+
+                    newBlack.push(movedPiece);
+
+                    setWhitePieces(newWhite);
+                    setBlackPieces(newBlack);
+                } else {
+                    let newBlack = blackPieces.filter(piece => {
+                        return piece.location != movedPiece.location
+                    });
+
+                    let newWhite = whitePieces.filter(piece => {
+                        return piece.location != selectedPiece?.location;
+                    });
+
+                    newWhite.push(movedPiece)
+
+                    setBlackPieces(newBlack);
+                    setWhitePieces(newWhite);
+                }
+            }
+
+            setSelectedPiece(null);
+            selectedPieceRef.current = null;
         } else {
             // Otherwise set the new active piece. Empty squares are null.
             setSelectedPiece(clickedPiece);
@@ -227,7 +266,7 @@ export default function Chess() {
 
     function setPawnMoves() {
         let piece = selectedPieceRef.current!;
-        let potentialLocs = [];
+        let potentialLocs: String[] = [];
         let frontCollision: number = 0;
 
         for (let i = 1; i <= 2; i++) {
@@ -265,9 +304,73 @@ export default function Chess() {
         setPotentialMoveList(potentialLocs);
     }
 
-    function setKnightMoves() {}
+    function setKnightMoves() {
+        const moves = [
+            [1, 2],
+            [2, 1],
+            [2, -1],
+            [1, -2],
+            [-1, -2],
+            [-2, -1],
+            [-2, 1],
+            [-1, 2]
+        ];    
+        
+        let piece = selectedPieceRef.current!;
+        let potentialLocs: String[] = [];
 
-    function setKingMoves() {}
+        let colIdx = columns.findIndex((col) => {
+            return col == piece.location.charAt(0);
+        });
+
+        let row = parseInt(piece.location.charAt(1));
+
+        moves.forEach((move) => {
+            let newLoc: String = "";
+
+            newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
+
+            if(checkPieceCollision(newLoc) != piece.color) {
+                potentialLocs.push(newLoc);
+            }
+        })
+
+        setPotentialMoveList(potentialLocs);
+    }
+
+    function setKingMoves() {
+        const moves = [
+            [0, 1],
+            [1, 1],
+            [1, 0],
+            [1, -1],
+            [0, -1],
+            [-1, -1],
+            [-1, 0],
+            [-1, 1]
+        ];    
+        
+        let piece = selectedPieceRef.current!;
+        let potentialLocs: String[] = [];
+
+        let colIdx = columns.findIndex((col) => {
+            return col == piece.location.charAt(0);
+        });
+
+        let row = parseInt(piece.location.charAt(1));
+
+        moves.forEach((move) => {
+            let newLoc: String = "";
+
+            newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
+
+            if(checkPieceCollision(newLoc) != piece.color) {
+                potentialLocs.push(newLoc);
+            }
+        })
+
+        setPotentialMoveList(potentialLocs);
+    }
     
     function setRookMoves() {}
 
@@ -302,7 +405,7 @@ export default function Chess() {
                                 return (<td key={col + row} className={boardSquareColor(cIdx, rIdx)}>
                                     <p className="colLabel">{(row == '1' ? col : '')}</p>
                                     <p className="rowLabel">{(col == 'a' ? row : '')}</p>
-                                    <span className={getPieceClass(col, row)} onClick={() => handleOnPieceSelect(col, row)}></span>
+                                    <span className={getPieceClass(col, row)} onClick={() => handleOnBoardClick(col, row)}></span>
                                 </td>)
                             })}
                         </tr>
