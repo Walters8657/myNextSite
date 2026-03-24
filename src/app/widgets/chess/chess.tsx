@@ -372,11 +372,184 @@ export default function Chess() {
         setPotentialMoveList(potentialLocs);
     }
     
-    function setRookMoves() {}
+    function setRookMoves() {
+        setPotentialMoveList(getRookMoves());
+    }
 
-    function setBishopMoves() {}
+    function setBishopMoves() {
+        setPotentialMoveList(getBishopMoves());
+    }
 
-    function setQueenMoves() {}
+    function setQueenMoves() {
+        let potentialLocs: String[] = [];
+        let potentialLocs1: String[] = [];
+        let potentialLocs2: String[] = [];
+
+        potentialLocs1 = getBishopMoves();
+        potentialLocs2 = getRookMoves();
+
+        potentialLocs = potentialLocs1.concat(potentialLocs2);
+
+        setPotentialMoveList(potentialLocs);
+    }
+
+    function getRookMoves() {
+        let piece = selectedPieceRef.current!;
+        let potentialLocs: String[] = [];
+
+        let colIdx = columns.findIndex((col) => {
+            return col == piece.location.charAt(0);
+        });
+
+        let row = parseInt(piece.location.charAt(1));
+
+        //#region Up
+        for (let i = row + 1; i <= 8; i++) {
+            let newLoc = piece.location.charAt(0) + i;
+            let collision = checkPieceCollision(newLoc);
+
+            if (collision == piece.color) {
+                break;
+            } else if (collision > 0) {
+                potentialLocs.push(newLoc);
+                break;
+            } else {
+                potentialLocs.push(newLoc);
+            }
+        }
+        //#endregion Up
+
+        //#region Down
+        for (let i = row - 1; i >= 1; i--) {
+            let newLoc = piece.location.charAt(0) + i;
+            let collision = checkPieceCollision(newLoc);
+
+            if (collision == piece.color) {
+                break;
+            } else if (collision > 0) {
+                potentialLocs.push(newLoc);
+                break;
+            } else {
+                potentialLocs.push(newLoc);
+            }
+        }
+        //#endregion Down
+
+        //#region Right
+        for (let i = colIdx + 1; i < 8; i++) {
+            let newLoc = columns[i].toString() + row.toString();
+            let collision = checkPieceCollision(newLoc);
+
+            if (collision == piece.color) {
+                break;
+            } else if (collision > 0) {
+                potentialLocs.push(newLoc);
+                break;
+            } else {
+                potentialLocs.push(newLoc);
+            }
+        }
+        //#endregion Right
+
+        //#region Left
+        for (let i = colIdx - 1; i >= 0; i--) {
+            let newLoc = columns[i].toString() + row.toString();
+            let collision = checkPieceCollision(newLoc);
+
+            if (collision == piece.color) {
+                break;
+            } else if (collision > 0) {
+                potentialLocs.push(newLoc);
+                break;
+            } else {
+                potentialLocs.push(newLoc);
+            }
+        }
+        //#endregion Left
+
+        return potentialLocs;
+    }
+
+    function getBishopMoves() {
+        let piece = selectedPieceRef.current!;
+        let potentialLocs: String[] = [];
+
+        let colIdx = columns.findIndex((col) => {
+            return col == piece.location.charAt(0);
+        });
+
+        let row = parseInt(piece.location.charAt(1));
+        
+        //#region Up Right
+        for (let i = colIdx + 1; i <= 8; i++) {
+            let newLocUp = (columns[i] ?? "") + (row + (colIdx - i));
+
+            let upCollision = checkPieceCollision(newLocUp);
+
+            if (upCollision == piece.color) {
+                break;
+            } if (upCollision > 0) {
+                potentialLocs.push(newLocUp);
+                break;
+            } else {
+                potentialLocs.push(newLocUp);
+            }
+        }
+        //#endregion Up Right
+        
+        //#region Down Right
+        for (let i = colIdx + 1; i <= 8; i++) {
+            let newLocUp = (columns[i] ?? "") + (row - (colIdx - i));
+
+            let upCollision = checkPieceCollision(newLocUp);
+
+            if (upCollision == piece.color) {
+                break;
+            } if (upCollision > 0) {
+                potentialLocs.push(newLocUp);
+                break;
+            } else {
+                potentialLocs.push(newLocUp);
+            }
+        }
+        //#endregion Down Right
+
+        //#region Up Left
+        for (let i = colIdx - 1; i >= 0; i--) {
+            let newLocUp = (columns[i] ?? "") + (row + (colIdx - i));
+
+            let upCollision = checkPieceCollision(newLocUp);
+
+            if (upCollision == piece.color) {
+                break;
+            } if (upCollision > 0) {
+                potentialLocs.push(newLocUp);
+                break;
+            } else {
+                potentialLocs.push(newLocUp);
+            }
+        }
+        //#endregion Up Left
+        
+        //#region Down Left
+        for (let i = colIdx - 1; i >= 0; i--) {
+            let newLocUp = (columns[i] ?? "") + (row - (colIdx - i));
+
+            let upCollision = checkPieceCollision(newLocUp);
+
+            if (upCollision == piece.color) {
+                break;
+            } if (upCollision > 0) {
+                potentialLocs.push(newLocUp);
+                break;
+            } else {
+                potentialLocs.push(newLocUp);
+            }
+        }
+        //#endregion Down Left
+
+        return potentialLocs;
+    }
 
     /**
      * 
