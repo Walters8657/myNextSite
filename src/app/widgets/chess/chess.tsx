@@ -154,13 +154,13 @@ export default function Chess() {
 
         whitePieces?.forEach((piece) => {
             if (col + row == piece.location) {
-                className = "whitePiece piece" + piece.pieceType;
+                className = "whitePiece piece piece" + piece.pieceType;
             }
         })
 
         blackPieces?.forEach((piece) => {
             if (col + row == piece.location) {
-                className = "blackPiece piece" + piece.pieceType;
+                className = "blackPiece piece piece" + piece.pieceType;
             }
         })
 
@@ -169,10 +169,10 @@ export default function Chess() {
         }
 
         if (potentialMoveList?.includes(col + row)) {
-            className += " potentialMove"
+            className += " potentialMove" 
         }
 
-        className = className + " piece";
+        className += " boardSquare";
 
         return className;
     }

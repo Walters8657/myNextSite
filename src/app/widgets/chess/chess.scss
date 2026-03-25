@@ -44,60 +44,88 @@
                 }
             }
 
-            @mixin pieceOutline {
+            .piece1.whitePiece {
+                background-image: url(../../../../public/chessAssets/Pawn.svg);
+            }
+
+            .piece2.whitePiece {
+                background-image: url(../../../../public/chessAssets/King.svg);
+            }
+
+            .piece3.whitePiece {
+                background-image: url(../../../../public/chessAssets/Queen.svg);
+            }
+
+            .piece4.whitePiece {
+                background-image: url(../../../../public/chessAssets/Bishop.svg);
+            }
+
+            .piece5.whitePiece {
+                background-image: url(../../../../public/chessAssets/Knight.svg);
+            }
+
+            .piece6.whitePiece {
+                background-image: url(../../../../public/chessAssets/Rook.svg);
+            }
+
+            .piece1.blackPiece {
+                background-image: url(../../../../public/chessAssets/Pawn_black.svg);
+            }
+
+            .piece2.blackPiece {
+                background-image: url(../../../../public/chessAssets/King_black.svg);
+            }
+
+            .piece3.blackPiece {
+                background-image: url(../../../../public/chessAssets/Queen_black.svg);
+            }
+
+            .piece4.blackPiece {
+                background-image: url(../../../../public/chessAssets/Bishop_black.svg);
+            }
+
+            .piece5.blackPiece {
+                background-image: url(../../../../public/chessAssets/Knight_black.svg);
+            }
+
+            .piece6.blackPiece {
+                background-image: url(../../../../public/chessAssets/Rook_black.svg);
+            }
+
+            .boardSquare {
                 display: block;
                 box-sizing: border-box;
 
                 height: 100%;
                 width: 100%;
 
-                background-size: cover;
-            }
-
-            .piece1 {
-                // pawn
-                background-image: url(../../../../public/chessAssets/Pawn.svg);
-            }
-
-            .piece2 {
-                // king
-                background-image: url(../../../../public/chessAssets/King.svg);
-            }
-
-            .piece3 {
-                // queen
-                background-image: url(../../../../public/chessAssets/Queen.svg);
-            }
-
-            .piece4 {
-                //bishop
-                background-image: url(../../../../public/chessAssets/Bishop.svg);
-            }
-
-            .piece5 {
-                //knight
-                background-image: url(../../../../public/chessAssets/Knight.svg);
-            }
-
-            .piece6 {
-                //rook
-                background-image: url(../../../../public/chessAssets/Rook.svg);
-            }
-
-            .piece {
-                @include pieceOutline();
-            }
-
-            .blackPiece {
-                filter: invert(1)
+                background-size: cover;;
             }
 
             .selectedPiece {
-                background-color: red;
+                background-color: rgb(119, 180, 218);
             }
 
             .potentialMove {
-                background-color: blue;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .potentialMove:after {
+                content: "";
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background-color: rgb(119, 180, 218);
+            }
+
+            .piece.potentialMove:after {
+                background-color: transparent;
+            }
+
+            .piece.potentialMove {
+                background-color: rgb(236, 142, 142);
             }
 
             .darkSquare {
