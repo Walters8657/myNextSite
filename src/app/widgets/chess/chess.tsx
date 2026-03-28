@@ -28,12 +28,15 @@ export default function Chess() {
     let columns: string[]= ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     let rows: string[] = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
+
     const [whitePieces, setWhitePieces] = useState<chessPiece[]>([]);
     const [blackPieces, setBlackPieces] = useState<chessPiece[]>([]);
 
     const [selectedPiece, setSelectedPiece] = useState<chessPiece | null>(null);
 
-    const [ potentialMoveList, setPotentialMoveList] = useState<String[] | null>([]);
+    const [potentialMoveList, setPotentialMoveList] = useState<String[] | null>([]);
+
+    const playerTurnRef = useRef<Number>(1);
 
     const allPiecesRef = useRef<chessPiece[]>([]);
     const selectedPieceRef = useRef<chessPiece | null>(null);
@@ -190,7 +193,7 @@ export default function Chess() {
             setSelectedPiece(null);
             selectedPieceRef.current = null;
         } else if (potentialMoveList?.includes(col + row)) { // If the clicked square is in the potential move list
-            let movedPiece = selectedPiece;
+            let movedPiece = selectedPieceRef.current;
 
             if (!movedPiece) return;
 
@@ -230,10 +233,18 @@ export default function Chess() {
 
             setSelectedPiece(null);
             selectedPieceRef.current = null;
-        } else {
+
+            playerTurnRef.current = (playerTurnRef.current == 1) ? 2 : 1;
+            console.log(playerTurnRef);
+        } else if (clickedPiece) {
             // Otherwise set the new active piece. Empty squares are null.
-            setSelectedPiece(clickedPiece);
-            selectedPieceRef.current = clickedPiece;
+            if (clickedPiece.color == playerTurnRef.current) {
+                setSelectedPiece(clickedPiece);
+                selectedPieceRef.current = clickedPiece;
+            }
+        } else {
+            setSelectedPiece(null);
+            selectedPieceRef.current = null;
         }
 
     }
