@@ -192,52 +192,36 @@ export default function Chess() {
         if (clickedPiece == selectedPiece) { // If the piece clicked on was the already selected piece, de-select
             setSelectedPiece(null);
             selectedPieceRef.current = null;
-        } else if (potentialMoveList?.includes(col + row)) { // If the clicked square is in the potential move list
-            let movedPiece = selectedPieceRef.current;
+        } else if (potentialMoveList?.includes(col + row)) { // If the square is being moved to
+            setPotentialMoveList(null); // Reset potential move list
 
-            if (!movedPiece) return;
+            // Setup working piece
+            let pieceMoving = selectedPieceRef.current;
 
-            movedPiece.location = col + row;
+            // If the user hasn't selected a piece then there is no piece to move
+            // This shouldn't technically be possible to trigger unless in a bugged state
+            if (!pieceMoving) { return; } 
 
-            let collision = checkPieceCollision(movedPiece.location);
+            // Set piece to move to new location
+            pieceMoving.location = col + row;
 
-            if (collision > 0 && collision != movedPiece.color) { //If taking piece
+            //Check for a capture at the new location
+            let collision = checkPieceCollision(pieceMoving.location);
+
+            if (collision > 0 && collision != pieceMoving.color) { // If colliding with other colors piece
                 if (collision == 1) {
-                    let newWhite = whitePieces.filter(piece => {
-                        return piece.location != movedPiece.location
-                    });
-
-                    let newBlack = blackPieces.filter(piece => {
-                        return piece.location != selectedPiece?.location;
-                    });
-
-                    newBlack.push(movedPiece);
-
-                    setWhitePieces(newWhite);
-                    setBlackPieces(newBlack);
+                    takeWhitePiece(pieceMoving);
                 } else {
-                    let newBlack = blackPieces.filter(piece => {
-                        return piece.location != movedPiece.location
-                    });
-
-                    let newWhite = whitePieces.filter(piece => {
-                        return piece.location != selectedPiece?.location;
-                    });
-
-                    newWhite.push(movedPiece)
-
-                    setBlackPieces(newBlack);
-                    setWhitePieces(newWhite);
+                    takeBlackPiece(pieceMoving);
                 }
-            }
+            } 
 
             setSelectedPiece(null);
             selectedPieceRef.current = null;
 
             playerTurnRef.current = (playerTurnRef.current == 1) ? 2 : 1;
-            console.log(playerTurnRef);
-        } else if (clickedPiece) {
-            // Otherwise set the new active piece. Empty squares are null.
+        } else if (clickedPiece) { // If there is a piece in the selected square
+            //If the selected piece is the current turns piece
             if (clickedPiece.color == playerTurnRef.current) {
                 setSelectedPiece(clickedPiece);
                 selectedPieceRef.current = clickedPiece;
@@ -246,7 +230,36 @@ export default function Chess() {
             setSelectedPiece(null);
             selectedPieceRef.current = null;
         }
+    }
 
+    function takeWhitePiece(pieceMoving: chessPiece) {
+        let newWhite = whitePieces.filter(piece => {
+            return piece.location != pieceMoving.location
+        });
+
+        let newBlack = blackPieces.filter(piece => {
+            return piece.location != selectedPiece?.location;
+        });
+
+        newBlack.push(pieceMoving);
+
+        setWhitePieces(newWhite);
+        setBlackPieces(newBlack);
+    }
+
+    function takeBlackPiece(pieceMoving: chessPiece) {
+        let newBlack = blackPieces.filter(piece => {
+            return piece.location != pieceMoving.location
+        });
+
+        let newWhite = whitePieces.filter(piece => {
+            return piece.location != selectedPiece?.location;
+        });
+
+        newWhite.push(pieceMoving)
+
+        setBlackPieces(newBlack);
+        setWhitePieces(newWhite);
     }
 
     function setPotentialMoves() {
