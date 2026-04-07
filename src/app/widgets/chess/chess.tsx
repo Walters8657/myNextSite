@@ -18,10 +18,16 @@ const pieceColor: Record<string, number> = {
     ,"black": 2
 }
 
-interface chessPiece {
+class chessPiece {
     location: string;
     pieceType: number;
     color: number;
+
+    constructor(location: string, pieceType: number, color: number) {
+        this.location = location;
+        this.pieceType = pieceType;
+        this.color = color;
+    }
 }
 
 export default function Chess() {
@@ -70,20 +76,12 @@ export default function Chess() {
 
         columns.forEach(col => {
             //#region Pawn Setup
-            let newPawn: chessPiece = {
-                location: col + "2"
-                ,pieceType: pieceType.pawn
-                ,color: pieceColor.white
-            };
+            let newPawn = new chessPiece(col + "2", pieceType.pawn, pieceColor.white);
             newWhitePieces.push(newPawn);
             //#endregion Pawn Setup
 
             //#region Major Piece Setup
-            let newPiece: chessPiece = {
-                location: col + "1"
-                ,pieceType: pieceType.pawn
-                ,color: pieceColor.white
-            };
+            let newPiece = new chessPiece(col + "1", pieceType.pawn, pieceColor.white);
 
             if (["a", "h"].includes(col)) {
                 newPiece.pieceType = pieceType.rook
@@ -109,20 +107,12 @@ export default function Chess() {
 
         columns.forEach(col => {
             //#region Pawn Setup
-            let newPawn: chessPiece = {
-                location: col + "7"
-                ,pieceType: pieceType.pawn
-                ,color: pieceColor.black
-            };
+            let newPawn= new chessPiece(col + "7", pieceType.pawn, pieceColor.black);
             newBlackPieces.push(newPawn);
             //#endregion Pawn Setup
 
             //#region Major Piece Setup
-            let newPiece: chessPiece = {
-                location: col + "8"
-                ,pieceType: pieceType.pawn
-                ,color: pieceColor.black
-            };
+            let newPiece= new chessPiece(col + "8", pieceType.pawn, pieceColor.black);
 
             if (["a", "h"].includes(col)) {
                 newPiece.pieceType = pieceType.rook
@@ -273,6 +263,29 @@ export default function Chess() {
         setWhitePieces(newWhite);
     }
 
+    function getPotentialMovesFromList(moves: number[][]) {
+        let piece = selectedPieceRef.current!;
+        let potentialLocs: String[] = [];
+
+        let colIdx = columns.findIndex((col) => {
+            return col == piece.location.charAt(0);
+        });
+
+        let row = parseInt(piece.location.charAt(1));
+
+        moves.forEach((move) => {
+            let newLoc: String = "";
+
+            newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
+
+            if(checkPieceCollision(newLoc) != piece.color) {
+                potentialLocs.push(newLoc);
+            }
+        })
+
+        return potentialLocs;
+    }
+
     function setPotentialMoves() {
         switch (selectedPieceRef.current?.pieceType) {
             case pieceType.pawn: 
@@ -396,27 +409,10 @@ export default function Chess() {
             [-2, -1],
             [-2, 1],
             [-1, 2]
-        ];    
+        ];
+
+        let potentialLocs: String[] = getPotentialMovesFromList(moves);
         
-        let piece = selectedPieceRef.current!;
-        let potentialLocs: String[] = [];
-
-        let colIdx = columns.findIndex((col) => {
-            return col == piece.location.charAt(0);
-        });
-
-        let row = parseInt(piece.location.charAt(1));
-
-        moves.forEach((move) => {
-            let newLoc: String = "";
-
-            newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
-
-            if(checkPieceCollision(newLoc) != piece.color) {
-                potentialLocs.push(newLoc);
-            }
-        })
-
         setPotentialMoveList(potentialLocs);
     }
 
@@ -430,27 +426,10 @@ export default function Chess() {
             [-1, -1],
             [-1, 0],
             [-1, 1]
-        ];    
+        ];
+
+        let potentialLocs: String[] = getPotentialMovesFromList(moves);
         
-        let piece = selectedPieceRef.current!;
-        let potentialLocs: String[] = [];
-
-        let colIdx = columns.findIndex((col) => {
-            return col == piece.location.charAt(0);
-        });
-
-        let row = parseInt(piece.location.charAt(1));
-
-        moves.forEach((move) => {
-            let newLoc: String = "";
-
-            newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
-
-            if(checkPieceCollision(newLoc) != piece.color) {
-                potentialLocs.push(newLoc);
-            }
-        })
-
         setPotentialMoveList(potentialLocs);
     }
     
