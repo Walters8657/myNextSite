@@ -35,11 +35,13 @@ export default function Chess() {
     const [selectedPiece, setSelectedPiece] = useState<chessPiece | null>(null);
 
     const [potentialMoveList, setPotentialMoveList] = useState<String[] | null>([]);
+    const [enPassantTake, setEnPassantTake] = useState<String | null>(null);
 
     const playerTurnRef = useRef<Number>(1);
 
     const allPiecesRef = useRef<chessPiece[]>([]);
     const selectedPieceRef = useRef<chessPiece | null>(null);
+    const enPassantRef = useRef<string | null>(null);
 
     useEffect(() => {
         resetGame();
@@ -200,7 +202,14 @@ export default function Chess() {
 
             // If the user hasn't selected a piece then there is no piece to move
             // This shouldn't technically be possible to trigger unless in a bugged state
-            if (!pieceMoving) { return; } 
+            if (!pieceMoving) { return; }
+
+            // If a pawn has just double moved, set as available for en passant
+            if ((pieceMoving.location.charAt(1) == '2' && row == '4') || (pieceMoving.location.charAt(1) == '7' && row == '5')) {
+                enPassantRef.current = col + row;
+            } else {
+                enPassantRef.current = null;
+            }
 
             // Set piece to move to new location
             pieceMoving.location = col + row;
@@ -214,7 +223,7 @@ export default function Chess() {
                 } else {
                     takeBlackPiece(pieceMoving);
                 }
-            } 
+            }
 
             setSelectedPiece(null);
             selectedPieceRef.current = null;
@@ -233,8 +242,9 @@ export default function Chess() {
     }
 
     function takeWhitePiece(pieceMoving: chessPiece) {
+        // Since en passant takes a piece not on the same square, it needs to be checked individually
         let newWhite = whitePieces.filter(piece => {
-            return piece.location != pieceMoving.location
+            return (piece.location != pieceMoving.location && piece.location != enPassantTake);
         });
 
         let newBlack = blackPieces.filter(piece => {
@@ -248,8 +258,9 @@ export default function Chess() {
     }
 
     function takeBlackPiece(pieceMoving: chessPiece) {
+        // Since en passant takes a piece not on the same square, it needs to be checked individually
         let newBlack = blackPieces.filter(piece => {
-            return piece.location != pieceMoving.location
+            return (piece.location != pieceMoving.location && piece.location != enPassantTake)
         });
 
         let newWhite = whitePieces.filter(piece => {
@@ -291,37 +302,84 @@ export default function Chess() {
     function setPawnMoves() {
         let piece = selectedPieceRef.current!;
         let potentialLocs: String[] = [];
-        let frontCollision: number = 0;
 
-        for (let i = 1; i <= 2; i++) {
-            let newLoc = piece.location.charAt(0) + (parseInt(piece.location.charAt(1)) + (piece.color == pieceColor.white ? i : -i));
+        let moves: number[][] = [];
 
-            frontCollision = checkPieceCollision(newLoc);
+        let colIdx = columns.findIndex((col) => {
+            return col == piece.location.charAt(0);
+        });
 
-            // Since pawns can only take diagonally, head on collisions are not allowed with _either_ piece color
-            if (frontCollision == 0) {
+        let row = parseInt(piece.location.charAt(1));
+
+        if (piece.color == pieceColor.white) {
+            let  movesAhead = (row == 2 ? 2 : 1); // Double  first move logic
+
+            for (let i = 1; i <= movesAhead; i++) {
+                let newLoc = columns[colIdx] + (row + i); // Add if white
+                let collision = checkPieceCollision(newLoc);
+
+                if (collision > 0) {
+                    break;
+                } else {
+                    potentialLocs.push(newLoc);
+                }
+            }
+
+            //Potential attacking moves
+            moves = [
+                [-1, 1],
+                [1, 1]
+            ]
+        }
+
+        if (piece.color == pieceColor.black) {
+            let  movesAhead = (row == 7 ? 2 : 1); // Double first move logic
+
+            for (let i = 1; i <= movesAhead; i++) {
+                let newLoc = columns[colIdx] + (row - i); // Subtract if black
+                let collision = checkPieceCollision(newLoc);
+
+                if (collision > 0) {
+                    break;
+                } else {
+                    potentialLocs.push(newLoc);
+                }
+            }
+
+            // Potential attacking moves
+            moves = [
+                [-1, -1],
+                [1, -1]
+            ]
+        }
+
+        moves.forEach((move) => {
+            let newLoc: String = "";
+
+            newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
+            
+            let collision = checkPieceCollision(newLoc);
+
+            if(collision > 0 && collision != piece.color) {
                 potentialLocs.push(newLoc);
-            };
+            }
+        })
 
-            //#region Search for Attacks
-            let colIdx = columns.findIndex((col) => {
-                return col == piece.location.charAt(0);
+        // If pawn has double moved
+        if (enPassantRef.current != null) {
+            let enColIdx = columns.findIndex((col) => {
+                return col == enPassantRef.current!.charAt(0);
             });
 
-            let row = parseInt(piece.location.charAt(1)) + (piece.color == pieceColor.white ? 1 : -1);
+            let enRow = parseInt(enPassantRef.current!.charAt(1));
 
-            newLoc = columns[colIdx + 1] + row;
-            if (checkPieceCollision(newLoc) > 0 && piece.color != checkPieceCollision(newLoc))
+            // If en passant actually possible
+            if (row == enRow && Math.abs(enColIdx - colIdx) == 1) {
+                let newLoc: string = (columns[enColIdx] + (row == 5 ? '6' : '3'));
+
+                // Add en passant as possible move and track potential en passant take
                 potentialLocs.push(newLoc);
-
-            newLoc = columns[colIdx - 1] + row;
-            if (checkPieceCollision(newLoc) > 0 && piece.color != checkPieceCollision(newLoc))
-                potentialLocs.push(newLoc);
-            //#endregion Search for Attacks
-
-            // If the piece has already moved, or is blocked, break the for loop before the second step
-            if (![2, 7].includes(parseInt(piece.location.charAt(1))) || frontCollision > 0) {
-                break;
+                setEnPassantTake(enPassantRef.current);
             }
         }
 
@@ -583,8 +641,16 @@ export default function Chess() {
     function checkPieceCollision(newLoc: String): number {
         let collision: number = 0;
 
+        // Check for collisions with pieces
         allPiecesRef.current.forEach(existingPiece => {
             if (existingPiece.location == newLoc) {
+                collision = existingPiece.color;
+            }
+        });
+
+        // Check if en passant has happened
+        allPiecesRef.current.forEach(existingPiece => {
+            if (existingPiece.location == enPassantTake) {
                 collision = existingPiece.color;
             }
         });
