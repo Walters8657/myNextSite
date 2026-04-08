@@ -209,17 +209,17 @@ export default function Chess() {
             // Set piece to move to new location
             pieceMoving.location = col + row;
 
+            if (pieceMoving.pieceType == pieceType.pawn) {
+                if (["1", "8"].includes(row)) {
+                    pieceMoving.pieceType = pieceType.queen;
+                }
+            }
+
             if (collision > 0 && collision != pieceMoving.color) { // If colliding with other colors piece
                 if (collision == 1) {
                     takeWhitePiece(pieceMoving);
                 } else {
                     takeBlackPiece(pieceMoving);
-                }
-            }
-
-            if (pieceMoving.pieceType == pieceType.pawn) {
-                if (["1", "8"].includes(row)) {
-                    console.log("Promotion")
                 }
             }
 
