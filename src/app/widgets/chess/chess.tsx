@@ -172,12 +172,21 @@ export default function Chess() {
         return className;
     }
 
+    function checkEnPassant(clickedCol: string, clickedRow: string, pieceMoving: chessPiece) {
+        if (
+            (pieceMoving.location.charAt(1) == '2' && clickedRow == '4' && pieceMoving.color == pieceColor.white) 
+                || 
+            (pieceMoving.location.charAt(1) == '7' && clickedRow == '5' && pieceMoving.color == pieceColor.black)) {
+            enPassantRef.current = clickedCol + clickedRow;
+        } else {
+            enPassantRef.current = null;
+        }
+    }
+
     function handleOnBoardClick(col: string, row: string) {
         let allPieces: chessPiece[] = allPiecesRef.current;
-        let clickedPiece: chessPiece | null = null;
 
-        // Finds if a piece was clicked on or not
-        clickedPiece = allPieces.find(piece => {
+        let clickedPiece: chessPiece | null = allPieces.find(piece => {
             return piece.location == col + row
         }) ?? null;
 
@@ -189,23 +198,16 @@ export default function Chess() {
 
             // Setup working piece
             let pieceMoving = selectedPieceRef.current;
-
-            // If the user hasn't selected a piece then there is no piece to move
-            // This shouldn't technically be possible to trigger unless in a bugged state
+            
             if (!pieceMoving) { return; }
 
-            // If a pawn has just double moved, set as available for en passant
-            if ((pieceMoving.location.charAt(1) == '2' && row == '4') || (pieceMoving.location.charAt(1) == '7' && row == '5')) {
-                enPassantRef.current = col + row;
-            } else {
-                enPassantRef.current = null;
-            }
+            checkEnPassant(col, row, pieceMoving);
+
+            //Check for a capture at the new location
+            let collision = checkPieceCollision(col + row);
 
             // Set piece to move to new location
             pieceMoving.location = col + row;
-
-            //Check for a capture at the new location
-            let collision = checkPieceCollision(pieceMoving.location);
 
             if (collision > 0 && collision != pieceMoving.color) { // If colliding with other colors piece
                 if (collision == 1) {
@@ -215,6 +217,13 @@ export default function Chess() {
                 }
             }
 
+            if (pieceMoving.pieceType == pieceType.pawn) {
+                if (["1", "8"].includes(row)) {
+                    console.log("Promotion")
+                }
+            }
+
+            // Unselect pieces and switch turns
             setSelectedPiece(null);
             selectedPieceRef.current = null;
 
