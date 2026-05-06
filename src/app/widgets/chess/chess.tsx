@@ -75,12 +75,11 @@ export default function Chess() {
         let newWhitePieces: chessPiece[] = [];
 
         columns.forEach(col => {
-            //#region Pawn Setup
+            // Pawn Setup
             let newPawn = new chessPiece(col + "2", pieceType.pawn, pieceColor.white);
             newWhitePieces.push(newPawn);
-            //#endregion Pawn Setup
 
-            //#region Major Piece Setup
+            // Major Piece Setup
             let newPiece = new chessPiece(col + "1", pieceType.pawn, pieceColor.white);
 
             if (["a", "h"].includes(col)) {
@@ -94,7 +93,6 @@ export default function Chess() {
             } else if (col == "e") {
                 newPiece.pieceType = pieceType.king;
             }
-            //#endregion Major Piece Setup
 
             newWhitePieces.push(newPiece);
         });
@@ -106,12 +104,11 @@ export default function Chess() {
         let newBlackPieces: chessPiece[] = [];
 
         columns.forEach(col => {
-            //#region Pawn Setup
+            // Pawn Setup
             let newPawn= new chessPiece(col + "7", pieceType.pawn, pieceColor.black);
             newBlackPieces.push(newPawn);
-            //#endregion Pawn Setup
 
-            //#region Major Piece Setup
+            // Major Piece Setup
             let newPiece= new chessPiece(col + "8", pieceType.pawn, pieceColor.black);
 
             if (["a", "h"].includes(col)) {
@@ -125,7 +122,6 @@ export default function Chess() {
             } else if (col == "e") {
                 newPiece.pieceType = pieceType.king;
             }
-            //#endregion Major Piece Setup
 
             newBlackPieces.push(newPiece);
         });
@@ -209,11 +205,13 @@ export default function Chess() {
             // Set piece to move to new location
             pieceMoving.location = col + row;
 
+            //#region Promotion Logic
             if (pieceMoving.pieceType == pieceType.pawn) {
                 if (["1", "8"].includes(row)) {
                     pieceMoving.pieceType = pieceType.queen;
                 }
             }
+            //#endregion Promotion Logic
 
             if (collision > 0 && collision != pieceMoving.color) { // If colliding with other colors piece
                 if (collision == 1) {
