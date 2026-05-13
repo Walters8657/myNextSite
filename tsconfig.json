@@ -21,11 +21,8 @@
         "name": "next"
       }
     ],
-    "baseUrl": "src",
     "paths": {
-      "@/*": [
-        "*"
-      ]
+      "@/*": ["./src/*"]
     },
     "target": "ES2017"
   },
