@@ -43,7 +43,7 @@ export default function Chess() {
     const [potentialMoveList, setPotentialMoveList] = useState<String[] | null>([]);
     const [enPassantTake, setEnPassantTake] = useState<String | null>(null);
 
-    const [showPromotionModal, setShowPromotionModal] = useState(false);
+    const [showPromotionModal, setShowPromotionModal] = useState(true);
     const [resolvePromotionPromise, setResolvePromotionPromise] = useState<((value: number | null) => void)>();
 
     const playerTurnRef = useRef<Number>(1);
@@ -669,7 +669,7 @@ export default function Chess() {
     return (
         <ToolCard title="Chess">
             <table id="chessBoard">
-                <tbody>
+                <tbody className={showPromotionModal ? "darkOverlay" : ""}>
                     {rows.reverse().map((row: string, rIdx: number) => (
                         <tr key={row}>
                             {columns.map((col: string, cIdx: number) => {
@@ -685,32 +685,30 @@ export default function Chess() {
                 <Activity mode={showPromotionModal ? "visible" : "hidden"}>
                     <tbody id="promotionRow">
                         <tr>
-                            <div>
-                                <td className="lightSquare">
-                                    <span 
-                                        onClick={() => closePromotePiece(pieceType.queen)}
-                                        className={getPromotionClass(pieceType.queen)}
-                                    ></span>
-                                </td>
-                                <td className="lightSquare">
-                                    <span 
-                                        onClick={() => closePromotePiece(pieceType.rook)}
-                                        className={getPromotionClass(pieceType.rook)}
-                                    ></span>
-                                </td>
-                                <td className="lightSquare">
-                                    <span 
-                                        onClick={() => closePromotePiece(pieceType.bishop)}
-                                        className={getPromotionClass(pieceType.bishop)}
-                                    ></span>
-                                </td>
-                                <td className="lightSquare">
-                                    <span 
-                                        onClick={() => closePromotePiece(pieceType.knight)}
-                                        className={getPromotionClass(pieceType.knight)}
-                                    ></span>
-                                </td>
-                            </div>
+                            <td className="lightSquare">
+                                <span 
+                                    onClick={() => closePromotePiece(pieceType.queen)}
+                                    className={getPromotionClass(pieceType.queen)}
+                                ></span>
+                            </td>
+                            <td className="lightSquare">
+                                <span 
+                                    onClick={() => closePromotePiece(pieceType.rook)}
+                                    className={getPromotionClass(pieceType.rook)}
+                                ></span>
+                            </td>
+                            <td className="lightSquare">
+                                <span 
+                                    onClick={() => closePromotePiece(pieceType.bishop)}
+                                    className={getPromotionClass(pieceType.bishop)}
+                                ></span>
+                            </td>
+                            <td className="lightSquare">
+                                <span 
+                                    onClick={() => closePromotePiece(pieceType.knight)}
+                                    className={getPromotionClass(pieceType.knight)}
+                                ></span>
+                            </td>
                         </tr>
                     </tbody>
                 </Activity>

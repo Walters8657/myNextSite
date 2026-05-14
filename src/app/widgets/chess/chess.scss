@@ -1,6 +1,10 @@
 #chessBoard {
     display: block;
 
+    table {
+        position: absolute;
+    }
+
     tbody{
         display: block;
 
@@ -140,17 +144,31 @@
 }
 
 #promotionRow {
-    margin-top: 20px;
-    tr {
-        div {
-            box-sizing: border-box;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            opacity: 1;
-            td:hover {
-                opacity: 0.33;
-            }
-        }
+    position: relative;
+    bottom: calc(31px * 4.5);
+    left: calc(31px * 2);
+    box-sizing: border-box;
+    padding: 0;
+    td:hover {
+        cursor: pointer;
+        filter: brightness(0.95)
     }
+    td {
+        border: solid black 2px;
+    }
+    td:nth-of-type(1) {
+        border-right: none;
+    }
+    td:nth-of-type(2), td:nth-of-type(3) {
+        border-left: none;
+        border-right: none;
+    }
+    td:nth-of-type(4) {
+        border-left: none;
+    }
+}
+
+.darkOverlay {
+    filter: brightness(0.85) blur(1px);
+    margin-bottom: -31px;
 }
