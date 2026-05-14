@@ -2,7 +2,7 @@
 import ToolCard from "@/app/ui/toolCard/toolCard";
 
 import './chess.scss'
-import { useEffect, useRef, useState } from "react";
+import { Activity, useEffect, useRef, useState } from "react";
 
 const pieceType: Record<string, number> = {
     "pawn": 1
@@ -42,6 +42,9 @@ export default function Chess() {
 
     const [potentialMoveList, setPotentialMoveList] = useState<String[] | null>([]);
     const [enPassantTake, setEnPassantTake] = useState<String | null>(null);
+
+    const [showPromotionModal, setShowPromotionModal] = useState(false);
+    const [resolvePromotionPromise, setResolvePromotionPromise] = useState<((value: number | null) => void)>();
 
     const playerTurnRef = useRef<Number>(1);
 
@@ -179,7 +182,7 @@ export default function Chess() {
         }
     }
 
-    function handleOnBoardClick(col: string, row: string) {
+    async function handleOnBoardClick(col: string, row: string) {
         let allPieces: chessPiece[] = allPiecesRef.current;
 
         let clickedPiece: chessPiece | null = allPieces.find(piece => {
@@ -208,7 +211,7 @@ export default function Chess() {
             //#region Promotion Logic
             if (pieceMoving.pieceType == pieceType.pawn) {
                 if (["1", "8"].includes(row)) {
-                    pieceMoving.pieceType = pieceType.queen;
+                    pieceMoving.pieceType = await openPromotePiece();
                 }
             }
             //#endregion Promotion Logic
@@ -236,6 +239,21 @@ export default function Chess() {
             setSelectedPiece(null);
             selectedPieceRef.current = null;
         }
+    }
+
+    const openPromotePiece = () => {
+        console.log("Open Promise");
+        setShowPromotionModal(true);
+        return new Promise((resolve: ((value: number) => void)) => {
+            setResolvePromotionPromise(() => resolve);
+        })
+    }
+
+    const closePromotePiece = (pieceSelection: number) => {
+        if (resolvePromotionPromise) {
+            resolvePromotionPromise(pieceSelection);
+        }
+        setShowPromotionModal(false);
     }
 
     function takeWhitePiece(pieceMoving: chessPiece) {
@@ -644,6 +662,10 @@ export default function Chess() {
         return collision;
     }
 
+    function getPromotionClass(pieceTypeNum: number): string {
+        return (playerTurnRef.current == pieceColor.white ? "whitePiece " : "blackPiece ") + "piece boardSquare piece" + pieceTypeNum
+    }
+
     return (
         <ToolCard title="Chess">
             <table id="chessBoard">
@@ -659,7 +681,39 @@ export default function Chess() {
                             })}
                         </tr>
                     ))}
-                </tbody>
+                </tbody>                    
+                <Activity mode={showPromotionModal ? "visible" : "hidden"}>
+                    <tbody id="promotionRow">
+                        <tr>
+                            <div>
+                                <td className="lightSquare">
+                                    <span 
+                                        onClick={() => closePromotePiece(pieceType.queen)}
+                                        className={getPromotionClass(pieceType.queen)}
+                                    ></span>
+                                </td>
+                                <td className="lightSquare">
+                                    <span 
+                                        onClick={() => closePromotePiece(pieceType.rook)}
+                                        className={getPromotionClass(pieceType.rook)}
+                                    ></span>
+                                </td>
+                                <td className="lightSquare">
+                                    <span 
+                                        onClick={() => closePromotePiece(pieceType.bishop)}
+                                        className={getPromotionClass(pieceType.bishop)}
+                                    ></span>
+                                </td>
+                                <td className="lightSquare">
+                                    <span 
+                                        onClick={() => closePromotePiece(pieceType.knight)}
+                                        className={getPromotionClass(pieceType.knight)}
+                                    ></span>
+                                </td>
+                            </div>
+                        </tr>
+                    </tbody>
+                </Activity>
             </table>
         </ToolCard>
     )

@@ -138,3 +138,19 @@
         }
     }
 }
+
+#promotionRow {
+    margin-top: 20px;
+    tr {
+        div {
+            box-sizing: border-box;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            opacity: 1;
+            td:hover {
+                opacity: 0.33;
+            }
+        }
+    }
+}
