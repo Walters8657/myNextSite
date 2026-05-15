@@ -43,7 +43,7 @@ export default function Chess() {
     const [potentialMoveList, setPotentialMoveList] = useState<String[] | null>([]);
     const [enPassantTake, setEnPassantTake] = useState<String | null>(null);
 
-    const [showPromotionModal, setShowPromotionModal] = useState(true);
+    const [showPromotionModal, setShowPromotionModal] = useState(false);
     const [resolvePromotionPromise, setResolvePromotionPromise] = useState<((value: number | null) => void)>();
 
     const playerTurnRef = useRef<Number>(1);
@@ -72,6 +72,7 @@ export default function Chess() {
     function resetGame() {
         resetWhitePieces();
         resetBlackPieces();
+        playerTurnRef.current = pieceColor.white;
     }
 
     function resetWhitePieces() {
@@ -668,6 +669,7 @@ export default function Chess() {
 
     return (
         <ToolCard title="Chess">
+            <button id="resetChess" onClick={resetGame}>Reset Game</button>
             <table id="chessBoard">
                 <tbody className={showPromotionModal ? "darkOverlay" : ""}>
                     {rows.reverse().map((row: string, rIdx: number) => (
