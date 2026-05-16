@@ -46,7 +46,7 @@ export default function Chess() {
     const [showPromotionModal, setShowPromotionModal] = useState(false);
     const [resolvePromotionPromise, setResolvePromotionPromise] = useState<((value: number | null) => void)>();
 
-    const playerTurnRef = useRef<Number>(1);
+    const playerTurnRef = useRef<number>(1);
 
     const allPiecesRef = useRef<chessPiece[]>([]);
     const selectedPieceRef = useRef<chessPiece | null>(null);
@@ -133,17 +133,7 @@ export default function Chess() {
         setBlackPieces(newBlackPieces);
     }
 
-    function boardSquareColor(cIdx: number, rIdx: number): string {
-        let className: string = "";
-
-        if (rIdx % 2 == 0) // Even Row
-            className = (cIdx % 2) == 1 ? "darkSquare " : "lightSquare "
-        else // Odd Row
-            className = (cIdx % 2) == 0 ? "darkSquare " : "lightSquare "
-        
-        return className;
-    }
-
+    //#region CSS Classes
     function getPieceClass(col: string, row: string): string {
         let className: string = "";
 
@@ -171,6 +161,22 @@ export default function Chess() {
 
         return className;
     }
+
+    function getPromotionClass(pieceTypeNum: number): string {
+        return (playerTurnRef.current == pieceColor.white ? "whitePiece " : "blackPiece ") + "piece boardSquare piece" + pieceTypeNum
+    }
+
+    function boardSquareColor(cIdx: number, rIdx: number): string {
+        let className: string = "";
+
+        if (rIdx % 2 == 0) // Even Row
+            className = (cIdx % 2) == 1 ? "darkSquare " : "lightSquare "
+        else // Odd Row
+            className = (cIdx % 2) == 0 ? "darkSquare " : "lightSquare "
+        
+        return className;
+    }
+    //#endregion CSS Classes
 
     function checkEnPassant(clickedCol: string, clickedRow: string, pieceMoving: chessPiece) {
         if (
@@ -243,7 +249,6 @@ export default function Chess() {
     }
 
     const openPromotePiece = () => {
-        console.log("Open Promise");
         setShowPromotionModal(true);
         return new Promise((resolve: ((value: number) => void)) => {
             setResolvePromotionPromise(() => resolve);
@@ -289,8 +294,59 @@ export default function Chess() {
         setWhitePieces(newWhite);
     }
 
-    function getPotentialMovesFromList(moves: number[][]) {
-        let piece = selectedPieceRef.current!;
+    //#region Get Moves
+    function setPotentialMoves() {
+        let potentialMoves: String[] = [];
+        switch (selectedPieceRef.current?.pieceType) {
+            case pieceType.pawn: 
+                potentialMoves = getPawnMoves();
+                break;
+            case pieceType.knight:
+                potentialMoves = getKnightMoves();
+                break;
+            case pieceType.king:
+                potentialMoves = getKingMoves();
+                break;
+            case pieceType.rook:
+                potentialMoves = getRookMoves();
+                break;
+            case pieceType.bishop:
+                potentialMoves = getBishopMoves();
+                break;
+            case pieceType.queen:
+                potentialMoves = getQueenMoves();
+                break;
+            default: // Handles no piece selected
+                break;
+        }
+
+        if (potentialMoves.length ?? 0 > 0) {
+            let movingPiece = selectedPieceRef.current;
+
+            let checkPinnedState: chessPiece[] = [...allPiecesRef.current].map(piece => {
+                if (piece != movingPiece) {
+                    return piece;
+                } else {
+                    return ({
+                        location: "",
+                        color: 1,
+                        pieceType: 1
+                    })
+                }; // Returns no location chess piece instead of potential pinned piece
+            });
+
+            if (checkIsCheck(playerTurnRef.current, checkPinnedState)) {
+                console.log("Pinned Piece")
+                potentialMoves = [];
+            } else {
+                console.log("Not pinned")
+            }
+        }
+
+        setPotentialMoveList(potentialMoves);
+    }
+
+    function getPotentialMovesFromList(moves: number[][], piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
         let potentialLocs: String[] = [];
 
         let colIdx = columns.findIndex((col) => {
@@ -304,7 +360,7 @@ export default function Chess() {
 
             newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
 
-            if(checkPieceCollision(newLoc) != piece.color) {
+            if(checkPieceCollision(newLoc, gameState) != piece.color) {
                 potentialLocs.push(newLoc);
             }
         })
@@ -312,34 +368,9 @@ export default function Chess() {
         return potentialLocs;
     }
 
-    function setPotentialMoves() {
-        switch (selectedPieceRef.current?.pieceType) {
-            case pieceType.pawn: 
-                setPawnMoves();
-                break;
-            case pieceType.knight:
-                setKnightMoves();
-                break;
-            case pieceType.king:
-                setKingMoves();
-                break;
-            case pieceType.rook:
-                setRookMoves();
-                break;
-            case pieceType.bishop:
-                setBishopMoves();
-                break;
-            case pieceType.queen:
-                setQueenMoves();
-                break;
-            default: // Handles no piece selected
-                setPotentialMoveList(null);
-                break;
-        }
-    }
+    function getPawnMoves(piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
+        if (piece == undefined) return [];
 
-    function setPawnMoves() {
-        let piece = selectedPieceRef.current!;
         let potentialLocs: String[] = [];
 
         let moves: number[][] = [];
@@ -355,7 +386,7 @@ export default function Chess() {
 
             for (let i = 1; i <= movesAhead; i++) {
                 let newLoc = columns[colIdx] + (row + i); // Add if white
-                let collision = checkPieceCollision(newLoc);
+                let collision = checkPieceCollision(newLoc, gameState);
 
                 if (collision > 0) {
                     break;
@@ -376,7 +407,7 @@ export default function Chess() {
 
             for (let i = 1; i <= movesAhead; i++) {
                 let newLoc = columns[colIdx] + (row - i); // Subtract if black
-                let collision = checkPieceCollision(newLoc);
+                let collision = checkPieceCollision(newLoc, gameState);
 
                 if (collision > 0) {
                     break;
@@ -397,14 +428,14 @@ export default function Chess() {
 
             newLoc = (columns[colIdx + move[0]] ?? "") + (row + move[1]);
             
-            let collision = checkPieceCollision(newLoc);
+            let collision = checkPieceCollision(newLoc, gameState);
 
             if(collision > 0 && collision != piece.color) {
                 potentialLocs.push(newLoc);
             }
         })
 
-        // If pawn has double moved
+        // If enemy neighbor pawn just double moved
         if (enPassantRef.current != null) {
             let enColIdx = columns.findIndex((col) => {
                 return col == enPassantRef.current!.charAt(0);
@@ -422,10 +453,10 @@ export default function Chess() {
             }
         }
 
-        setPotentialMoveList(potentialLocs);
+        return potentialLocs;
     }
 
-    function setKnightMoves() {
+    function getKnightMoves(piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
         const moves = [
             [1, 2],
             [2, 1],
@@ -437,12 +468,12 @@ export default function Chess() {
             [-1, 2]
         ];
 
-        let potentialLocs: String[] = getPotentialMovesFromList(moves);
+        let potentialLocs: String[] = getPotentialMovesFromList(moves, piece, gameState);
         
-        setPotentialMoveList(potentialLocs);
+        return potentialLocs;
     }
 
-    function setKingMoves() {
+    function getKingMoves(piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
         const moves = [
             [0, 1],
             [1, 1],
@@ -454,34 +485,25 @@ export default function Chess() {
             [-1, 1]
         ];
 
-        let potentialLocs: String[] = getPotentialMovesFromList(moves);
+        let potentialLocs: String[] = getPotentialMovesFromList(moves, piece, gameState);
         
-        setPotentialMoveList(potentialLocs);
-    }
-    
-    function setRookMoves() {
-        setPotentialMoveList(getRookMoves());
+        return potentialLocs;
     }
 
-    function setBishopMoves() {
-        setPotentialMoveList(getBishopMoves());
-    }
-
-    function setQueenMoves() {
+    function getQueenMoves(piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
         let potentialLocs: String[] = [];
         let potentialLocs1: String[] = [];
         let potentialLocs2: String[] = [];
 
-        potentialLocs1 = getBishopMoves();
-        potentialLocs2 = getRookMoves();
+        potentialLocs1 = getBishopMoves(piece, gameState);
+        potentialLocs2 = getRookMoves(piece, gameState);
 
         potentialLocs = potentialLocs1.concat(potentialLocs2);
 
-        setPotentialMoveList(potentialLocs);
+        return potentialLocs;
     }
 
-    function getRookMoves() {
-        let piece = selectedPieceRef.current!;
+    function getRookMoves(piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
         let potentialLocs: String[] = [];
 
         let colIdx = columns.findIndex((col) => {
@@ -493,7 +515,7 @@ export default function Chess() {
         //#region Up
         for (let i = row + 1; i <= 8; i++) {
             let newLoc = piece.location.charAt(0) + i;
-            let collision = checkPieceCollision(newLoc);
+            let collision = checkPieceCollision(newLoc, gameState);
 
             if (collision == piece.color) {
                 break;
@@ -509,7 +531,7 @@ export default function Chess() {
         //#region Down
         for (let i = row - 1; i >= 1; i--) {
             let newLoc = piece.location.charAt(0) + i;
-            let collision = checkPieceCollision(newLoc);
+            let collision = checkPieceCollision(newLoc, gameState);
 
             if (collision == piece.color) {
                 break;
@@ -525,7 +547,7 @@ export default function Chess() {
         //#region Right
         for (let i = colIdx + 1; i < 8; i++) {
             let newLoc = columns[i].toString() + row.toString();
-            let collision = checkPieceCollision(newLoc);
+            let collision = checkPieceCollision(newLoc, gameState);
 
             if (collision == piece.color) {
                 break;
@@ -541,7 +563,7 @@ export default function Chess() {
         //#region Left
         for (let i = colIdx - 1; i >= 0; i--) {
             let newLoc = columns[i].toString() + row.toString();
-            let collision = checkPieceCollision(newLoc);
+            let collision = checkPieceCollision(newLoc, gameState);
 
             if (collision == piece.color) {
                 break;
@@ -557,8 +579,7 @@ export default function Chess() {
         return potentialLocs;
     }
 
-    function getBishopMoves() {
-        let piece = selectedPieceRef.current!;
+    function getBishopMoves(piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
         let potentialLocs: String[] = [];
 
         let colIdx = columns.findIndex((col) => {
@@ -571,7 +592,7 @@ export default function Chess() {
         for (let i = colIdx + 1; i <= 8; i++) {
             let newLocUp = (columns[i] ?? "") + (row + (colIdx - i));
 
-            let upCollision = checkPieceCollision(newLocUp);
+            let upCollision = checkPieceCollision(newLocUp, gameState);
 
             if (upCollision == piece.color) {
                 break;
@@ -588,7 +609,7 @@ export default function Chess() {
         for (let i = colIdx + 1; i <= 8; i++) {
             let newLocUp = (columns[i] ?? "") + (row - (colIdx - i));
 
-            let upCollision = checkPieceCollision(newLocUp);
+            let upCollision = checkPieceCollision(newLocUp, gameState);
 
             if (upCollision == piece.color) {
                 break;
@@ -605,7 +626,7 @@ export default function Chess() {
         for (let i = colIdx - 1; i >= 0; i--) {
             let newLocUp = (columns[i] ?? "") + (row + (colIdx - i));
 
-            let upCollision = checkPieceCollision(newLocUp);
+            let upCollision = checkPieceCollision(newLocUp, gameState);
 
             if (upCollision == piece.color) {
                 break;
@@ -622,7 +643,7 @@ export default function Chess() {
         for (let i = colIdx - 1; i >= 0; i--) {
             let newLocUp = (columns[i] ?? "") + (row - (colIdx - i));
 
-            let upCollision = checkPieceCollision(newLocUp);
+            let upCollision = checkPieceCollision(newLocUp, gameState);
 
             if (upCollision == piece.color) {
                 break;
@@ -637,24 +658,25 @@ export default function Chess() {
 
         return potentialLocs;
     }
+    //#endregion Get Moves
 
     /**
      * 
      * @param newLoc Location to check for collision
      * @returns 0 if no collision, 1 if white collision, 2 if black collision
      */
-    function checkPieceCollision(newLoc: String): number {
+    function checkPieceCollision(newLoc: String, gameState = allPiecesRef.current): number {
         let collision: number = 0;
 
         // Check for collisions with pieces
-        allPiecesRef.current.forEach(existingPiece => {
+        gameState.forEach(existingPiece => {
             if (existingPiece.location == newLoc) {
                 collision = existingPiece.color;
             }
         });
 
         // Check if en passant has happened
-        allPiecesRef.current.forEach(existingPiece => {
+        gameState.forEach(existingPiece => {
             if (existingPiece.location == enPassantTake) {
                 collision = existingPiece.color;
             }
@@ -663,8 +685,104 @@ export default function Chess() {
         return collision;
     }
 
-    function getPromotionClass(pieceTypeNum: number): string {
-        return (playerTurnRef.current == pieceColor.white ? "whitePiece " : "blackPiece ") + "piece boardSquare piece" + pieceTypeNum
+    function checkIsCheck(color: number, gameState = allPiecesRef.current) {
+        let ownKing = gameState.find(piece => {
+            return (
+                piece.color == color
+                && piece.pieceType == pieceType.king
+            )
+        });
+
+        let enemyPawns: (chessPiece | undefined)[] = gameState.map(piece => {
+            if (piece.color != color && piece.pieceType == pieceType.pawn) {
+                return piece;
+            }
+        });
+
+        const bishopMoves: String[] = getBishopMoves(ownKing, gameState);
+        const rookMoves: String[] = getRookMoves(ownKing, gameState);
+        const knightMoves: String[] = getKnightMoves(ownKing, gameState);
+
+        let isCheck = false;
+
+        bishopMoves.forEach(move => {
+            let kingAttacker = gameState.find(piece => {
+                return (
+                    piece.color !=  color // Opposite color piece
+                    && piece.location == move // Target square
+                    && (
+                        [
+                            pieceType.bishop,
+                            pieceType.queen
+                        ].includes(piece.pieceType) // Piece can see king
+                    )
+                )
+            });
+
+            if (kingAttacker != undefined) {
+                isCheck = true;
+            }
+        });
+
+        rookMoves.forEach(move => {
+            let kingAttacker = gameState.find(piece => {
+                return (
+                    piece.color !=  color // Opposite color piece
+                    && piece.location == move // Target square
+                    && (
+                        [
+                            pieceType.rook,
+                            pieceType.queen
+                        ].includes(piece.pieceType) // Piece can see king
+                    )
+                )
+            });
+
+            if (kingAttacker != undefined) {
+                isCheck = true;
+            }
+        });
+
+        knightMoves.forEach(move => {
+            let kingAttacker = gameState.find(piece => {
+                return (
+                    piece.color !=  color // Opposite color piece
+                    && piece.location == move // Target square
+                    && (
+                        [
+                            pieceType.knight
+                        ].includes(piece.pieceType) // Piece can see king
+                    )
+                )
+            });
+
+            if (kingAttacker != undefined) {
+                isCheck = true;
+            }
+        });
+
+        enemyPawns.forEach(pawn => {
+            let pawnMoves = getPawnMoves(pawn);
+            pawnMoves?.forEach(move => {
+                let kingAttacker = gameState.find(piece => {
+                return (
+                        piece.color !=  color // Opposite color piece
+                        && piece.location == move // Target square
+                        && (
+                            [
+                                pieceType.knight
+                            ].includes(piece.pieceType) // Piece can see king
+                        )
+                    )
+                });
+
+                if (kingAttacker != undefined) {
+                    isCheck = true;
+                }
+            })
+        });
+
+        return isCheck;
     }
 
     return (
