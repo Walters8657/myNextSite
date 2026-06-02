@@ -177,3 +177,13 @@
     filter: brightness(0.85) blur(1px);
     margin-bottom: -31px;
 }
+
+#turnRow {
+    margin-top: 10px;
+    box-sizing: border-box;
+    margin-left: calc(31px * 3);
+    .currentTurn {
+        border: solid black 2px;
+        border-radius: 2px;
+    }
+}

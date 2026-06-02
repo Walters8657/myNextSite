@@ -835,6 +835,20 @@ export default function Chess() {
                         </tr>
                     </tbody>
                 </Activity>
+                <tbody>
+                    <tr id="turnRow">
+                        <td className={playerTurnRef.current == 1 ? "currentTurn" : ""}>
+                            <span className="whitePiece piece boardSquare piece2">
+                                
+                            </span>
+                        </td>
+                        <td className={playerTurnRef.current == 2 ? "currentTurn" : ""}>
+                            <span className="blackPiece piece boardSquare piece2">
+                                
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </ToolCard>
     )
