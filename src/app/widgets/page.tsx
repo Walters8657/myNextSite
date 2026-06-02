@@ -13,12 +13,14 @@ import CanvasOfBabble from "./canvasOfBabble/babble";
 import HowMuchFaster from "./howMuchFaster/howMuchFaster";
 import ColorConverter from "./colorConverter/colorConverter";
 import SortingVisualizations from "./sortingVisualizations/sortingVisualizations";
+import Chess from "./chess/chess";
 
 
 export default function Page() {
   const [lastClickedWidget, setLastClickedWidget] = useState("");
   const widgets: JSX.Element[] = [
-    <Snake key="snake" lastClicked={lastClickedWidget}/>
+    <Chess key="chess" />
+    ,<Snake key="snake" lastClicked={lastClickedWidget}/>
     ,<Boids key="boids" />
     ,<Flashcards key="flashcards" />
     ,<GameOfLife key="gameOfLife" />
@@ -82,8 +84,8 @@ export default function Page() {
         {widgetOrder.map((widgetX, i) => (
           <div className="widget" key={widgetX} onClick={() => setLastClickedWidget(widgetX ?? "")}>
             <span className="orderControlBtns">
-              <img id="upBtn" src="../arrow.svg" onClick={() => widgetUp(i)} />
-              <img id="downBtn" src="../arrow.svg" onClick={() => widgetDown(i)} />
+              <img id="upBtn" src="/arrow.svg" onClick={() => widgetUp(i)} />
+              <img id="downBtn" src="/arrow.svg" onClick={() => widgetDown(i)} />
             </span>
 
             {widgets.find(widget => {
