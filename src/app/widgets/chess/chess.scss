@@ -1,0 +1,189 @@
+#resetChess {
+    width: auto;
+    margin: 0 auto 20px ;
+}
+
+#chessBoard {
+    display: block;
+
+    table {
+        position: absolute;
+    }
+
+    tbody{
+        display: block;
+
+        tr {
+            display: block;
+            width: 100%;
+
+            td {
+                position: relative;
+
+                aspect-ratio: 1;
+                width: calc((100%) / 8);
+                height: auto;
+                display: inline-block;
+                box-sizing: border-box;
+                padding: 2px;
+
+                p {
+                    box-sizing: border-box;
+                    font-weight: 300;
+                    background-color: transparent;
+                    opacity: 0.66;
+
+                    position: absolute;
+
+                    width: auto;
+                    height: auto;
+
+                    line-height: 10px;
+                    font-size: 10px;
+                }
+
+                .rowLabel {
+                    top: 2px;
+                    left: 2px;
+                }
+
+                .colLabel {
+                    bottom: 2px;
+                    right: 2px;
+                }
+            }
+
+            .piece1.whitePiece {
+                background-image: url(../../../../public/chessAssets/Pawn.svg);
+            }
+
+            .piece2.whitePiece {
+                background-image: url(../../../../public/chessAssets/King.svg);
+            }
+
+            .piece3.whitePiece {
+                background-image: url(../../../../public/chessAssets/Queen.svg);
+            }
+
+            .piece4.whitePiece {
+                background-image: url(../../../../public/chessAssets/Bishop.svg);
+            }
+
+            .piece5.whitePiece {
+                background-image: url(../../../../public/chessAssets/Knight.svg);
+            }
+
+            .piece6.whitePiece {
+                background-image: url(../../../../public/chessAssets/Rook.svg);
+            }
+
+            .piece1.blackPiece {
+                background-image: url(../../../../public/chessAssets/Pawn_black.svg);
+            }
+
+            .piece2.blackPiece {
+                background-image: url(../../../../public/chessAssets/King_black.svg);
+            }
+
+            .piece3.blackPiece {
+                background-image: url(../../../../public/chessAssets/Queen_black.svg);
+            }
+
+            .piece4.blackPiece {
+                background-image: url(../../../../public/chessAssets/Bishop_black.svg);
+            }
+
+            .piece5.blackPiece {
+                background-image: url(../../../../public/chessAssets/Knight_black.svg);
+            }
+
+            .piece6.blackPiece {
+                background-image: url(../../../../public/chessAssets/Rook_black.svg);
+            }
+
+            .boardSquare {
+                display: block;
+                box-sizing: border-box;
+
+                height: 100%;
+                width: 100%;
+
+                background-size: cover;;
+            }
+
+            .selectedPiece {
+                background-color: rgb(119, 180, 218);
+            }
+
+            .potentialMove {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .potentialMove:after {
+                content: "";
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background-color: rgb(119, 180, 218);
+            }
+
+            .piece.potentialMove:after {
+                background-color: transparent;
+            }
+
+            .piece.potentialMove {
+                background-color: rgb(236, 142, 142);
+            }
+
+            .darkSquare {
+                background-color: rgb(150, 150, 150);
+            }
+
+            .lightSquare {
+                background-color: rgb(190, 190, 190);
+            }
+        }
+    }
+}
+
+#promotionRow {
+    position: relative;
+    bottom: calc(31px * 4.5);
+    left: calc(31px * 2);
+    box-sizing: border-box;
+    padding: 0;
+    td:hover {
+        cursor: pointer;
+        filter: brightness(0.95)
+    }
+    td {
+        border: solid black 2px;
+    }
+    td:nth-of-type(1) {
+        border-right: none;
+    }
+    td:nth-of-type(2), td:nth-of-type(3) {
+        border-left: none;
+        border-right: none;
+    }
+    td:nth-of-type(4) {
+        border-left: none;
+    }
+}
+
+.darkOverlay {
+    filter: brightness(0.85) blur(1px);
+    margin-bottom: -31px;
+}
+
+#turnRow {
+    margin-top: 10px;
+    box-sizing: border-box;
+    margin-left: calc(31px * 3);
+    .currentTurn {
+        border: solid black 2px;
+        border-radius: 2px;
+    }
+}

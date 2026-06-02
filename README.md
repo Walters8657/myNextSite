@@ -2,6 +2,8 @@
 
 ### Todo
 - Move global functions
+- Style widgets as more wwindows-95-esque 
+
 - Widgets
     - Weather
     - Metronome
