@@ -376,8 +376,6 @@ export default function Chess() {
     }
 
     function getPawnMoves(piece = selectedPieceRef.current!, gameState = allPiecesRef.current!) {
-        if (piece == undefined) return [];
-
         let potentialLocs: string[] = [];
 
         let moves: number[][] = [];
@@ -389,6 +387,12 @@ export default function Chess() {
         let row = parseInt(piece.location.charAt(1));
 
         if (piece.color == pieceColor.white) {
+            //Potential attacking moves
+            moves = [
+                [-1, 1],
+                [1, 1]
+            ]
+
             let  movesAhead = (row == 2 ? 2 : 1); // Double  first move logic
 
             for (let i = 1; i <= movesAhead; i++) {
@@ -401,15 +405,15 @@ export default function Chess() {
                     potentialLocs.push(newLoc);
                 }
             }
-
-            //Potential attacking moves
-            moves = [
-                [-1, 1],
-                [1, 1]
-            ]
         }
 
         if (piece.color == pieceColor.black) {
+            // Potential attacking moves
+            moves = [
+                [-1, -1],
+                [1, -1]
+            ]
+
             let  movesAhead = (row == 7 ? 2 : 1); // Double first move logic
 
             for (let i = 1; i <= movesAhead; i++) {
@@ -422,12 +426,6 @@ export default function Chess() {
                     potentialLocs.push(newLoc);
                 }
             }
-
-            // Potential attacking moves
-            moves = [
-                [-1, -1],
-                [1, -1]
-            ]
         }
 
         moves.forEach((move) => {
@@ -709,6 +707,7 @@ export default function Chess() {
         const bishopMoves: string[] = getBishopMoves(ownKing, gameState);
         const rookMoves: string[] = getRookMoves(ownKing, gameState);
         const knightMoves: string[] = getKnightMoves(ownKing, gameState);
+        const pawnMoves: string[] = getPawnMoves(ownKing, gameState);
 
         let isCheck = false;
 
@@ -768,25 +767,22 @@ export default function Chess() {
             }
         });
 
-        enemyPawns.forEach(pawn => {
-            let pawnMoves = getPawnMoves(pawn);
-            pawnMoves?.forEach(move => {
-                let kingAttacker = gameState.find(piece => {
+        pawnMoves.forEach(move => {
+            let kingAttacker = gameState.find(piece => {
                 return (
-                        piece.color !=  color // Opposite color piece
-                        && piece.location == move // Target square
-                        && (
-                            [
-                                pieceType.knight
-                            ].includes(piece.pieceType) // Piece can see king
-                        )
+                    piece.color !=  color // Opposite color piece
+                    && piece.location == move // Target square
+                    && (
+                        [
+                            pieceType.pawn
+                        ].includes(piece.pieceType) // Piece can see king
                     )
-                });
+                )
+            });
 
-                if (kingAttacker != undefined) {
-                    isCheck = true;
-                }
-            })
+            if (kingAttacker != undefined) {
+                isCheck = true;
+            }
         });
 
         return isCheck;
