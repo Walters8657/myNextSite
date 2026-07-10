@@ -79,6 +79,17 @@ export default function Page() {
     })
   }
 
+  /**
+   * TODO: Drag and Drop Reordering
+   * 
+   * --- Psudo ---
+   * On start dragging gray out background and create a copy of the selected element at the cursor position
+   * Do NOT check for change unless the element is different than the selected
+   * As the cursor moves to a different element, move above if on top half, below if on bottom half
+   * Iterate through the map comparing to the newly hovered element
+   * --- Psudo ---
+   */
+
   return (
     <div className="widgetsContainer">
         {widgetOrder.map((widgetX, i) => (
