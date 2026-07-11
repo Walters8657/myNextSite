@@ -10,7 +10,8 @@
 
   .widget {
     display: block;
-    margin: 0 auto;
+    margin: 0 auto calc($toolCardGutter / 2);
+    padding: 0;
     width: 100%;
     max-width: $toolCardWidth;
     break-inside: avoid-column;
@@ -18,18 +19,42 @@
     // Allows items to be positions with respect to the widget
     position: relative;
 
+    // Border styling
+    border: 2px solid;
+    border-left-color: $lightGray;
+    border-top-color: $lightGray;
+    border-right-color: $black;
+    border-bottom-color: $black;
+
+    background: $darkGray;
+
+    #titleBar {
+      background-image: linear-gradient(to right,rgb(0, 0, 123), rgb(16, 132, 206));
+      margin: 2px;
+      p {
+        margin: 0;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 0 10px;
+        letter-spacing: 1px;
+      }
+    }
+
     .orderControlBtns {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 3px;
+      right: 3px;
       
       z-index: 1;
+
+      filter: invert(100%);
       #upBtn:hover, #downBtn:hover {
         cursor: pointer;
       }
       #upBtn, #downBtn {
         border-radius: 50%;
-        opacity: 33%;
+        height: 20px;
       }
       #upBtn {
         rotate: -90deg;

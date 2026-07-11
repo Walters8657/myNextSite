@@ -3,18 +3,9 @@
   max-width: $toolCardWidth;
 
   box-sizing: border-box;
-
-  background: $darkGray;
-  border: 2px solid $black;
-  border-radius: 2px;
-  padding: 1rem 1.5rem;
-  margin: 0 auto calc($toolCardGutter / 2);
+  padding: 0 1.5rem 1rem;
+  margin: 2px;
 
   position: relative;
   overflow: hidden;
-}
-
-#title {
-  text-align: center;
-  font-weight: 600;
 }

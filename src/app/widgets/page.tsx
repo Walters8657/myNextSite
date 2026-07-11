@@ -94,6 +94,9 @@ export default function Page() {
     <div className="widgetsContainer">
         {widgetOrder.map((widgetX, i) => (
           <div className="widget" key={widgetX} onClick={() => setLastClickedWidget(widgetX ?? "")}>
+            <div id="titleBar">
+              <p>Title Here</p>
+            </div>
             <span className="orderControlBtns">
               <img id="upBtn" src="/arrow.svg" onClick={() => widgetUp(i)} />
               <img id="downBtn" src="/arrow.svg" onClick={() => widgetDown(i)} />
