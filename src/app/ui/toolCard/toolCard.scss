@@ -1,11 +1,27 @@
 .toolCard {
   display: block;
-  max-width: $toolCardWidth;
 
   box-sizing: border-box;
-  padding: 0 1.5rem 1rem;
   margin: 2px;
 
   position: relative;
   overflow: hidden;
+
+  #content {
+    max-width: $toolCardWidth;
+    margin: 0 1.5rem 1rem;
+  }
+
+  #titleBar {
+      background-image: linear-gradient(to right,rgb(0, 0, 123), rgb(16, 132, 206));
+      margin: 2px;
+      p {
+        margin: 0;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 1px 10px;
+        letter-spacing: 1px;
+      }
+    }
 }

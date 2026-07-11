@@ -20,7 +20,7 @@
     position: relative;
 
     // Border styling
-    border: 2px solid;
+    border: 3px solid;
     border-left-color: $lightGray;
     border-top-color: $lightGray;
     border-right-color: $black;
@@ -28,23 +28,10 @@
 
     background: $darkGray;
 
-    #titleBar {
-      background-image: linear-gradient(to right,rgb(0, 0, 123), rgb(16, 132, 206));
-      margin: 2px;
-      p {
-        margin: 0;
-        color: white;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 0 10px;
-        letter-spacing: 1px;
-      }
-    }
-
     .orderControlBtns {
       position: absolute;
-      top: 3px;
-      right: 3px;
+      top: 5px;
+      right: 5px;
       
       z-index: 1;
 
@@ -54,7 +41,7 @@
       }
       #upBtn, #downBtn {
         border-radius: 50%;
-        height: 20px;
+        height: 22px;
       }
       #upBtn {
         rotate: -90deg;
